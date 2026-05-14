@@ -30,15 +30,15 @@ export function Home({ setPage }: HomeProps) {
           <Reveal className="hero-meta">
             <div>
               <div className="eyebrow"><span className="dot" /><span>Plataforma de Memoria y Solidaridad Académica · UNAL</span></div>
-              <div className="mt-3.5 font-mono text-xs text-fg-mute tracking-[0.1em]">
+              <div className="mt-3.5 font-mono text-[13px] md:text-xs text-fg-mute tracking-[0.1em] leading-relaxed">
                 Repositorio permanente · Facultad de Derecho y Ciencias Políticas
               </div>
             </div>
-            <div className="text-right max-w-[320px]">
-              <div className="font-mono text-[11px] text-fg-mute tracking-[0.18em] uppercase mb-2.5">
+            <div className="text-left md:text-right w-full md:max-w-[320px]">
+              <div className="font-mono text-xs md:text-[11px] text-fg-mute tracking-[0.18em] uppercase mb-2.5">
                 001 / Inicio
               </div>
-              <div className="text-sm text-fg-mute">
+              <div className="text-base md:text-sm text-fg-mute leading-relaxed">
                 Un espacio sentipensante de educación pública desde Colombia, en solidaridad con Palestina.
               </div>
             </div>
@@ -119,7 +119,7 @@ export function Home({ setPage }: HomeProps) {
                 <div className="eyebrow"><span className="dot" /><span>Misión</span></div>
               </Reveal>
               <Reveal delay={0.1}>
-                <div className="mt-7 font-mono text-xs text-fg-mute">/ 02 — qué hacemos</div>
+                <div className="mt-7 font-mono text-[13px] md:text-xs text-fg-mute">/ 02 — qué hacemos</div>
               </Reveal>
             </div>
 
@@ -204,7 +204,7 @@ export function Home({ setPage }: HomeProps) {
               </Reveal>
 
               <Reveal delay={0.2}>
-                <p className="mt-9 max-w-[46ch] text-[15px] leading-[1.65]" style={{ color: 'rgba(241,237,224,0.78)' }}>
+                <p className="mt-9 max-w-[46ch] text-base md:text-[15px] leading-[1.7] md:leading-[1.65]" style={{ color: 'rgba(241,237,224,0.78)' }}>
                   Si el ocupante toma la tierra, el poeta nombra la tierra. Si el archivo
                   quema, el cantor recuerda. Esta cátedra recoge un cuerpo poético, musical
                   y cinematográfico que ha sostenido la palabra <i>Palestina</i> durante
@@ -261,7 +261,7 @@ export function Home({ setPage }: HomeProps) {
                 </ul>
 
                 <div className="md-foot">
-                  <span className="font-mono text-[10.5px] tracking-[0.15em]" style={{ color: 'rgba(241,237,224,0.55)' }}>
+                  <span className="font-mono text-[11px] md:text-[10.5px] tracking-[0.15em]" style={{ color: 'rgba(241,237,224,0.55)' }}>
                     Curaduría · Cátedra Caminos de Resistencia
                   </span>
                   <button className="btn-ghost-light">
@@ -290,7 +290,7 @@ export function Home({ setPage }: HomeProps) {
               </Reveal>
             </div>
             <Reveal delay={0.2}>
-              <p className="text-fg-mute text-base leading-[1.6] max-w-[44ch]">
+              <p className="text-fg-mute text-base md:text-base leading-relaxed max-w-full md:max-w-[44ch]">
                 Una semiótica popular acompaña a la causa palestina desde 1948.
                 Tres signos —el olivo, la llave, la firmeza— operan como
                 <strong className="text-fg font-medium"> contraseña, herencia y mandato.</strong>

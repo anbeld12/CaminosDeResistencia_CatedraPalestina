@@ -1120,12 +1120,12 @@
   .nav-burger { display: inline-flex; }
 }
 @media (max-width: 720px) {
-  .hero-foot { grid-template-columns: 1fr 1fr; }
+  .hero-foot { grid-template-columns: 1fr 1fr; gap: 20px; }
 }
 @media (max-width: 820px) {
   .quote-grid { grid-template-columns: 1fr; gap: 40px; }
   .mission { grid-template-columns: 1fr; gap: 24px; }
-  .page-head .row { grid-template-columns: 1fr; gap: 32px; }
+  .page-head .row { grid-template-columns: 1fr; gap: 32px; align-items: start; }
   .glossary { grid-template-columns: 1fr; }
   .gloss-item { border-right: none; }
   .biblio { grid-template-columns: 1fr; }
@@ -1147,6 +1147,7 @@
 }
 @media (max-width: 920px) {
   .sticky-story { grid-template-columns: 1fr; gap: 28px; }
+  .sticky-story .stick { position: relative; top: 0; }
   .simbo-grid { grid-template-columns: 1fr; }
   .simbo-card { border-right: none; }
 }
@@ -1160,6 +1161,175 @@
 }
 @media (max-width: 480px) {
   .footer .wrap > .top { grid-template-columns: 1fr; gap: 32px; }
+}
+
+/* ============================================================
+   Mobile typography & spacing — minimum legible sizes on small screens.
+   Bumps small UI text (eyebrows, kickers, meta) to ≥12px on mobile so
+   it remains legible, reduces card paddings, stacks crowded layouts.
+   ============================================================ */
+@media (max-width: 768px) {
+  :root { --pad: 18px; }
+
+  /* Headings — keep clamp() floors readable but not overwhelming on small screens */
+  h1 { font-size: clamp(38px, 11vw, 64px); line-height: 1; letter-spacing: -0.03em; }
+  h2 { font-size: clamp(28px, 7vw, 40px); line-height: 1.08; }
+  h3 { font-size: clamp(20px, 5vw, 26px); }
+
+  /* Sections — less vertical air on phones */
+  .section { padding: 64px 0; }
+
+  /* Small UI text bumps */
+  .eyebrow { font-size: 12px; letter-spacing: 0.14em; }
+  .kicker  { font-size: 12px; letter-spacing: 0.14em; }
+  .hr-rule { font-size: 12px; letter-spacing: 0.14em; }
+
+  /* Nav shell — wider on mobile, less internal padding */
+  .nav-shell { top: 12px; width: calc(100% - 16px); }
+  .nav { padding: 10px 10px 10px 16px; gap: 12px; }
+  .brand { font-size: 15px; }
+  .brand small { font-size: 9px; }
+  .icon-btn { width: 36px; height: 36px; }
+
+  /* Mobile menu — overflow-safe text */
+  .mobile-sheet { padding: 88px 20px 24px; }
+  .mobile-sheet a { font-size: 28px; padding: 12px 0; }
+  .mobile-sheet a small { font-size: 10px; }
+
+  /* HERO — stack meta vertically, scale stats down */
+  .hero { padding-top: calc(var(--nav-h) + 24px); padding-bottom: 56px; min-height: auto; }
+  .hero-meta { flex-direction: column; align-items: flex-start; gap: 18px; margin-bottom: 28px; }
+  .hero-meta > div:last-child { text-align: left; max-width: 100%; }
+  .hero-foot { margin-top: 40px; padding-top: 20px; gap: 18px; }
+  .hero-foot .stat .num { font-size: 28px; }
+  .hero-foot .stat .lbl { font-size: 10px; letter-spacing: 0.12em; }
+
+  /* QUOTE */
+  .pull-quote { max-width: 100%; }
+  .quote-aside { padding: 8px 0 8px 20px; font-size: 14px; }
+  .quote-attrib { font-size: 11px; letter-spacing: 0.12em; margin-top: 24px; }
+
+  /* MISSION */
+  .mission .lede { font-size: clamp(20px, 5.2vw, 28px); }
+  .mission ul { margin-top: 20px; }
+  .mission li { grid-template-columns: 32px 1fr; gap: 12px; padding: 12px 0; font-size: 14px; }
+
+  /* PAGE HEAD */
+  .page-head { padding-top: calc(var(--nav-h) + 40px); padding-bottom: 32px; }
+  .page-head h1 { font-size: clamp(44px, 12vw, 80px); }
+  .page-head .lede { font-size: 15px; max-width: 100%; }
+
+  /* SUBTABS — full-width scrollable row on mobile to avoid overflow */
+  .subtabs { width: 100%; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .subtabs::-webkit-scrollbar { display: none; }
+  .subtab { white-space: nowrap; font-size: 13px; padding: 8px 14px; }
+
+  /* CARDS grid — single column, compact */
+  .cards { grid-template-columns: 1fr; gap: 18px; }
+  .card { padding: 22px 20px 20px; border-radius: 14px; }
+  .card h3 { font-size: 24px; }
+  .card .body { font-size: 14.5px; }
+  .card .stat-strip { grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; padding-top: 14px; }
+  .card .stat-strip .v { font-size: 20px; }
+  .card .stat-strip .k { font-size: 9.5px; }
+  .card-img { height: 160px; margin-bottom: 18px; }
+
+  /* STICKY STORY */
+  .story-slot { height: 280px; }
+  .story-block { padding: 36px 0; }
+  .story-block h3 { font-size: 26px; }
+  .story-block p { font-size: 15px; }
+
+  /* TIMELINE — narrower nodes so labels remain readable */
+  .timeline-rail { padding: 24px 0 40px; }
+  .tl-node { width: 78vw; max-width: 320px; padding-top: 80px; }
+  .tl-node::before { top: 60px; }
+  .timeline-track::before { top: 67px; }
+  .tl-year { font-size: 48px; }
+  .tl-title { font-size: 19px; }
+  .tl-body { font-size: 14px; }
+  .tl-meta { gap: 8px; font-size: 9.5px; flex-wrap: wrap; }
+
+  /* GLOSSARY */
+  .gloss-item { padding: 22px 18px; }
+  .gloss-item .term { font-size: 24px; }
+  .gloss-item .def { font-size: 14px; }
+  .gloss-item .author { font-size: 11px; }
+
+  /* ARCHIVE */
+  .archive-toolbar { gap: 12px; padding: 14px 0; margin-bottom: 24px; }
+  .archive-search { padding: 8px 12px; }
+  .archive-search input { font-size: 14px; }
+  .archive-search.is-prominent { padding: 12px 16px; border-radius: 12px; }
+  .archive-search.is-prominent input { font-size: 16px; }
+  .archive-grid { grid-template-columns: 1fr; gap: 16px; }
+  .proj { padding: 14px; }
+  .proj-thumb { height: 140px; }
+  .proj h4 { font-size: 18px; }
+  .proj .author { font-size: 13.5px; }
+  .proj .meta { font-size: 10px; }
+  .proj-foot { font-size: 12px; }
+  .chip { font-size: 10px; padding: 6px 10px; }
+
+  /* BIBLIO */
+  .biblio-item { padding: 18px 16px; gap: 16px; grid-template-columns: 44px 1fr; }
+  .biblio-author { font-size: 14.5px; }
+  .biblio-item .work { font-size: 13.5px; }
+
+  /* POÉTICA / MEDIA */
+  .poetica { padding: 80px 0; }
+  .poetica-quote { font-size: clamp(22px, 6vw, 32px); }
+  .poetica-attrib { font-size: 11px; letter-spacing: 0.12em; }
+  .media-stub { padding: 18px; }
+  .md-title { font-size: 16px; }
+  .md-list li { grid-template-columns: 50px 1fr auto; padding: 10px 12px; font-size: 13px; gap: 8px; }
+  .md-list .md-kind { font-size: 9.5px; }
+  .md-list .md-len { font-size: 10.5px; }
+  .md-wave { height: 44px; }
+
+  /* SIMBO */
+  .simbo-card { padding: 28px 22px 24px; }
+  .simbo-card-glyph { width: 64px; height: 64px; margin-bottom: 20px; }
+  .simbo-card-body { font-size: 14px; }
+  .simbo-card-meaning { font-size: 10.5px; letter-spacing: 0.14em; }
+
+  /* PARTNER ROW */
+  .partner-row .font-serif,
+  .partner-row [class*="font-serif"] { font-size: 20px !important; }
+
+  /* FOOTER */
+  .footer { padding: 56px 0 24px; margin-top: 56px; }
+  .footer .mark { font-size: 26px; }
+  .footer .wrap > .top { gap: 32px; }
+  .footer h4 { margin-bottom: 12px; }
+  .footer a { font-size: 14.5px; }
+  .footer-inst li { font-size: 13.5px; }
+  .footer-brands { margin-top: 32px; }
+  .footer-logo { padding: 20px 0; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .footer-logo:last-child { border-bottom: none; }
+  .footer .bot { font-size: 10px; flex-direction: column; align-items: flex-start; gap: 8px; }
+
+  /* READING NOTE / CTA STRIP */
+  .reading-note { padding: 28px 22px; border-radius: 16px; }
+  .cta-strip { padding: 28px 0; }
+  .cta-strip .flex { width: 100%; }
+
+  /* MODAL */
+  .modal { padding: 24px 18px; max-height: 92vh; }
+  .modal .close { top: 12px; right: 12px; }
+
+  /* BUTTONS readable */
+  .btn { font-size: 13.5px; padding: 11px 16px; }
+  .nav-cta { font-size: 13px; }
+}
+
+@media (max-width: 420px) {
+  h1 { font-size: clamp(34px, 10.5vw, 48px); }
+  .page-head h1 { font-size: clamp(40px, 13vw, 64px); }
+  .hero-foot { grid-template-columns: 1fr 1fr; }
+  .hero-foot .stat .num { font-size: 26px; }
+  .tl-year { font-size: 40px; }
+  .gloss-item .term { font-size: 22px; }
 }
 
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }

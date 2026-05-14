@@ -115,7 +115,7 @@ export function Archive() {
                   ))}
                 </div>
                 <div className="ml-auto flex gap-3 items-center">
-                  <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute">
+                  <span className="font-mono text-xs md:text-[11px] tracking-[0.14em] uppercase text-fg-mute">
                     {filtered.length} de {PROJECTS.length}
                   </span>
                   <div className="viewtoggle">
@@ -127,9 +127,9 @@ export function Archive() {
             </Reveal>
 
             {filtered.length === 0 ? (
-              <div className="py-20 text-center text-fg-mute">
-                <div className="font-serif text-4xl">Sin coincidencias.</div>
-                <div className="mt-2.5 text-sm">Prueba otra etiqueta o vacía la búsqueda.</div>
+              <div className="py-16 md:py-20 text-center text-fg-mute px-4">
+                <div className="font-serif text-3xl md:text-4xl">Sin coincidencias.</div>
+                <div className="mt-2.5 text-base md:text-sm">Prueba otra etiqueta o vacía la búsqueda.</div>
               </div>
             ) : (
               <div className={view === 'grid' ? 'archive-grid' : 'archive-list'}>
@@ -169,12 +169,12 @@ export function Archive() {
             </Reveal>
 
             <Reveal delay={0.2}>
-              <div className="mt-12 px-9 py-8 border border-dashed border-[var(--line)] rounded-2xl flex justify-between items-center gap-6 flex-wrap">
+              <div className="mt-10 md:mt-12 px-5 py-6 md:px-9 md:py-8 border border-dashed border-[var(--line)] rounded-2xl flex flex-col md:flex-row md:justify-between md:items-center gap-5 md:gap-6">
                 <div>
                   <div className="kicker">¿Falta una autora?</div>
-                  <div className="font-serif text-[26px] mt-2">Propón una entrada para la próxima cohorte.</div>
+                  <div className="font-serif text-[22px] md:text-[26px] mt-2 leading-tight">Propón una entrada para la próxima cohorte.</div>
                 </div>
-                <button className="btn terra">Sugerir bibliografía →</button>
+                <button className="btn terra self-start md:self-auto">Sugerir bibliografía →</button>
               </div>
             </Reveal>
           </div>
@@ -205,9 +205,9 @@ export function Archive() {
                 <div className="kind-glyph">{openProj.kind.toUpperCase()}</div>
               </div>
               <div className="kicker">{openProj.kind} · {openProj.year}</div>
-              <h2 className="mt-3 text-[clamp(28px,3.5vw,44px)]">{openProj.title}</h2>
-              <div className="text-fg-mute mt-2.5 text-sm">{openProj.author}</div>
-              <p className="mt-6 text-fg-mute leading-[1.65]">
+              <h2 className="mt-3 text-[clamp(26px,7vw,44px)] leading-tight">{openProj.title}</h2>
+              <div className="text-fg-mute mt-2.5 text-base md:text-sm">{openProj.author}</div>
+              <p className="mt-5 md:mt-6 text-fg-mute text-base leading-relaxed">
                 Fragmento de la sinopsis: este proyecto fue desarrollado en el marco del módulo final
                 de la cátedra. Su propósito es articular un argumento — visual, textual o sonoro — que
                 tense el aprendizaje con la práctica solidaria. La versión completa puede consultarse

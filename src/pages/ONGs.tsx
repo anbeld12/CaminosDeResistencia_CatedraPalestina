@@ -92,9 +92,9 @@ export function ONGs() {
             <div className="border-t border-[var(--line)]">
               {ONG_PARTNERS.map((p, i) => (
                 <Reveal key={i} className="partner-row">
-                  <div className="font-mono text-accent text-[11px] tracking-[0.15em]">0{i + 1}</div>
+                  <div className="font-mono text-accent text-xs md:text-[11px] tracking-[0.15em]">0{i + 1}</div>
                   <div>
-                    <div className="font-serif text-[26px] tracking-[-0.015em]">{p.name}</div>
+                    <div className="font-serif text-[20px] md:text-[26px] tracking-[-0.015em] leading-tight">{p.name}</div>
                   </div>
                   <div className="partner-city font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute">{p.city}</div>
                   <div className="partner-focus text-sm text-fg-mute">{p.focus}</div>
@@ -111,10 +111,10 @@ export function ONGs() {
           <div className="wrap">
             <Reveal className="grid-2">
               <div>
-                <h2 className="text-[clamp(36px,5vw,64px)]">
+                <h2 className="text-[clamp(32px,8vw,64px)] leading-tight">
                   Brigadas <em className="text-accent italic">de</em> cosecha
                 </h2>
-                <p className="text-fg-mute mt-4 text-base leading-[1.6] max-w-[48ch]">
+                <p className="text-fg-mute mt-4 text-base leading-relaxed max-w-full md:max-w-[48ch]">
                   Cada octubre, brigadas internacionales acompañan la cosecha de la aceituna en
                   Cisjordania. Acompañar no es producir — es estar ahí cuando se intenta arrancar el árbol.
                   La presencia es una unidad de medida política.
@@ -131,10 +131,10 @@ export function ONGs() {
 
             <div className="grid-3">
               {FIELD_STEPS.map((s, i) => (
-                <Reveal key={s.n} delay={i * 0.08} className="px-6 py-7 border-t border-[var(--line)] relative">
-                  <div className="font-mono text-accent text-[11px] tracking-[0.15em]">/ {s.n}</div>
+                <Reveal key={s.n} delay={i * 0.08} className="px-4 md:px-6 py-6 md:py-7 border-t border-[var(--line)] relative">
+                  <div className="font-mono text-accent text-xs md:text-[11px] tracking-[0.15em]">/ {s.n}</div>
                   <h3 className="mt-3">{s.t}</h3>
-                  <p className="mt-2.5 text-fg-mute text-[14.5px] leading-[1.6]">{s.d}</p>
+                  <p className="mt-2.5 text-fg-mute text-base md:text-[14.5px] leading-relaxed">{s.d}</p>
                 </Reveal>
               ))}
             </div>

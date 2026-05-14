@@ -84,7 +84,7 @@ export function History() {
             <div className="timeline-progress">
               <span style={{ width: `${Math.max(progress * 100, 8)}%` }} />
             </div>
-            <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute min-w-[80px] text-right">
+            <div className="font-mono text-xs md:text-[11px] tracking-[0.14em] uppercase text-fg-mute min-w-[72px] md:min-w-[80px] text-right">
               {Math.round(progress * 100)}% leído
             </div>
           </div>
@@ -97,10 +97,10 @@ export function History() {
           <div className="grid-2">
             <Reveal>
               <div className="eyebrow"><span className="dot" /><span>Cartografía del despojo · 1947 → hoy</span></div>
-              <h2 className="mt-5 text-[clamp(34px,4.5vw,56px)]">
+              <h2 className="mt-5 text-[clamp(28px,7vw,56px)] leading-tight">
                 La geografía <em className="text-accent italic">—también—</em> se desplaza.
               </h2>
-              <p className="mt-4 text-fg-mute text-base leading-[1.65] max-w-[48ch]">
+              <p className="mt-4 text-fg-mute text-base leading-relaxed max-w-full md:max-w-[48ch]">
                 Cuatro mapas leídos juntos cuentan la historia sin necesidad de palabras: el territorio
                 palestino bajo el Mandato Británico, el Plan de Partición de la ONU, el armisticio de 1949,
                 y la fragmentación posterior a Oslo. La superficie verde se contrae como una hoja seca.
@@ -151,10 +151,10 @@ export function History() {
         <div className="wrap">
           <Reveal className="reading-note">
             <div>
-              <div className="font-mono text-[11px] tracking-[0.18em] uppercase" style={{ color: 'rgba(241,237,224,0.7)' }}>
+              <div className="font-mono text-xs md:text-[11px] tracking-[0.18em] uppercase" style={{ color: 'rgba(241,237,224,0.7)' }}>
                 Nota de método
               </div>
-              <p className="font-serif text-[clamp(20px,2.5vw,28px)] mt-3 leading-[1.25] max-w-[44ch]">
+              <p className="font-serif text-[clamp(20px,5.5vw,28px)] mt-3 leading-snug max-w-full md:max-w-[44ch]">
                 Las fechas no son la historia. Son la cuadrícula que permite distinguir
                 una continuidad de una novedad — y abre la pregunta verdadera: <em>¿quién?</em>
               </p>
