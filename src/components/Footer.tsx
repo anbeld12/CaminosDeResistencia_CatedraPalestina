@@ -9,7 +9,6 @@ export function Footer({ setPage }: FooterProps) {
     <footer className="footer">
       <div className="wrap">
         <div className="top">
-
           <div>
             <div className="mark">Caminos de Resistencia</div>
             <p className="tag">Plataforma de memoria y solidaridad académica.</p>
@@ -21,7 +20,7 @@ export function Footer({ setPage }: FooterProps) {
               <a
                 key={p.id}
                 href="#"
-                onClick={(e) => { e.preventDefault(); setPage(p.id as PageId); window.scrollTo({ top: 0 }); }}
+                onClick={(e) => { e.preventDefault(); setPage(p.id); window.scrollTo({ top: 0 }); }}
               >
                 {p.label}
               </a>
@@ -37,7 +36,6 @@ export function Footer({ setPage }: FooterProps) {
               <li>Embajada del Estado de Palestina en Colombia</li>
             </ul>
           </div>
-
         </div>
 
         <div className="footer-brands">

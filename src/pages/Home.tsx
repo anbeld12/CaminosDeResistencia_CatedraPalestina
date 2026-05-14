@@ -1,4 +1,6 @@
-import { useReveal } from '../lib/hooks';
+import type { ReactNode } from 'react';
+import { motion } from 'framer-motion';
+import { Reveal } from '../components/Reveal';
 import { Icon } from '../lib/icons';
 import type { PageId } from '../lib/types';
 
@@ -7,49 +9,52 @@ interface HomeProps {
 }
 
 export function Home({ setPage }: HomeProps) {
-  useReveal();
-
   return (
     <>
       {/* ============ HERO ============ */}
       <section className="hero">
         <div className="hero-bg" aria-hidden="true" />
 
-        <div className="olive-decor" style={{ top: 110, right: -40, color: 'var(--olive)' }} aria-hidden="true">
+        <div className="olive-decor text-primary" style={{ top: 110, right: -40 }} aria-hidden="true">
           <svg width="320" height="320" viewBox="0 0 320 320" fill="none" stroke="currentColor" opacity="0.25">
-            <path d="M40 280 Q 180 80, 290 30" strokeWidth="1.2"/>
-            <ellipse cx="80" cy="240" rx="14" ry="5" transform="rotate(-30 80 240)" fill="currentColor" stroke="none"/>
-            <ellipse cx="120" cy="190" rx="14" ry="5" transform="rotate(-40 120 190)" fill="currentColor" stroke="none"/>
-            <ellipse cx="160" cy="150" rx="14" ry="5" transform="rotate(-50 160 150)" fill="currentColor" stroke="none"/>
-            <ellipse cx="210" cy="100" rx="14" ry="5" transform="rotate(-60 210 100)" fill="currentColor" stroke="none"/>
-            <ellipse cx="260" cy="60" rx="14" ry="5" transform="rotate(-70 260 60)" fill="currentColor" stroke="none"/>
+            <path d="M40 280 Q 180 80, 290 30" strokeWidth="1.2" />
+            <ellipse cx="80" cy="240" rx="14" ry="5" transform="rotate(-30 80 240)" fill="currentColor" stroke="none" />
+            <ellipse cx="120" cy="190" rx="14" ry="5" transform="rotate(-40 120 190)" fill="currentColor" stroke="none" />
+            <ellipse cx="160" cy="150" rx="14" ry="5" transform="rotate(-50 160 150)" fill="currentColor" stroke="none" />
+            <ellipse cx="210" cy="100" rx="14" ry="5" transform="rotate(-60 210 100)" fill="currentColor" stroke="none" />
+            <ellipse cx="260" cy="60" rx="14" ry="5" transform="rotate(-70 260 60)" fill="currentColor" stroke="none" />
           </svg>
         </div>
 
-        <div className="wrap" style={{ width: '100%' }}>
-          <div className="hero-meta reveal">
+        <div className="wrap w-full">
+          <Reveal className="hero-meta">
             <div>
               <div className="eyebrow"><span className="dot" /><span>Plataforma de Memoria y Solidaridad Académica · UNAL</span></div>
-              <div style={{ marginTop: 14, fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--fg-mute)', letterSpacing: '.1em' }}>
+              <div className="mt-3.5 font-mono text-xs text-fg-mute tracking-[0.1em]">
                 Repositorio permanente · Facultad de Derecho y Ciencias Políticas
               </div>
             </div>
-            <div style={{ textAlign: 'right', maxWidth: 320 }}>
-              <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--fg-mute)', letterSpacing: '.18em', textTransform: 'uppercase', marginBottom: 10 }}>
+            <div className="text-right max-w-[320px]">
+              <div className="font-mono text-[11px] text-fg-mute tracking-[0.18em] uppercase mb-2.5">
                 001 / Inicio
               </div>
-              <div style={{ fontSize: 14, color: 'var(--fg-mute)' }}>
+              <div className="text-sm text-fg-mute">
                 Un espacio sentipensante de educación pública desde Colombia, en solidaridad con Palestina.
               </div>
             </div>
-          </div>
+          </Reveal>
 
-          <h1 className="hero-title reveal delay-1">
+          <motion.h1
+            className="hero-title"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
+          >
             <span className="neutral">Caminos</span><br />
             <em>de</em> Resistencia
-          </h1>
+          </motion.h1>
 
-          <div className="hero-foot reveal delay-3">
+          <Reveal className="hero-foot" delay={0.3}>
             <div className="stat">
               <span className="num">VIII</span>
               <span className="lbl">Cohortes · documentadas</span>
@@ -59,14 +64,14 @@ export function Home({ setPage }: HomeProps) {
               <span className="lbl">Facultades · convocantes</span>
             </div>
             <div className="stat">
-              <span className="num" style={{ color: 'var(--terracotta)' }}>+76</span>
+              <span className="num text-accent">+76</span>
               <span className="lbl">Años · de despojo</span>
             </div>
             <div className="stat">
               <span className="num">∞</span>
               <span className="lbl">Sumud · firmeza</span>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -75,24 +80,32 @@ export function Home({ setPage }: HomeProps) {
         <div className="wrap">
           <div className="quote-grid">
             <div>
-              <div className="eyebrow reveal"><span className="dot" /><span>Apertura · Palabra fundacional</span></div>
-              <p className="pull-quote reveal delay-1" style={{ marginTop: 28 }}>
-                "Vengo con el <span className="leaf">fusil</span> del combatiente de la libertad en una mano
-                y la <span className="leaf">rama de olivo</span> en la otra.
-                No dejen que la rama de olivo caiga de mi mano."
-              </p>
-              <div className="quote-attrib reveal delay-2">
-                — Yasser Arafat &nbsp;·&nbsp; Asamblea General de las Naciones Unidas &nbsp;·&nbsp; 13 · XI · 1974
-              </div>
+              <Reveal>
+                <div className="eyebrow"><span className="dot" /><span>Apertura · Palabra fundacional</span></div>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <p className="pull-quote mt-7">
+                  "Vengo con el <span className="leaf">fusil</span> del combatiente de la libertad en una mano
+                  y la <span className="leaf">rama de olivo</span> en la otra.
+                  No dejen que la rama de olivo caiga de mi mano."
+                </p>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <div className="quote-attrib">
+                  — Yasser Arafat &nbsp;·&nbsp; Asamblea General de las Naciones Unidas &nbsp;·&nbsp; 13 · XI · 1974
+                </div>
+              </Reveal>
             </div>
 
-            <div className="quote-aside reveal delay-2">
-              Cincuenta y dos años después, la rama de olivo sigue pendiente del aire. Esta cátedra
-              recoge el gesto: <strong>nombrar lo que ocurre, sostener la memoria, sembrar futuro.</strong>
-              <br /><br />
-              Un acuerdo público entre estudiantes, docentes y comunidades —dentro y fuera de la universidad— para
-              que el aula sea también territorio en disputa.
-            </div>
+            <Reveal delay={0.2}>
+              <div className="quote-aside">
+                Cincuenta y dos años después, la rama de olivo sigue pendiente del aire. Esta cátedra
+                recoge el gesto: <strong>nombrar lo que ocurre, sostener la memoria, sembrar futuro.</strong>
+                <br /><br />
+                Un acuerdo público entre estudiantes, docentes y comunidades —dentro y fuera de la universidad— para
+                que el aula sea también territorio en disputa.
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -102,37 +115,31 @@ export function Home({ setPage }: HomeProps) {
         <div className="wrap">
           <div className="mission">
             <div>
-              <div className="eyebrow reveal"><span className="dot" /><span>Misión</span></div>
-              <div className="reveal delay-1" style={{ marginTop: 28, fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--fg-mute)' }}>
-                / 02 — qué hacemos
-              </div>
+              <Reveal>
+                <div className="eyebrow"><span className="dot" /><span>Misión</span></div>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <div className="mt-7 font-mono text-xs text-fg-mute">/ 02 — qué hacemos</div>
+              </Reveal>
             </div>
 
             <div>
-              <p className="lede reveal">
-                Un espacio educativo <span className="accent">sentipensante</span> de la
-                Universidad Nacional de Colombia para fomentar la solidaridad frente al
-                exterminio, contra la indiferencia académica y a favor de un saber que
-                <em> piensa-con-el-cuerpo</em>.
-              </p>
+              <Reveal>
+                <p className="lede">
+                  Un espacio educativo <span className="accent">sentipensante</span> de la
+                  Universidad Nacional de Colombia para fomentar la solidaridad frente al
+                  exterminio, contra la indiferencia académica y a favor de un saber que
+                  <em> piensa-con-el-cuerpo</em>.
+                </p>
+              </Reveal>
 
               <ul>
-                <li className="reveal delay-1">
-                  <span className="n">/ 01</span>
-                  <span><b>Investigar</b> con rigor histórico el caso palestino desde las orillas del sur global, sin neutralidades cómplices ni eufemismos académicos.</span>
-                </li>
-                <li className="reveal delay-2">
-                  <span className="n">/ 02</span>
-                  <span><b>Documentar</b> la vida cotidiana bajo bloqueo: agua, semillas, hospitales, escuelas — la infraestructura de la firmeza (sumud).</span>
-                </li>
-                <li className="reveal delay-3">
-                  <span className="n">/ 03</span>
-                  <span><b>Sembrar</b> redes entre universidades, ONGs, diásporas y comunidades campesinas que reconozcan parentescos de lucha.</span>
-                </li>
-                <li className="reveal delay-4">
-                  <span className="n">/ 04</span>
-                  <span><b>Publicar</b> un archivo abierto — bibliografía, ensayos estudiantiles, cartografías, podcast — disponible más allá del aula.</span>
-                </li>
+                {MISSION_POINTS.map((m, i) => (
+                  <Reveal key={m.n} as="li" delay={(i + 1) * 0.08}>
+                    <span className="n">/ {m.n}</span>
+                    <span><b>{m.title}</b> {m.body}</span>
+                  </Reveal>
+                ))}
               </ul>
             </div>
           </div>
@@ -140,49 +147,31 @@ export function Home({ setPage }: HomeProps) {
       </section>
 
       {/* ============ STICKY STORY ============ */}
-      <section className="section" style={{ background: 'var(--bg-warm)' }}>
+      <section className="section bg-[var(--bg-warm)]">
         <div className="wrap">
-          <div className="eyebrow reveal" style={{ marginBottom: 40 }}>
-            <span className="dot" /><span>Programa · cuatro estaciones</span>
-          </div>
+          <Reveal>
+            <div className="eyebrow mb-10">
+              <span className="dot" /><span>Programa · cuatro estaciones</span>
+            </div>
+          </Reveal>
 
           <div className="sticky-story">
-            <div className="stick reveal">
+            <Reveal className="stick">
               <div className="story-slot">
                 <div className="cap">Raíz de olivo emergiendo entre una geografía cartográfica · alto contraste</div>
               </div>
-            </div>
+            </Reveal>
 
             <div>
-              <div className="story-block reveal">
-                <div className="kicker">/ Estación 01</div>
-                <h3>La memoria como territorio</h3>
-                <p>Cómo se construye el relato hegemónico de un despojo. Lectura cruzada de Sand,
-                Masalha y Traverso: la invención del Estado, la ingeniería del traslado, el lugar
-                de Gaza antes y después de la historia.</p>
-              </div>
-              <div className="story-block reveal">
-                <div className="kicker">/ Estación 02</div>
-                <h3>Economía del bloqueo</h3>
-                <p>Agua, electricidad, combustible y harina como armas. Mapas operativos de los
-                puntos de control, infraestructura humanitaria intervenida y la
-                arquitectura del cerco.</p>
-              </div>
-              <div className="story-block reveal">
-                <div className="kicker">/ Estación 03</div>
-                <h3>Sumud — la firmeza</h3>
-                <p>El cultivo del olivo como acto político. Casas demolidas y reconstruidas.
-                Médicas y maestros que sostienen el oficio en hospitales destruidos.
-                Resistencia que no se entiende sin cotidianidad.</p>
-              </div>
-              <div className="story-block reveal">
-                <div className="kicker">/ Estación 04</div>
-                <h3>Solidaridades del sur</h3>
-                <p>Genealogía de los vínculos entre América Latina y Palestina:
-                tercermundismo, no alineación, brigadas, exilios y diásporas.
-                Cierre con una mesa de diálogo entre comunidades campesinas
-                colombianas y delegaciones palestinas.</p>
-              </div>
+              {STATIONS.map((s) => (
+                <Reveal key={s.n}>
+                  <div className="story-block">
+                    <div className="kicker">/ Estación {s.n}</div>
+                    <h3>{s.title}</h3>
+                    <p>{s.body}</p>
+                  </div>
+                </Reveal>
+              ))}
             </div>
           </div>
         </div>
@@ -194,37 +183,41 @@ export function Home({ setPage }: HomeProps) {
         <div className="wrap">
           <div className="poetica-grid">
             <div>
-              <div className="eyebrow reveal" style={{ color: 'rgba(241,237,224,0.7)' }}>
-                <span className="dot" style={{ background: '#e8b04a' }} /><span>Poética de la Tierra · voces</span>
-              </div>
+              <Reveal>
+                <div className="eyebrow" style={{ color: 'rgba(241,237,224,0.7)' }}>
+                  <span className="dot" style={{ background: '#e8b04a' }} /><span>Poética de la Tierra · voces</span>
+                </div>
+              </Reveal>
 
-              <p className="poetica-quote reveal delay-1">
-                "Escribo el <span className="leaf">nombre</span> de mi tierra en el viento,
-                <br />pero el viento no sabe que mi tierra<br />
-                tiene <span className="leaf">nombre.</span>"
-              </p>
+              <Reveal delay={0.1}>
+                <p className="poetica-quote">
+                  "Escribo el <span className="leaf">nombre</span> de mi tierra en el viento,
+                  <br />pero el viento no sabe que mi tierra<br />
+                  tiene <span className="leaf">nombre.</span>"
+                </p>
+              </Reveal>
 
-              <div className="poetica-attrib reveal delay-2">
-                — Mahmoud Darwish &nbsp;·&nbsp; <i>El lecho de una extranjera</i> &nbsp;·&nbsp; 1999
-              </div>
+              <Reveal delay={0.2}>
+                <div className="poetica-attrib">
+                  — Mahmoud Darwish &nbsp;·&nbsp; <i>El lecho de una extranjera</i> &nbsp;·&nbsp; 1999
+                </div>
+              </Reveal>
 
-              <p className="reveal delay-2" style={{
-                marginTop: 36, maxWidth: '46ch',
-                color: 'rgba(241,237,224,0.78)',
-                fontSize: 15, lineHeight: 1.65,
-              }}>
-                Si el ocupante toma la tierra, el poeta nombra la tierra. Si el archivo
-                quema, el cantor recuerda. Esta cátedra recoge un cuerpo poético, musical
-                y cinematográfico que ha sostenido la palabra <i>Palestina</i> durante
-                medio siglo de borradura sistemática.
-              </p>
+              <Reveal delay={0.2}>
+                <p className="mt-9 max-w-[46ch] text-[15px] leading-[1.65]" style={{ color: 'rgba(241,237,224,0.78)' }}>
+                  Si el ocupante toma la tierra, el poeta nombra la tierra. Si el archivo
+                  quema, el cantor recuerda. Esta cátedra recoge un cuerpo poético, musical
+                  y cinematográfico que ha sostenido la palabra <i>Palestina</i> durante
+                  medio siglo de borradura sistemática.
+                </p>
+              </Reveal>
             </div>
 
-            <div className="reveal delay-3">
+            <Reveal delay={0.3}>
               <div className="media-stub">
                 <div className="media-stub-head">
                   <div className="md-dot" />
-                  <div style={{ flex: 1 }}>
+                  <div className="flex-1">
                     <div className="md-now">Reproduciendo · sin sonido</div>
                     <div className="md-title">Marcel Khalifé — <i>Rita y el fusil</i></div>
                   </div>
@@ -268,7 +261,7 @@ export function Home({ setPage }: HomeProps) {
                 </ul>
 
                 <div className="md-foot">
-                  <span style={{ fontFamily: 'var(--mono)', fontSize: 10.5, letterSpacing: '.15em', color: 'rgba(241,237,224,0.55)' }}>
+                  <span className="font-mono text-[10.5px] tracking-[0.15em]" style={{ color: 'rgba(241,237,224,0.55)' }}>
                     Curaduría · Cátedra Caminos de Resistencia
                   </span>
                   <button className="btn-ghost-light">
@@ -276,7 +269,7 @@ export function Home({ setPage }: HomeProps) {
                   </button>
                 </div>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -284,19 +277,25 @@ export function Home({ setPage }: HomeProps) {
       {/* ============ SIMBOLOGÍA Y RAÍCES ============ */}
       <section className="section">
         <div className="wrap">
-          <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: 64, alignItems: 'end', marginBottom: 56 }} className="simbo-head">
+          <div className="simbo-head">
             <div>
-              <div className="eyebrow reveal"><span className="dot" /><span>Simbología y Raíces</span></div>
-              <h2 className="reveal delay-1" style={{ marginTop: 22 }}>
-                Tres objetos<br />
-                <em style={{ color: 'var(--terracotta)', fontStyle: 'italic' }}>—que</em> dicen un pueblo
-              </h2>
+              <Reveal>
+                <div className="eyebrow"><span className="dot" /><span>Simbología y Raíces</span></div>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <h2 className="mt-5">
+                  Tres objetos<br />
+                  <em className="text-accent italic">—que</em> dicen un pueblo
+                </h2>
+              </Reveal>
             </div>
-            <p className="reveal delay-2" style={{ color: 'var(--fg-mute)', fontSize: 16, lineHeight: 1.6, maxWidth: '44ch' }}>
-              Una semiótica popular acompaña a la causa palestina desde 1948.
-              Tres signos —el olivo, la llave, la firmeza— operan como
-              <strong style={{ color: 'var(--fg)', fontWeight: 500 }}> contraseña, herencia y mandato.</strong>
-            </p>
+            <Reveal delay={0.2}>
+              <p className="text-fg-mute text-base leading-[1.6] max-w-[44ch]">
+                Una semiótica popular acompaña a la causa palestina desde 1948.
+                Tres signos —el olivo, la llave, la firmeza— operan como
+                <strong className="text-fg font-medium"> contraseña, herencia y mandato.</strong>
+              </p>
+            </Reveal>
           </div>
 
           <div className="simbo-grid">
@@ -327,19 +326,19 @@ export function Home({ setPage }: HomeProps) {
       </section>
 
       {/* ============ CTA STRIP ============ */}
-      <section className="section" style={{ paddingTop: 40, paddingBottom: 80 }}>
+      <section className="section pt-10 pb-20">
         <div className="wrap">
-          <div className="cta-strip reveal">
+          <Reveal className="cta-strip">
             <div>
-              <h2 style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}>
-                Esta plataforma <em style={{ color: 'var(--terracotta)' }}>permanece.</em>
+              <h2 className="text-[clamp(28px,4vw,48px)]">
+                Esta plataforma <em className="text-accent">permanece.</em>
               </h2>
-              <p style={{ marginTop: 12, color: 'var(--fg-mute)', maxWidth: '56ch' }}>
+              <p className="mt-3 text-fg-mute max-w-[56ch]">
                 Un archivo público y vivo: lo que la cátedra ha investigado, conversado y publicado
                 queda disponible para quien quiera leer, citar o continuarlo.
               </p>
             </div>
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <div className="flex gap-2.5 flex-wrap">
               <button className="btn terra" onClick={() => setPage('archive')}>
                 Explorar el archivo <Icon.Arrow />
               </button>
@@ -347,12 +346,26 @@ export function Home({ setPage }: HomeProps) {
                 Conocer la historia
               </button>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
     </>
   );
 }
+
+const MISSION_POINTS = [
+  { n: '01', title: 'Investigar', body: 'con rigor histórico el caso palestino desde las orillas del sur global, sin neutralidades cómplices ni eufemismos académicos.' },
+  { n: '02', title: 'Documentar', body: 'la vida cotidiana bajo bloqueo: agua, semillas, hospitales, escuelas — la infraestructura de la firmeza (sumud).' },
+  { n: '03', title: 'Sembrar',    body: 'redes entre universidades, ONGs, diásporas y comunidades campesinas que reconozcan parentescos de lucha.' },
+  { n: '04', title: 'Publicar',   body: 'un archivo abierto — bibliografía, ensayos estudiantiles, cartografías, podcast — disponible más allá del aula.' },
+];
+
+const STATIONS = [
+  { n: '01', title: 'La memoria como territorio', body: 'Cómo se construye el relato hegemónico de un despojo. Lectura cruzada de Sand, Masalha y Traverso: la invención del Estado, la ingeniería del traslado, el lugar de Gaza antes y después de la historia.' },
+  { n: '02', title: 'Economía del bloqueo',       body: 'Agua, electricidad, combustible y harina como armas. Mapas operativos de los puntos de control, infraestructura humanitaria intervenida y la arquitectura del cerco.' },
+  { n: '03', title: 'Sumud — la firmeza',         body: 'El cultivo del olivo como acto político. Casas demolidas y reconstruidas. Médicas y maestros que sostienen el oficio en hospitales destruidos. Resistencia que no se entiende sin cotidianidad.' },
+  { n: '04', title: 'Solidaridades del sur',      body: 'Genealogía de los vínculos entre América Latina y Palestina: tercermundismo, no alineación, brigadas, exilios y diásporas. Cierre con una mesa de diálogo entre comunidades campesinas colombianas y delegaciones palestinas.' },
+];
 
 function OliveGlyph() {
   return (
@@ -395,18 +408,18 @@ interface SimboCardProps {
   term: string;
   meaning: string;
   body: string;
-  glyph: React.ReactNode;
+  glyph: ReactNode;
   accent?: boolean;
 }
 
 function SimboCard({ n, term, meaning, body, glyph, accent }: SimboCardProps) {
   return (
-    <article className={'simbo-card reveal ' + (accent ? 'is-accent' : '')}>
+    <Reveal as="article" className={'simbo-card ' + (accent ? 'is-accent' : '')}>
       <div className="simbo-card-glyph" aria-hidden="true">{glyph}</div>
       <div className="simbo-card-n">/ {n}</div>
       <h3 className="simbo-card-term">{term}</h3>
       <div className="simbo-card-meaning">{meaning}</div>
       <p className="simbo-card-body">{body}</p>
-    </article>
+    </Reveal>
   );
 }

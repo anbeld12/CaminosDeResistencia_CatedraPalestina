@@ -5,23 +5,25 @@ import { Home } from './pages/Home';
 import { ONGs } from './pages/ONGs';
 import { History } from './pages/History';
 import { Archive } from './pages/Archive';
-import type { PageId } from './lib/types';
+import type { PageId, Theme } from './lib/types';
+
+const VALID_PAGES: PageId[] = ['home', 'ongs', 'history', 'archive'];
 
 export function App() {
   const [page, setPage] = useState<PageId>(() => {
     const saved = localStorage.getItem('cdr-page') as PageId | null;
-    const valid: PageId[] = ['home', 'ongs', 'history', 'archive'];
-    return (saved && valid.includes(saved)) ? saved : 'home';
+    return (saved && VALID_PAGES.includes(saved)) ? saved : 'home';
   });
 
-  const [theme, setTheme] = useState<string>(() => {
-    const saved = localStorage.getItem('cdr-theme');
-    if (saved) return saved;
+  const [theme, setTheme] = useState<Theme>(() => {
+    const saved = localStorage.getItem('cdr-theme') as Theme | null;
+    if (saved === 'dark' || saved === 'light') return saved;
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.classList.toggle('dark', theme === 'dark');
     localStorage.setItem('cdr-theme', theme);
   }, [theme]);
 
@@ -36,17 +38,17 @@ export function App() {
 
   const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark');
 
-  const PageComp = {
+  const PageComp: Record<PageId, React.ReactNode> = {
     home:    <Home setPage={setPage} />,
     ongs:    <ONGs />,
     history: <History />,
     archive: <Archive />,
-  }[page];
+  };
 
   return (
     <>
       <Nav page={page} setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
-      <main data-screen-label={`Page ${page}`}>{PageComp}</main>
+      <main data-screen-label={`Page ${page}`}>{PageComp[page]}</main>
       <Footer setPage={setPage} />
     </>
   );

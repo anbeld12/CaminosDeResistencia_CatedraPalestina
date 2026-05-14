@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useScrollY } from '../lib/hooks';
 import { Icon, OliveMark } from '../lib/icons';
-import { PAGES, type PageId } from '../lib/types';
+import { PAGES, type PageId, type Theme } from '../lib/types';
 
 interface NavProps {
   page: PageId;
   setPage: (p: PageId) => void;
-  theme: string;
+  theme: Theme;
   toggleTheme: () => void;
 }
 
@@ -26,7 +26,7 @@ export function Nav({ page, setPage, theme, toggleTheme }: NavProps) {
             href="#"
             onClick={(e) => { e.preventDefault(); setPage('home'); }}
           >
-            <span className="brand-mark" style={{ color: 'var(--olive)' }}>
+            <span className="brand-mark text-primary">
               <OliveMark size={28} />
             </span>
             <span>
@@ -40,7 +40,7 @@ export function Nav({ page, setPage, theme, toggleTheme }: NavProps) {
               <button
                 key={p.id}
                 className={'nav-link ' + (page === p.id ? 'is-active' : '')}
-                onClick={() => setPage(p.id as PageId)}
+                onClick={() => setPage(p.id)}
                 aria-selected={page === p.id}
               >
                 {p.label}
@@ -72,13 +72,13 @@ export function Nav({ page, setPage, theme, toggleTheme }: NavProps) {
           <a
             key={p.id}
             href="#"
-            onClick={(e) => { e.preventDefault(); setPage(p.id as PageId); }}
+            onClick={(e) => { e.preventDefault(); setPage(p.id); }}
           >
             <span>{p.label}</span>
             <small>0{i + 1}</small>
           </a>
         ))}
-        <div style={{ marginTop: 24, display: 'flex', gap: 12 }}>
+        <div className="mt-6 flex gap-3">
           <button className="btn terra" onClick={() => setPage('archive')}>
             Explorar el Archivo
           </button>

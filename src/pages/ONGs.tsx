@@ -1,60 +1,18 @@
 import { useState } from 'react';
-import { useReveal } from '../lib/hooks';
+import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
-
-const ONG_CARDS = [
-  {
-    tag: '/ Agua · Energía',
-    title: 'El bloqueo como tecnología',
-    body: 'Israel controla el 80% de los acuíferos de la Cisjordania. El combustible es la palanca económica del cerco: cuando falta diésel se apagan incubadoras, plantas desalinizadoras y bombas de aguas residuales — y la geografía cotidiana se contrae.',
-    stats: [{ v: '80%', k: 'acuíferos controlados' }, { v: '·3 h', k: 'Electricidad / día (Gaza)' }],
-    blockade: true,
-    img: 'olive' as const,
-    label: 'Tanques azules en azoteas · cisterna improvisada',
-    size: 's6',
-  },
-  {
-    tag: '/ Salud mental',
-    title: 'Curar entre ruinas',
-    body: 'Hospitales destruidos donde médicas y residentes siguen atendiendo: el oficio sostenido como forma de resistencia. La OMS contabiliza más de 36 instalaciones sanitarias inutilizadas — pero el turno continúa.',
-    stats: [{ v: '36+', k: 'hospitales afectados' }, { v: '1 / 5', k: 'psiquiatras / 100k hab.' }],
-    blockade: false,
-    img: 'terra' as const,
-    label: 'Manos suturando bajo luz de lámpara de bolsillo',
-    size: 's6',
-  },
-  {
-    tag: '/ Sumud',
-    title: 'Firmeza — cultivar lo que arrancan',
-    body: 'Sumud es la palabra árabe para la firmeza testaruda: replantar el olivo arrancado, dormir en la casa demolida, mandar a la niña a la escuela bajo el dron. No es metáfora — es agronomía, urbanismo y pedagogía a la vez.',
-    stats: [{ v: '·800K', k: 'olivos arrancados desde 1967' }, { v: '+150', k: 'asentamientos en curso' }],
-    blockade: true,
-    img: 'olive' as const,
-    label: 'Olivo recién plantado entre escombros · tierra removida',
-    size: 's12',
-  },
-];
-
-const ONG_PARTNERS = [
-  { name: 'Medical Aid for Palestinians', city: 'Londres', since: '1984', focus: 'Salud comunitaria' },
-  { name: 'Al-Haq', city: 'Ramallah', since: '1979', focus: 'Derecho internacional' },
-  { name: "B'Tselem", city: 'Jerusalén', since: '1989', focus: 'Documentación' },
-  { name: 'PCRF', city: 'Kuwait — Global', since: '1991', focus: 'Niñez y reconstrucción' },
-  { name: 'Visualizing Palestine', city: 'Beirut', since: '2012', focus: 'Cartografía de datos' },
-  { name: 'Cátedra Edward Said — UNAL', city: 'Bogotá', since: '2024', focus: 'Articulación académica' },
-];
+import { ONG_CARDS, ONG_PARTNERS, FIELD_STEPS } from '../data/ongs';
 
 type Tab = 'vida' | 'partners' | 'field';
 
-export function ONGs() {
-  useReveal();
-  const [tab, setTab] = useState<Tab>('vida');
+const TABS: { id: Tab; label: string }[] = [
+  { id: 'vida',     label: 'Logística de la vida' },
+  { id: 'partners', label: 'Aliadas' },
+  { id: 'field',    label: 'Trabajo de campo' },
+];
 
-  const tabs: { id: Tab; label: string }[] = [
-    { id: 'vida',     label: 'Logística de la vida' },
-    { id: 'partners', label: 'Aliadas' },
-    { id: 'field',    label: 'Trabajo de campo' },
-  ];
+export function ONGs() {
+  const [tab, setTab] = useState<Tab>('vida');
 
   return (
     <>
@@ -62,41 +20,47 @@ export function ONGs() {
         <div className="wrap">
           <div className="row">
             <div>
-              <div className="eyebrow reveal"><span className="dot" /><span>Página 02 · ONGs</span></div>
-              <h1 className="reveal delay-1" style={{ marginTop: 18 }}>
-                Savia<br />
-                <em style={{ fontStyle: 'italic', color: 'var(--terracotta)' }}>y</em> Sumud
-              </h1>
+              <Reveal>
+                <div className="eyebrow"><span className="dot" /><span>Página 02 · ONGs</span></div>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <h1 className="mt-4">
+                  Savia<br />
+                  <em className="italic text-accent">y</em> Sumud
+                </h1>
+              </Reveal>
             </div>
-            <div className="reveal delay-2">
+            <Reveal delay={0.2}>
               <p className="lede">
                 <strong>La resistencia tiene logística.</strong> Esta página mapea
                 organizaciones que sostienen el agua, el cuidado y la tierra cuando
                 la infraestructura del Estado es —deliberadamente— inviable.
               </p>
-            </div>
+            </Reveal>
           </div>
 
-          <div className="subtabs reveal delay-3">
-            {tabs.map(t => (
-              <button
-                key={t.id}
-                className={'subtab ' + (tab === t.id ? 'is-active' : '')}
-                onClick={() => setTab(t.id)}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
+          <Reveal delay={0.3}>
+            <div className="subtabs">
+              {TABS.map(t => (
+                <button
+                  key={t.id}
+                  className={'subtab ' + (tab === t.id ? 'is-active' : '')}
+                  onClick={() => setTab(t.id)}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </header>
 
       {tab === 'vida' && (
-        <section className="section" style={{ paddingTop: 24 }}>
+        <section className="section pt-6">
           <div className="wrap">
             <div className="cards">
               {ONG_CARDS.map((c, i) => (
-                <article key={i} className={'card reveal delay-' + Math.min(i + 1, 3) + ' ' + c.size}>
+                <Reveal as="article" key={i} delay={Math.min(i + 1, 3) * 0.08} className={'card ' + c.size}>
                   <div className={'card-img ' + (c.img === 'terra' ? 'terra' : '')}>{c.label}</div>
                   <div className="tag">{c.tag}</div>
                   <h3>{c.title}</h3>
@@ -110,7 +74,7 @@ export function ONGs() {
                       </div>
                     ))}
                   </div>
-                </article>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -118,22 +82,24 @@ export function ONGs() {
       )}
 
       {tab === 'partners' && (
-        <section className="section" style={{ paddingTop: 24 }}>
+        <section className="section pt-6">
           <div className="wrap">
-            <div className="hr-rule reveal" style={{ marginBottom: 24 }}>
-              <span>Listado vivo · 06 aliadas</span>
-            </div>
-            <div style={{ borderTop: '1px solid var(--line)' }}>
+            <Reveal>
+              <div className="hr-rule mb-6">
+                <span>Listado vivo · 06 aliadas</span>
+              </div>
+            </Reveal>
+            <div className="border-t border-[var(--line)]">
               {ONG_PARTNERS.map((p, i) => (
-                <div key={i} className="partner-row reveal">
-                  <div style={{ fontFamily: 'var(--mono)', color: 'var(--terracotta)', fontSize: 11, letterSpacing: '.15em' }}>0{i + 1}</div>
+                <Reveal key={i} className="partner-row">
+                  <div className="font-mono text-accent text-[11px] tracking-[0.15em]">0{i + 1}</div>
                   <div>
-                    <div style={{ fontFamily: 'var(--serif)', fontSize: 26, letterSpacing: '-0.015em' }}>{p.name}</div>
+                    <div className="font-serif text-[26px] tracking-[-0.015em]">{p.name}</div>
                   </div>
-                  <div className="partner-city" style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--fg-mute)' }}>{p.city}</div>
-                  <div className="partner-focus" style={{ fontSize: 14, color: 'var(--fg-mute)' }}>{p.focus}</div>
-                  <div className="partner-since" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--fg-mute)', letterSpacing: '.15em', textAlign: 'right' }}>est. {p.since}</div>
-                </div>
+                  <div className="partner-city font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute">{p.city}</div>
+                  <div className="partner-focus text-sm text-fg-mute">{p.focus}</div>
+                  <div className="partner-since font-mono text-[11px] text-fg-mute tracking-[0.15em] text-right">est. {p.since}</div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -141,39 +107,35 @@ export function ONGs() {
       )}
 
       {tab === 'field' && (
-        <section className="section" style={{ paddingTop: 24 }}>
+        <section className="section pt-6">
           <div className="wrap">
-            <div className="grid-2 reveal">
+            <Reveal className="grid-2">
               <div>
-                <h2 style={{ fontSize: 'clamp(36px, 5vw, 64px)' }}>
-                  Brigadas <em style={{ color: 'var(--terracotta)', fontStyle: 'italic' }}>de</em> cosecha
+                <h2 className="text-[clamp(36px,5vw,64px)]">
+                  Brigadas <em className="text-accent italic">de</em> cosecha
                 </h2>
-                <p style={{ color: 'var(--fg-mute)', marginTop: 18, fontSize: 16, lineHeight: 1.6, maxWidth: '48ch' }}>
+                <p className="text-fg-mute mt-4 text-base leading-[1.6] max-w-[48ch]">
                   Cada octubre, brigadas internacionales acompañan la cosecha de la aceituna en
                   Cisjordania. Acompañar no es producir — es estar ahí cuando se intenta arrancar el árbol.
                   La presencia es una unidad de medida política.
                 </p>
-                <div style={{ marginTop: 28, display: 'flex', gap: 10 }}>
+                <div className="mt-7 flex gap-2.5">
                   <button className="btn terra">Cómo unirse</button>
                   <button className="btn">Protocolo · PDF</button>
                 </div>
               </div>
               <ImageSlot height={360} label="Brigada en olivar · oct. 2025" />
-            </div>
+            </Reveal>
 
-            <div style={{ height: 80 }} />
+            <div className="h-20" />
 
             <div className="grid-3">
-              {[
-                { n: '01', t: 'Solicitud', d: 'Carta de motivación + carné UNAL vigente. Cierre: 30 de agosto.' },
-                { n: '02', t: 'Formación', d: 'Tres sesiones obligatorias: contexto, primeros auxilios, derecho humanitario.' },
-                { n: '03', t: 'Viaje', d: 'Acompañamiento entre el 6 y el 20 de octubre. Estancia en Beit Sahour.' },
-              ].map(s => (
-                <div key={s.n} className="reveal" style={{ padding: '28px 24px', borderTop: '1px solid var(--line)', position: 'relative' }}>
-                  <div style={{ fontFamily: 'var(--mono)', color: 'var(--terracotta)', fontSize: 11, letterSpacing: '.15em' }}>/ {s.n}</div>
-                  <h3 style={{ marginTop: 12 }}>{s.t}</h3>
-                  <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.6 }}>{s.d}</p>
-                </div>
+              {FIELD_STEPS.map((s, i) => (
+                <Reveal key={s.n} delay={i * 0.08} className="px-6 py-7 border-t border-[var(--line)] relative">
+                  <div className="font-mono text-accent text-[11px] tracking-[0.15em]">/ {s.n}</div>
+                  <h3 className="mt-3">{s.t}</h3>
+                  <p className="mt-2.5 text-fg-mute text-[14.5px] leading-[1.6]">{s.d}</p>
+                </Reveal>
               ))}
             </div>
           </div>
