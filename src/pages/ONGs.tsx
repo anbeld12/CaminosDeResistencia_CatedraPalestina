@@ -125,28 +125,14 @@ export function ONGs() {
             </div>
             <div style={{ borderTop: '1px solid var(--line)' }}>
               {ONG_PARTNERS.map((p, i) => (
-                <div
-                  key={i}
-                  className="reveal"
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '60px 1.6fr 1fr 1fr 80px',
-                    gap: 24, alignItems: 'center',
-                    padding: '26px 0',
-                    borderBottom: '1px solid var(--line)',
-                    cursor: 'pointer',
-                    transition: 'padding-left .25s ease, color .25s ease',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.paddingLeft = '12px')}
-                  onMouseLeave={(e) => (e.currentTarget.style.paddingLeft = '0')}
-                >
+                <div key={i} className="partner-row reveal">
                   <div style={{ fontFamily: 'var(--mono)', color: 'var(--terracotta)', fontSize: 11, letterSpacing: '.15em' }}>0{i + 1}</div>
                   <div>
                     <div style={{ fontFamily: 'var(--serif)', fontSize: 26, letterSpacing: '-0.015em' }}>{p.name}</div>
                   </div>
-                  <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--fg-mute)' }}>{p.city}</div>
-                  <div style={{ fontSize: 14, color: 'var(--fg-mute)' }}>{p.focus}</div>
-                  <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--fg-mute)', letterSpacing: '.15em', textAlign: 'right' }}>est. {p.since}</div>
+                  <div className="partner-city" style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--fg-mute)' }}>{p.city}</div>
+                  <div className="partner-focus" style={{ fontSize: 14, color: 'var(--fg-mute)' }}>{p.focus}</div>
+                  <div className="partner-since" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--fg-mute)', letterSpacing: '.15em', textAlign: 'right' }}>est. {p.since}</div>
                 </div>
               ))}
             </div>

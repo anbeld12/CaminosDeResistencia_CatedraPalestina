@@ -157,15 +157,7 @@ export function History() {
       {/* ============ READING NOTE ============ */}
       <section className="section" style={{ paddingTop: 24 }}>
         <div className="wrap">
-          <div style={{
-            padding: '44px 48px',
-            background: 'var(--olive)',
-            color: '#f1ede0',
-            borderRadius: 20,
-            display: 'grid',
-            gridTemplateColumns: '1fr auto',
-            gap: 32, alignItems: 'center',
-          }} className="reveal">
+          <div className="reading-note reveal">
             <div>
               <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: 'rgba(241,237,224,0.7)' }}>
                 Nota de método

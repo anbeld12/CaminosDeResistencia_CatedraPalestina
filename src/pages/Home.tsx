@@ -329,12 +329,7 @@ export function Home({ setPage }: HomeProps) {
       {/* ============ CTA STRIP ============ */}
       <section className="section" style={{ paddingTop: 40, paddingBottom: 80 }}>
         <div className="wrap">
-          <div style={{
-            display: 'grid', gridTemplateColumns: '1fr auto', gap: 32, alignItems: 'center',
-            padding: '40px 0',
-            borderTop: '1px solid var(--line)',
-            borderBottom: '1px solid var(--line)',
-          }} className="reveal">
+          <div className="cta-strip reveal">
             <div>
               <h2 style={{ fontSize: 'clamp(28px, 4vw, 48px)' }}>
                 Esta plataforma <em style={{ color: 'var(--terracotta)' }}>permanece.</em>
