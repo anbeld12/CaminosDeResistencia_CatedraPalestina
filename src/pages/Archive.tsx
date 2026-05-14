@@ -186,9 +186,12 @@ export function Archive() {
               {BIBLIO.map((b, i) => (
                 <div key={i} className="biblio-item">
                   <div className="idx">N° {String(i + 1).padStart(2, '0')}</div>
-                  <div>
-                    <h5>{b.author}</h5>
-                    <div className="work">{b.work}</div>
+                  <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                    <span className="biblio-icon" aria-hidden="true"><Icon.Book /></span>
+                    <div>
+                      <div className="biblio-author">{b.author}</div>
+                      <div className="work">{b.work}</div>
+                    </div>
                   </div>
                   <div className="meta-r">{b.origin} · {b.year}</div>
                 </div>
