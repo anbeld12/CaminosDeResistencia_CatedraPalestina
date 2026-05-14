@@ -15,7 +15,9 @@ export function App() {
   });
 
   const [theme, setTheme] = useState<string>(() => {
-    return localStorage.getItem('cdr-theme') || 'light';
+    const saved = localStorage.getItem('cdr-theme');
+    if (saved) return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
   useEffect(() => {
