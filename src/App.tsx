@@ -5,9 +5,11 @@ import { Home } from './pages/Home';
 import { ONGs } from './pages/ONGs';
 import { History } from './pages/History';
 import { Archive } from './pages/Archive';
+import { Voces } from './pages/Voces';
+import { Genero } from './pages/Genero';
 import type { PageId, Theme } from './lib/types';
 
-const VALID_PAGES: PageId[] = ['home', 'ongs', 'history', 'archive'];
+const VALID_PAGES: PageId[] = ['home', 'history', 'ongs', 'genero', 'voces', 'archive'];
 
 export function App() {
   const [page, setPage] = useState<PageId>(() => {
@@ -40,8 +42,10 @@ export function App() {
 
   const PageComp: Record<PageId, React.ReactNode> = {
     home:    <Home setPage={setPage} />,
-    ongs:    <ONGs />,
     history: <History />,
+    ongs:    <ONGs />,
+    genero:  <Genero />,
+    voces:   <Voces />,
     archive: <Archive />,
   };
 

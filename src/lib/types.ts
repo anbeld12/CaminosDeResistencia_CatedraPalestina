@@ -4,12 +4,14 @@ export interface Page {
   sub: string;
 }
 
-export type PageId = 'home' | 'ongs' | 'history' | 'archive';
+export type PageId = 'home' | 'history' | 'ongs' | 'genero' | 'voces' | 'archive';
 
 export const PAGES: Page[] = [
   { id: 'home',    label: 'Inicio',   sub: 'El Surco de la Memoria' },
-  { id: 'ongs',    label: 'ONGs',     sub: 'Savia y Sumud' },
   { id: 'history', label: 'Historia', sub: 'Raíces Milenarias' },
+  { id: 'ongs',    label: 'ONGs',     sub: 'Savia y Sumud' },
+  { id: 'genero',  label: 'Género',   sub: 'Palestina de Todas' },
+  { id: 'voces',   label: 'Voces',    sub: 'Cultura y Medios' },
   { id: 'archive', label: 'Archivo',  sub: 'Cosecha de Saberes' },
 ];
 
@@ -78,4 +80,11 @@ export interface KindFilter {
   id: 'all' | ProjectKind;
   label: string;
   n: number;
+}
+
+export interface Myth {
+  id: string;
+  myth: string;
+  reality: string;
+  sources: string[];
 }

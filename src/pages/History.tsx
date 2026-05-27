@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Reveal } from '../components/Reveal';
+import { MythCards } from '../components/MythCards';
 import { Icon } from '../lib/icons';
 import { ImageSlot } from '../components/ImageSlot';
 import { TIMELINE, GLOSSARY } from '../data/history';
@@ -108,6 +109,34 @@ export function History() {
             </Reveal>
             <ImageSlot height={420} label="Cuatro mapas comparativos · contraste cromático verde/negro" variant="terra" className="has-grain" />
           </div>
+        </div>
+      </section>
+
+      {/* ============ MITOS VS. REALIDAD ============ */}
+      <section className="section">
+        <div className="wrap">
+          <div className="myth-section-head">
+            <div>
+              <Reveal>
+                <div className="eyebrow"><span className="dot" /><span>Mitos vs. Realidad</span></div>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <h2 className="mt-5">
+                  Cuatro mitos<br />
+                  <em className="text-accent italic">—que no resisten</em><br />
+                  los archivos
+                </h2>
+              </Reveal>
+            </div>
+            <Reveal delay={0.2}>
+              <p className="text-fg-mute text-base leading-relaxed max-w-[44ch]">
+                El relato hegemónico sobre Palestina descansa en una serie de afirmaciones
+                repetidas como hechos. Gira cada tarjeta para confrontarlas con la evidencia
+                documental. <span className="font-mono text-[11px] tracking-[0.12em] uppercase">Hover · escritorio &nbsp;/&nbsp; Tap · móvil</span>
+              </p>
+            </Reveal>
+          </div>
+          <MythCards />
         </div>
       </section>
 
