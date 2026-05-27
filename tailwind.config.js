@@ -6,23 +6,20 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#2E4731',
-          deep: '#1d2f1f',
-          soft: '#6f9456',
+          DEFAULT: 'var(--olive)',
+          deep: 'var(--olive-deep)',
         },
         accent: {
           DEFAULT: 'var(--terracotta)',
         },
-        dark: '#121212',
+        dark: 'var(--carbon)',
         light: {
-          DEFAULT: '#F5F5F5',
-          warm: '#FAFAF7',
+          DEFAULT: 'var(--smoke)',
+          warm: 'var(--paper)',
         },
         fg: {
-          DEFAULT: '#121212',
-          mute: '#4a4a48',
-          'dark-default': '#f1ede4',
-          'dark-mute': '#a8a39a',
+          DEFAULT: 'var(--fg)',
+          mute: 'var(--fg-mute)',
         },
       },
       fontFamily: {
@@ -32,12 +29,6 @@ export default {
       },
       maxWidth: {
         wrap: '1280px',
-      },
-      backgroundColor: {
-        'bg-base': '#F5F5F5',
-        'bg-warm': '#FAFAF7',
-        'bg-dark': '#0b0c0a',
-        'bg-dark-warm': '#121310',
       },
     },
   },

@@ -125,7 +125,7 @@ function ArteTab() {
                   marginTop: 28,
                   fontFamily: 'var(--mono)',
                   fontSize: 10.5,
-                  color: 'rgba(241,237,224,.38)',
+                  color: 'rgba(241,237,224,.65)',
                   letterSpacing: '.15em',
                   textTransform: 'uppercase',
                   borderLeft: '2px solid var(--terracotta)',
