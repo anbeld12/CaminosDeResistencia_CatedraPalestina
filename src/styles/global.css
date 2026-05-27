@@ -885,24 +885,26 @@
 
   .btn {
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 11px 18px;
+    padding: 12px 22px;
     border-radius: 999px;
     border: 1px solid var(--line);
     background: transparent;
     font-family: inherit;
     font-size: 13px; font-weight: 500;
+    line-height: 1.15;
+    white-space: nowrap;
     color: var(--fg);
     cursor: pointer;
-    transition: border-color .2s ease, color .2s ease, background .2s ease;
+    transition: border-color .2s ease, color .2s ease, background .2s ease, transform .2s ease;
   }
   .btn:hover { border-color: var(--terracotta); color: var(--terracotta); }
   .btn.solid { background: var(--olive); color: #f1ede0; border-color: var(--olive); }
   .btn.solid:hover { background: var(--olive-deep); color: #fff; border-color: var(--olive-deep); }
-  .btn.terra { background: var(--terracotta); color: var(--text-on-terracotta); border-color: var(--terracotta); }
-  .btn.terra:hover { background: #a02930; border-color: #a02930; color: #fff; }
+  .btn.terra { background: var(--terracotta); color: var(--text-on-terracotta); border-color: transparent; }
+  .btn.terra:hover { background: #a02930; border-color: transparent; color: #fff; }
 
   html.dark .btn.terra:hover,
-  html[data-theme="dark"] .btn.terra:hover { background: #8B1D22; border-color: #8B1D22; }
+  html[data-theme="dark"] .btn.terra:hover { background: #8B1D22; border-color: transparent; }
 
   .kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--terracotta); }
 
@@ -1024,11 +1026,13 @@
 
   .btn-ghost-light {
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 8px 14px; border-radius: 999px;
-    background: transparent; border: 1px solid rgba(241,237,224,0.2);
-    color: #f1ede0; font-family: inherit; font-size: 12px;
+    padding: 10px 18px; border-radius: 999px;
+    background: transparent; border: 1px solid rgba(241,237,224,0.22);
+    color: #f1ede0; font-family: inherit; font-size: 13px;
+    line-height: 1.2;
+    white-space: nowrap;
     cursor: pointer;
-    transition: background .2s ease, border-color .2s ease, color .2s ease;
+    transition: background .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
   }
   .btn-ghost-light:hover { background: rgba(241,237,224,0.08); border-color: rgba(232,176,74,0.6); color: var(--gold-accent); }
   .btn-ghost-light svg { width: 12px; height: 12px; }
