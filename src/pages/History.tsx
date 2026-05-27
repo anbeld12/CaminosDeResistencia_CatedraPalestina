@@ -11,6 +11,7 @@ export function History() {
   const [open, setOpen] = useState(-1);
 
   useEffect(() => {
+    if (window.innerWidth < 820) return;
     const el = railRef.current;
     if (!el) return;
     const onScroll = () => {
@@ -24,6 +25,7 @@ export function History() {
   }, []);
 
   const scroll = (dir: number) => {
+    if (window.innerWidth < 820) return;
     railRef.current?.scrollBy({ left: dir * 384, behavior: 'smooth' });
   };
 

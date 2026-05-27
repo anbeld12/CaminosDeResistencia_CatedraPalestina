@@ -1,0 +1,50 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "edit": "ask",
+    "bash": "ask"
+  },
+  "command": {
+    "audit-responsive": {
+      "description": "Escanea el proyecto en busca de problemas de responsividad y genera un reporte",
+      "template": "Ejecuta el agente @audit-responsive para analizar todos los archivos del proyecto en busca de problemas de responsividad. Escanea especialmente:\n\n1. Elementos con `overflow-x: auto` que no tengan `-webkit-overflow-scrolling: touch`\n2. `white-space: nowrap` en contenedores sin breakpoint de desbordamiento\n3. Clases de grid que usan `span-*` sin media query para tablets (entre 640px y 980px)\n4. Textos con `font-size` menor a 12px en cualquier media query\n5. Uso de `scrollBy` o `scrollLeft` en JS que no se desactiven en pantallas pequeñas\n\nGenera un archivo `responsiveness-report.md` en la raíz del proyecto con:\n- Lista de problemas encontrados\n- Archivo y línea donde ocurre cada problema\n- Sugerencia de corrección para cada uno\n\nNo modifiques ningún archivo fuente, solo genera el reporte.",
+      "agent": "audit-responsive"
+    },
+    "fix-colors": {
+      "description": "Analiza literales de color y sugiere reemplazos por variables CSS (--apply para aplicar cambios)",
+      "template": "Ejecuta el agente @fix-colors para analizar todos los archivos .tsx, .css, .js, .json en busca de literales de color (#hex, rgb, hsl, nombres de color).\n\nReglas:\n- Ignorar colores dentro de comentarios\n- Si un color aparece más de 2 veces y no tiene token, sugerir la creación de una nueva variable CSS\n- Verificar que cada color usado tenga un par de contraste en modo claro y oscuro (WCAG 2.1 AA: ratio ≥ 4.5:1 para texto normal)\n- Mapear cada literal a variables existentes: --olive, --olive-deep, --olive-soft, --terracotta, --terracotta-soft, --carbon, --smoke, --paper, --ink, --ink-mute, --line, --line-soft, --bg, --bg-warm, --fg, --fg-mute\n\nGenera un archivo `color-tokens-report.md` con:\n- Mapeo literal → variable sugerida\n- Bloque de código CSS con nuevas definiciones si son necesarias\n- Advertencias de contraste insuficiente\n\n{{#if apply}}\nMODO APLICACIÓN: Reemplaza automáticamente los literales por las variables correspondientes. Muestra un diff de cada cambio antes de aplicarlo. Crea backups con extensión .original solo si hay cambios críticos.\n{{/if}}",
+      "agent": "fix-colors"
+    },
+    "humanize-text": {
+      "description": "Reescribe textos generados por IA con tono académico local y natural (--auto para aplicar sin confirmación)",
+      "template": "Ejecuta el agente @humanize-text para procesar los archivos que contienen texto visible: src/pages/*.tsx, src/components/*.tsx (solo los textos dentro de etiquetas p, h1..h6, li, blockquote, .lede, .pull-quote, etc.).\n\nReglas de transformación (sin cambiar el significado):\n1. Eliminar voz pasiva → convertir a activa\n2. Reemplazar adverbios terminados en \"-mente\" por frases más directas\n3. Dividir oraciones de más de 25 palabras\n4. Eliminar muletillas como \"cabe destacar\", \"no es metáfora\", \"sin embargo\", \"por lo tanto\"\n5. Añadir al menos una referencia local por párrafo (ej. \"como mencionamos en la clase del profesor X\", \"en el contexto colombiano...\")\n6. Usar contracciones solo en citas directas\n7. Mantener el contenido en español y el tono académico\n\n{{#if auto}}\nMODO AUTO: Aplica todos los cambios directamente. Crea un backup de cada archivo modificado con extensión .original antes de escribir.\n{{else}}\nMODO INTERACTIVO: Muestra un diff de cada cambio propuesto y espera confirmación antes de aplicar. El usuario debe poder aceptar o rechazar cada transformación individualmente.\n{{/if}}",
+      "agent": "humanize-text"
+    }
+  },
+  "agent": {
+    "audit-responsive": {
+      "description": "Agente de auditoría de responsividad — detecta layouts rotos en móvil/tablet",
+      "mode": "subagent",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask"
+      }
+    },
+    "fix-colors": {
+      "description": "Agente de limpieza cromática — unifica tokens y elimina literales de color",
+      "mode": "subagent",
+      "permission": {
+        "edit": "ask",
+        "bash": "ask"
+      }
+    },
+    "humanize-text": {
+      "description": "Agente reescritor de contenido — humaniza textos generados por IA",
+      "mode": "subagent",
+      "permission": {
+        "edit": "ask",
+        "bash": "ask"
+      }
+    }
+  }
+}

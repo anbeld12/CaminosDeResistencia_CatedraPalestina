@@ -367,7 +367,7 @@ function PeriodismoTab() {
               </div>
             </div>
             <div className="voces-db-footer">
-              <div style={{ fontFamily: 'var(--mono)', fontSize: 10.5, color: 'rgba(255,255,255,.34)', letterSpacing: '.14em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 10.5, color: 'rgba(255,255,255,.34)', letterSpacing: '.14em', textTransform: 'uppercase', whiteSpace: 'normal' }}>
                 Contra el memoridicio
               </div>
               <div style={{ borderLeft: '2px solid #8B1D22', paddingLeft: 20, fontStyle: 'italic', color: 'rgba(255,255,255,.72)', fontSize: 15, lineHeight: 1.68 }}>

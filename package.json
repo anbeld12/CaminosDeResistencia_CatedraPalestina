@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "audit:all": "echo \"Ejecuta manualmente en OpenCode: /audit-responsive, /fix-colors, /humanize-text\""
   },
   "devDependencies": {
     "@types/react": "^18.3.28",

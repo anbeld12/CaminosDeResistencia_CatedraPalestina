@@ -20,7 +20,7 @@ export function Footer({ setPage }: FooterProps) {
               <a
                 key={p.id}
                 href="#"
-                onClick={(e) => { e.preventDefault(); setPage(p.id); window.scrollTo({ top: 0 }); }}
+                onClick={(e) => { e.preventDefault(); setPage(p.id); window.scrollTo(0, 0); }}
               >
                 {p.label}
               </a>
