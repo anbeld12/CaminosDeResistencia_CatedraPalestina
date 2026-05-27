@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useScrollY } from '../lib/hooks';
-import { Icon, OliveMark } from '../lib/icons';
+import { Icon } from '../lib/icons';
 import { PAGES, type PageId, type Theme } from '../lib/types';
 
 interface NavProps {
@@ -26,8 +26,8 @@ export function Nav({ page, setPage, theme, toggleTheme }: NavProps) {
             href="#"
             onClick={(e) => { e.preventDefault(); setPage('home'); }}
           >
-            <span className="brand-mark text-primary">
-              <OliveMark size={28} />
+            <span className="brand-mark">
+              <img src="/navbar-icon.png" alt="" width={28} height={28} />
             </span>
             <span>
               Caminos de Resistencia

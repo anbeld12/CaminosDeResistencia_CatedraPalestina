@@ -69,19 +69,4 @@ export const Icon = {
   ),
 };
 
-export function OliveMark({ size = 28 }: { size?: number }) {
-  return (
-    <svg viewBox="0 0 32 32" width={size} height={size} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M16 29 C14 24, 18 20, 15 15 C12 10, 17 6, 16 3" strokeWidth="1.4"/>
-      <ellipse cx="12.5" cy="22" rx="3.2" ry="1.1" transform="rotate(-42 12.5 22)" strokeWidth="1.1"/>
-      <ellipse cx="19.5" cy="20.5" rx="3.2" ry="1.1" transform="rotate(38 19.5 20.5)" strokeWidth="1.1"/>
-      <ellipse cx="11" cy="17" rx="3.0" ry="1.0" transform="rotate(-50 11 17)" strokeWidth="1.1"/>
-      <ellipse cx="20" cy="15.5" rx="3.0" ry="1.0" transform="rotate(44 20 15.5)" strokeWidth="1.1"/>
-      <ellipse cx="12" cy="11.5" rx="2.8" ry="1.0" transform="rotate(-55 12 11.5)" strokeWidth="1.1"/>
-      <ellipse cx="19" cy="10" rx="2.8" ry="1.0" transform="rotate(48 19 10)" strokeWidth="1.1"/>
-      <ellipse cx="14" cy="6.5" rx="2.4" ry="0.9" transform="rotate(-40 14 6.5)" strokeWidth="1.0"/>
-      <circle cx="13.5" cy="19.5" r="1.2" fill="currentColor" stroke="none"/>
-      <circle cx="19" cy="13" r="1.1" fill="currentColor" stroke="none"/>
-    </svg>
-  );
-}
+

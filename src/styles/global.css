@@ -193,7 +193,7 @@
     white-space: nowrap;
   }
   .brand-mark { width: 28px; height: 28px; position: relative; flex-shrink: 0; }
-  .brand-mark svg { display:block; width:100%; height:100%; }
+  .brand-mark svg, .brand-mark img { display:block; width:100%; height:100%; }
   .brand small {
     font-family: var(--mono);
     font-size: 9.5px;
