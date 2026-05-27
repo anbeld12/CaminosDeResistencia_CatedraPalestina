@@ -133,8 +133,8 @@ export function History() {
             <Reveal delay={0.2}>
               <p className="text-fg-mute text-base leading-relaxed max-w-[44ch]">
                 El relato hegemónico sobre Palestina descansa en una serie de afirmaciones
-                repetidas como hechos. Gira cada tarjeta para confrontarlas con la evidencia
-                documental. <span className="font-mono text-[11px] tracking-[0.12em] uppercase">Hover · escritorio &nbsp;/&nbsp; Tap · móvil</span>
+                repetidas como hechos. Interactúa con cada tarjeta para confrontarlas
+                con la evidencia documental.
               </p>
             </Reveal>
           </div>

@@ -41,6 +41,18 @@ The content is organized as follows:
 
 <directory_structure>
 .gitignore
+.opencode/agents/audit-responsive.md
+.opencode/agents/fix-colors.md
+.opencode/agents/humanize-text.md
+.opencode/skills/audit-responsive/SKILL.md
+.opencode/skills/color-accessibility/references/accessible-color-usage.md
+.opencode/skills/color-accessibility/references/color-contrast-standards.md
+.opencode/skills/color-accessibility/references/color-vision-deficiency-simulation.md
+.opencode/skills/color-accessibility/references/testing-validation.md
+.opencode/skills/color-accessibility/SKILL.md
+.opencode/skills/color-accessibility/templates/component-template.tsx
+.opencode/skills/fix-colors/SKILL.md
+.opencode/skills/humanize-text/SKILL.md
 CLAUDE.md
 design_files/c-tedra-palestina/chats/chat1.md
 design_files/c-tedra-palestina/project/app.jsx
@@ -61,6 +73,8 @@ design_files/c-tedra-palestina/project/styles.css
 design_files/c-tedra-palestina/project/tweaks-panel.jsx
 design_files/c-tedra-palestina/README.md
 index.html
+OPECODE_SETUP.md
+opencode.json
 package.json
 postcss.config.js
 public/favicon.svg
@@ -99,31 +113,1228 @@ vite.config.ts
 <files>
 This section contains the contents of the repository's files.
 
-<file path=".gitignore">
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+<file path=".opencode/skills/color-accessibility/references/accessible-color-usage.md">
+# Accessible Color Usage
 
-node_modules
-dist
-dist-ssr
-*.local
+## Accessible Color Usage
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+```yaml
+Color Usage Guidelines:
+
+Status Indicators:
+
+Error:
+  Color: #D32F2F (red)
+  Contrast: 4.5:1 minimum
+  Additional: Error icon, text "Error"
+  Don't: Use ONLY red, no other indication
+
+Success:
+  Color: #388E3C (green)
+  Contrast: 4.5:1 minimum
+  Additional: Checkmark icon, text "Success"
+  Don't: Use ONLY green
+
+Warning:
+  Color: #F57C00 (orange)
+  Contrast: 4.5:1 minimum
+  Additional: Warning icon, text "Warning"
+  Don't: Use ONLY orange
+
+Info:
+  Color: #1976D2 (blue)
+  Contrast: 4.5:1 minimum
+  Additional: Info icon, text "Info"
+  Don't: Use ONLY blue
+
+---
+Data Visualization:
+
+Charts & Graphs:
+  - Use 8+ color combinations for color blindness
+  - Include patterns or textures
+  - Label elements directly (not legend only)
+  - Use colorblind-friendly palettes
+
+Recommended Palettes:
+  - ColorBrewer (designed for accessibility)
+  - Okabe-Ito palette
+  - Paul Tol colors
+
+Heat Maps:
+  - Sequential palettes only
+  - Avoid red-green combinations
+  - Test with simulator
+
+---
+UI Component States:
+
+Button States:
+  - Default: Primary color
+  - Hover: Slightly darker
+  - Disabled: Gray with reduced contrast
+  - Focus: Outline indicator (not color alone)
+  - Active: Darker shade
+
+Form Validation:
+  - Invalid: Red + error icon + message
+  - Valid: Green + checkmark icon (optional)
+  - Required: No special color, use text label
+
+Interactive Elements:
+  - Focus: Visible outline or ring
+  - Selected: Checkmark or checkmark icon + color
+  - Hover: Underline + color change
+  - Don't: Use color alone to indicate state
+```
+</file>
+
+<file path=".opencode/skills/color-accessibility/references/color-contrast-standards.md">
+# Color Contrast Standards
+
+## Color Contrast Standards
+
+```yaml
+WCAG Contrast Ratios:
+
+WCAG AA (Minimum):
+  - Normal text: 4.5:1
+  - Large text (18pt+): 3:1
+  - UI components & graphical elements: 3:1
+  - Focus indicators: 3:1
+
+WCAG AAA (Enhanced):
+  - Normal text: 7:1
+  - Large text: 4.5:1
+  - Better for accessibility
+
+---
+Testing Contrast:
+
+Tools:
+  - WebAIM Contrast Checker
+  - Color Contrast Analyzer
+  - Figma plugins
+  - Browser DevTools
+
+Formula (WCAG): Contrast = (L1 + 0.05) / (L2 + 0.05)
+  Where L = relative luminance
+
+Example Pairs:
+
+Good (Pass AA):
+  - Black (#000000) on White (#FFFFFF) = 21:1 ✓
+  - White on Dark Blue (#003366) = 12.6:1 ✓
+  - Dark Gray (#333333) on Light Gray (#EEEEEE) = 10:1 ✓
+
+Poor (Fail):
+  - Light Gray (#CCCCCC) on White (#FFFFFF) = 1.3:1 ✗
+  - Yellow (#FFFF00) on White (#FFFFFF) = 1.07:1 ✗
+```
+</file>
+
+<file path=".opencode/skills/color-accessibility/references/color-vision-deficiency-simulation.md">
+# Color Vision Deficiency Simulation
+
+## Color Vision Deficiency Simulation
+
+```python
+# Design for color vision deficiency
+
+class ColorAccessibility:
+    COLOR_DEFICIENCY_TYPES = {
+        'Protanopia': 'Red-blind (1% male)',
+        'Deuteranopia': 'Green-blind (1% male)',
+        'Tritanopia': 'Blue-yellow blind (very rare)',
+        'Monochromacy': 'Complete color blindness (very rare)'
+    }
+
+    def simulate_vision_deficiency(self, color, deficiency_type):
+        """Simulate how color appears to different eyes"""
+        # Color blind simulation
+        simulated_colors = {
+            'normal': color,
+            'protanopia': self.apply_protanopia_filter(color),
+            'deuteranopia': self.apply_deuteranopia_filter(color),
+            'tritanopia': self.apply_tritanopia_filter(color)
+        }
+        return simulated_colors
+
+    def check_palette_accessibility(self, color_palette):
+        """Validate entire palette for accessibility"""
+        issues = []
+
+        # Check contrast ratios
+        for color_pair in self.generate_pairs(color_palette):
+            contrast = self.calculate_contrast(color_pair[0], color_pair[1])
+            if contrast < 4.5:
+                issues.append({
+                    'type': 'Low contrast',
+                    'colors': color_pair,
+                    'ratio': contrast,
+                    'severity': 'Critical'
+                })
+
+        # Check color blind differentiation
+        for deficiency in self.COLOR_DEFICIENCY_TYPES:
+            simulated = self.simulate_for_deficiency(color_palette, deficiency)
+            if not self.are_colors_distinguishable(simulated):
+                issues.append({
+                    'type': 'Color blindness',
+                    'deficiency': deficiency,
+                    'severity': 'High'
+                })
+
+        return {
+            'palette': color_palette,
+            'issues': issues,
+            'is_accessible': len(issues) == 0,
+            'recommendations': self.generate_recommendations(issues)
+        }
+
+    def generate_recommendations(self, issues):
+        """Suggest palette improvements"""
+        return [
+            'Use patterns or icons to differentiate (not just color)',
+            'Increase contrast ratios',
+            'Use tested accessible color combinations',
+            'Test with color blindness simulator before launch'
+        ]
+```
+</file>
+
+<file path=".opencode/skills/color-accessibility/references/testing-validation.md">
+# Testing & Validation
+
+## Testing & Validation
+
+```javascript
+// Test color accessibility
+
+class ColorAccessibilityTesting {
+  testColorPalette(palette) {
+    return {
+      contrast_test: this.validateContrast(palette),
+      colorblind_test: this.simulateColorBlindness(palette),
+      usage_test: this.testColorUsage(palette),
+      tools_used: [
+        "WebAIM Contrast Checker",
+        "Color Oracle simulator",
+        "WAVE accessibility checker",
+      ],
+    };
+  }
+
+  validateContrast(palette) {
+    const results = [];
+
+    for (let color of palette) {
+      const contrast = this.calculateLuminance(color);
+      results.push({
+        color: color,
+        luminance: contrast,
+        passes_aa: contrast >= 4.5,
+        passes_aaa: contrast >= 7.0,
+      });
+    }
+
+    return results;
+  }
+
+  simulateColorBlindness(palette) {
+    return {
+      protanopia: this.convertToProtanopia(palette),
+      deuteranopia: this.convertToDeuteranopia(palette),
+      tritanopia: this.convertToTritanopia(palette),
+      all_distinguishable: this.checkDistinguishability(palette),
+    };
+  }
+}
+```
+</file>
+
+<file path=".opencode/skills/color-accessibility/SKILL.md">
+---
+name: color-accessibility
+description: >
+  Design color palettes that are accessible to all users including those with
+  color blindness. Ensure sufficient contrast, meaningful use of color, and
+  inclusive design.
+---
+
+# Color Accessibility
+
+## Table of Contents
+
+- [Overview](#overview)
+- [When to Use](#when-to-use)
+- [Quick Start](#quick-start)
+- [Reference Guides](#reference-guides)
+- [Best Practices](#best-practices)
+
+## Overview
+
+Accessible color design ensures all users, including those with color vision deficiency, can access and understand information.
+
+## When to Use
+
+- Creating color palettes
+- Designing data visualizations
+- Testing interface designs
+- Status indicators and alerts
+- Form validation states
+- Charts and graphs
+
+## Quick Start
+
+Minimal working example:
+
+```yaml
+WCAG Contrast Ratios:
+
+WCAG AA (Minimum):
+  - Normal text: 4.5:1
+  - Large text (18pt+): 3:1
+  - UI components & graphical elements: 3:1
+  - Focus indicators: 3:1
+
+WCAG AAA (Enhanced):
+  - Normal text: 7:1
+  - Large text: 4.5:1
+  - Better for accessibility
+
+---
+Testing Contrast:
+
+Tools:
+  - WebAIM Contrast Checker
+  - Color Contrast Analyzer
+  - Figma plugins
+  - Browser DevTools
+
+Formula (WCAG): Contrast = (L1 + 0.05) / (L2 + 0.05)
+  Where L = relative luminance
+```
+
+## Reference Guides
+
+Detailed implementations in the `references/` directory:
+
+| Guide | Contents |
+|---|---|
+| [Color Contrast Standards](references/color-contrast-standards.md) | WCAG AA/AAA ratios, example pairs |
+| [Color Vision Deficiency Simulation](references/color-vision-deficiency-simulation.md) | Simulación de daltonismo, validación de paletas |
+| [Accessible Color Usage](references/accessible-color-usage.md) | Estados, validación, visualización de datos |
+| [Testing & Validation](references/testing-validation.md) | Tests de contraste, simulación de daltonismo |
+
+## Best Practices
+
+### ✅ DO
+
+- Ensure 4.5:1 contrast minimum (WCAG AA)
+- Test with color blindness simulator
+- Use patterns or icons with color
+- Label states with text, not color alone
+- Test with real users with color blindness
+- Document color usage in design system
+- Choose accessible color palettes
+- Use sequential colors for ordered data
+- Validate all color combinations
+- Include focus indicators
+
+### ❌ DON'T
+
+- Use color alone to convey information
+- Create low-contrast text
+- Assume users see colors correctly
+- Use red-green combinations
+- Forget about focus states
+- Mix too many colors (>5-8)
+- Use pure red and pure green together
+- Skip contrast testing
+- Assume AA is sufficient (AAA better)
+- Ignore color blindness in testing
+</file>
+
+<file path=".opencode/skills/color-accessibility/templates/component-template.tsx">
+// Component: [Name]
+// TODO: Customize for your framework (React, Vue, Svelte, etc.)
+
+import React from 'react';
+
+interface Props {
+  // TODO: Define props
+}
+
+export function ComponentName({ }: Props) {
+  // TODO: Add state and effects
+
+  return (
+    <div>
+      {/* TODO: Add component markup */}
+    </div>
+  );
+}
+</file>
+
+<file path=".opencode/agents/audit-responsive.md">
+---
+description: Escanea las páginas del proyecto y sus estilos para encontrar problemas de responsividad
+mode: subagent
+permission:
+  edit: deny
+  bash: ask
+---
+
+# Agente de Auditoría Responsiva
+
+Eres un especialista en auditoría de responsividad para proyectos React + Tailwind CSS. Tu tarea es escanear sistemáticamente el código en busca de patrones que rompan el layout en dispositivos móviles y tablets.
+
+## Archivos a analizar
+
+- `src/pages/*.tsx` — Home.tsx, ONGs.tsx, History.tsx, Archive.tsx, Voces.tsx, Genero.tsx
+- `src/components/*.tsx` — Nav.tsx, Footer.tsx, ImageSlot.tsx, Reveal.tsx, MythCards.tsx
+- `src/styles/global.css` — todos los estilos globales y media queries
+- `tailwind.config.js` — configuración de breakpoints
+
+## Patrones a detectar
+
+### 1. Overflow horizontal sin scroll táctil
+Busca cualquier instancia de:
+- `overflow-x: auto` sin `-webkit-overflow-scrolling: touch`
+- `overflow-x: scroll` sin `-webkit-overflow-scrolling: touch`
+
+**Problema:** En iOS, el scroll horizontal sin esta propiedad se siente "trabado" y no tiene inercia.
+
+**Corrección sugerida:** Añadir `-webkit-overflow-scrolling: touch;` junto a `overflow-x`.
+
+### 2. White-space nowrap sin manejo de desbordamiento
+Busca:
+- `white-space: nowrap` en contenedores que puedan exceder el viewport
+- `white-space: nowrap` sin `overflow: hidden` + `text-overflow: ellipsis`
+
+**Problema:** El texto se sale del contenedor en pantallas pequeñas.
+
+**Corrección sugerida:**
+```css
+.contenedor {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* O en mobile: */
+@media (max-width: 768px) {
+  .contenedor { white-space: normal; }
+}
+```
+
+### 3. Grid span sin breakpoint intermedio
+Busca clases como:
+- `grid-cols-*` con `span-*` que no tengan media query entre 640px y 980px
+- `md:grid-cols-2` o `lg:grid-cols-3` sin considerar tablets (768px–980px)
+
+**Problema:** Las tablets en orientación vertical quedan con layouts demasiado estrechos o demasiado anchos.
+
+**Corrección sugerida:** Añadir breakpoint intermedio:
+```tsx
+className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+```
+
+### 4. Font-size menor a 12px
+Busca en CSS y Tailwind:
+- `font-size` < 12px en cualquier media query
+- Clases como `text-[10px]`, `text-[11px]` sin alternativa mobile
+
+**Problema:** Ilegible en dispositivos móviles, especialmente para usuarios con dificultades visuales.
+
+**Corrección sugerida:**
+```css
+@media (max-width: 768px) {
+  .eyebrow { font-size: 12px; }
+}
+```
+
+### 5. Scroll programático sin desactivar en mobile
+Busca en archivos .tsx/.ts:
+- `window.scrollBy()`, `element.scrollLeft`, `scrollTo()`
+- Scroll horizontal programático en pantallas < 768px
+
+**Problema:** El scroll programático horizontal compite con el gesto de navegación del navegador móvil.
+
+**Corrección sugerida:**
+```ts
+if (window.innerWidth >= 768) {
+  element.scrollLeft += 100;
+}
+```
+
+## Formato de salida
+
+Genera un archivo `responsiveness-report.md` en la raíz del proyecto con esta estructura:
+
+```markdown
+# Reporte de Responsividad — Cátedra Caminos de Resistencia
+
+Fecha: [fecha de generación]
+
+## Resumen
+
+- **Total de problemas encontrados:** X
+- **Archivos afectados:** Y
+- **Críticos (ilegibilidad):** Z
+
+## Problemas por categoría
+
+### 1. Overflow horizontal sin scroll táctil
+
+| Archivo | Línea | Código | Corrección sugerida |
+|---------|-------|--------|---------------------|
+| src/... | 123   | `...`  | `...`               |
+
+### 2. White-space nowrap sin manejo
+
+...
+
+### 3. Grid span sin breakpoint intermedio
+
+...
+
+### 4. Font-size menor a 12px
+
+...
+
+### 5. Scroll programático sin desactivar en mobile
+
+...
+
+## Recomendaciones generales
+
+[Lista de recomendaciones de arquitectura responsive]
+```
+
+## Instrucciones de ejecución
+
+1. Lee todos los archivos mencionados arriba
+2. Busca cada patrón problemático usando grep o lectura directa
+3. Para cada hallazgo, registra: archivo, línea, código problemático, corrección sugerida
+4. Genera el archivo `responsiveness-report.md` con el formato especificado
+5. No modifiques ningún archivo fuente — solo genera el reporte
+
+## Contexto del proyecto
+
+- Framework: Vite + React 18 + TypeScript
+- Estilos: Tailwind CSS + CSS custom properties en global.css
+- Breakpoints actuales: 768px, 820px, 880px, 920px, 940px, 980px, 640px, 480px, 420px
+- Mobile-first: sí
+- Dark mode: vía class `dark` + data-theme="dark"
+</file>
+
+<file path=".opencode/agents/fix-colors.md">
+---
+description: Analiza literales de color y sugiere reemplazos por variables CSS existentes o nuevas
+mode: subagent
+permission:
+  edit: ask
+  bash: ask
+---
+
+# Agente de Limpieza Cromática
+
+Eres un especialista en sistemas de diseño y tokens de color para proyectos Tailwind CSS. Tu tarea es identificar todos los literales de color en el código y mapearlos a variables CSS semánticas, manteniendo la coherencia visual y el contraste accesible.
+
+## Variables CSS existentes
+
+Estas son las variables definidas en `src/styles/global.css`:
+
+```css
+:root {
+  --olive: #2E4731;
+  --olive-deep: #1d2f1f;
+  --olive-soft: rgba(46, 71, 49, 0.08);
+  --terracotta: #8B1D22;
+  --terracotta-soft: rgba(139, 29, 34, 0.08);
+  --carbon: #121212;
+  --smoke: #F5F5F5;
+  --paper: #FAFAF7;
+  --ink: #121212;
+  --ink-mute: #4a4a48;
+  --line: rgba(18, 18, 18, 0.12);
+  --line-soft: rgba(18, 18, 18, 0.06);
+
+  --bg: var(--smoke);
+  --bg-warm: var(--paper);
+  --fg: var(--ink);
+  --fg-mute: var(--ink-mute);
+}
+
+html[data-theme="dark"],
+html.dark {
+  --bg: #0b0c0a;
+  --bg-warm: #121310;
+  --fg: #f1ede4;
+  --fg-mute: #a8a39a;
+  --line: rgba(241, 237, 228, 0.14);
+  --line-soft: rgba(241, 237, 228, 0.07);
+  --olive: #6f9456;
+  --olive-deep: #4d6b3a;
+  --olive-soft: rgba(140, 175, 130, 0.12);
+  --terracotta-soft: rgba(200, 80, 86, 0.14);
+}
+```
+
+## Tokens Tailwind (tailwind.config.js)
+
+```js
+colors: {
+  primary: { DEFAULT: '#2E4731', deep: '#1d2f1f', soft: '#6f9456' },
+  accent: { DEFAULT: '#8B1D22' },
+  dark: '#121212',
+  light: { DEFAULT: '#F5F5F5', warm: '#FAFAF7' },
+  fg: { DEFAULT: '#121212', mute: '#4a4a48', 'dark-default': '#f1ede4', 'dark-mute': '#a8a39a' },
+  backgroundColor: {
+    'bg-base': '#F5F5F5',
+    'bg-warm': '#FAFAF7',
+    'bg-dark': '#0b0c0a',
+    'bg-dark-warm': '#121310',
+  },
+}
+```
+
+## Archivos a analizar
+
+- `src/**/*.tsx` — todos los componentes y páginas
+- `src/styles/global.css` — estilos globales
+- `tailwind.config.js` — configuración de colores
+- `src/**/*.ts` — archivos de datos si contienen colores
+- `src/**/*.css` — cualquier otro CSS
+
+## Reglas de análisis
+
+### 1. Ignorar colores en comentarios
+No reportes colores que estén dentro de:
+- Comentarios de línea: `// #hex`
+- Comentarios de bloque: `/* #hex */`
+- JSDoc: `/** @color #hex */`
+
+### 2. Detectar literales
+Busca patrones como:
+- Hex: `#RGB`, `#RRGGBB`, `#RRGGBBAA`
+- RGB/RGBA: `rgb(r, g, b)`, `rgba(r, g, b, a)`
+- HSL/HSLA: `hsl(h, s%, l%)`, `hsla(h, s%, l%, a)`
+- Nombres: `red`, `blue`, `transparent`, `white`, `black`
+
+### 3. Sugerir nuevas variables
+Si un color aparece **más de 2 veces** y no tiene token:
+1. Propón un nombre semántico (ej. `--gold-accent`, `--podcast-bg`)
+2. Añade la definición para `:root` y `html.dark`
+3. Sugiere el reemplazo en todos los usos
+
+### 4. Verificar contraste WCAG 2.1 AA
+Para cada par color-de-fondo:
+- Texto normal: ratio ≥ 4.5:1
+- Texto grande (≥18px o ≥14px bold): ratio ≥ 3:1
+- Elementos de UI (iconos, bordes): ratio ≥ 3:1
+
+Usa la fórmula de contraste WCAG:
+```
+L1 = luminancia más clara
+L2 = luminancia más oscura
+ratio = (L1 + 0.05) / (L2 + 0.05)
+```
+
+Si el contraste es insuficiente, sugiere un color alternativo más oscuro/claro.
+
+## Mapeo sugerido
+
+| Literal común | Variable sugerida | Uso típico |
+|---------------|-------------------|------------|
+| `#2E4731` | `var(--olive)` | primary, brand |
+| `#1d2f1f` | `var(--olive-deep)` | hover olive |
+| `#8B1D22` | `var(--terracotta)` | accent, CTA |
+| `#121212` | `var(--carbon)` o `var(--ink)` | texto, fondos oscuros |
+| `#F5F5F5` | `var(--smoke)` o `var(--bg)` | fondo claro |
+| `#FAFAF7` | `var(--paper)` o `var(--bg-warm)` | fondo cálido |
+| `#4a4a48` | `var(--ink-mute)` o `var(--fg-mute)` | texto secundario |
+| `#f1ede4` | `var(--fg)` (dark mode) | texto dark mode |
+| `#a8a39a` | `var(--fg-mute)` (dark mode) | texto secundario dark |
+| `rgba(18,18,18,0.12)` | `var(--line)` | bordes sutiles |
+
+## Formato de salida
+
+Genera `color-tokens-report.md`:
+
+```markdown
+# Reporte de Tokens de Color — Cátedra Caminos de Resistencia
+
+Fecha: [fecha]
+
+## Resumen
+
+- **Literales encontrados:** X
+- **Reemplazables por variables existentes:** Y
+- **Requieren nueva variable:** Z
+- **Problemas de contraste:** W
+
+## Mapeo literal → variable
+
+### Colores reemplazables
+
+| Archivo | Línea | Literal | Variable sugerida | Contexto |
+|---------|-------|---------|-------------------|----------|
+| src/... | 45    | `#2E4731` | `var(--olive)` | background de tarjeta |
+
+### Nuevas variables sugeridas
+
+Color: `#d4a04a` (ocurrencias: 5)
+
+**Nombre sugerido:** `--gold-accent`
+
+```css
+:root {
+  --gold-accent: #d4a04a;
+}
+html.dark {
+  --gold-accent: #e8b04a;
+}
+```
+
+**Usos:**
+- src/pages/Home.tsx:123
+- src/components/Card.tsx:45
+
+## Problemas de contraste
+
+| Archivo | Línea | Par | Ratio | Mínimo | Estado |
+|---------|-------|-----|-------|--------|--------|
+| src/... | 78    | #8B1D22 / #F5F5F5 | 5.2:1 | 4.5:1 | ✅ OK |
+| src/... | 92    | #6f9456 / #121212 | 3.8:1 | 4.5:1 | ❌ Falla |
+
+## Bloque CSS sugerido
+
+```css
+/* Nuevas variables para agregar a src/styles/global.css */
+:root {
+  --gold-accent: #d4a04a;
+  --podcast-bg: #f5e6d3;
+}
+
+html.dark {
+  --gold-accent: #e8b04a;
+  --podcast-bg: #2a2418;
+}
+```
+```
+
+## Modo aplicación (--apply)
+
+Si se ejecuta con el flag `--apply`:
+
+1. **Para cada reemplazo:**
+   - Muestra un diff del cambio propuesto
+   - Espera confirmación del usuario
+   - Si confirma, aplica el cambio
+
+2. **Archivos modificados:**
+   - `src/styles/global.css` — añade nuevas variables si son necesarias
+   - `src/**/*.tsx` — reemplaza literales por `var(--nombre)` o clases Tailwind
+   - `tailwind.config.js` — añade tokens si corresponde
+
+3. **Backups:**
+   - Solo crea `.original` si el cambio es crítico (más de 10 reemplazos en un archivo)
+   - Nombre: `archivo.original`
+
+4. **Registro:**
+   - Al finalizar, muestra un resumen de cambios aplicados
+   - Lista archivos modificados y número de reemplazos por archivo
+
+## Instrucciones de ejecución
+
+1. Lee todos los archivos fuente mencionados
+2. Extrae todos los literales de color (ignora comentarios)
+3. Agrupa por valor y cuenta ocurrencias
+4. Para cada color:
+   - Busca si existe variable equivalente
+   - Si no existe y aparece >2 veces, sugiere nueva variable
+   - Calcula contraste con colores de fondo adyacentes
+5. Genera `color-tokens-report.md`
+6. Si `--apply`: muestra diffs y aplica cambios confirmados
+
+## Contexto del proyecto
+
+- Framework: Vite + React 18 + TypeScript
+- Estilos: Tailwind CSS + CSS custom properties
+- Dark mode: vía class `dark` + data-theme="dark"
+- Paleta base: verde olivo (#2E4731) + terracota (#8B1D22) como ejes
+- No instalar librerías de UI externas
+</file>
+
+<file path=".opencode/agents/humanize-text.md">
+---
+description: Reescribe textos generados por IA con tono académico local y natural
+mode: subagent
+permission:
+  edit: ask
+  bash: ask
+---
+
+# Agente Reescritor de Contenido (Humanización)
+
+Eres un editor académico especializado en textos sobre estudios latinoamericanos y palestinos. Tu tarea es reescribir contenidos generados por IA para que suenen naturales, locales y académicamente rigurosos, manteniendo el significado original pero eliminando rasgos característicos de texto generado automáticamente.
+
+## Archivos a procesar
+
+- `src/pages/*.tsx` — Home.tsx, ONGs.tsx, History.tsx, Archive.tsx, Voces.tsx, Genero.tsx
+- `src/components/*.tsx` — Nav.tsx, Footer.tsx, ImageSlot.tsx, Reveal.tsx, MythCards.tsx
+- Solo texto visible dentro de: `p`, `h1`–`h6`, `li`, `blockquote`, `.lede`, `.pull-quote`, `.eyebrow`, `.kicker`
+- **No modificar:** IDs, nombres de variables, imports, lógica de código, comentarios técnicos
+
+## Reglas de transformación
+
+### 1. Voz pasiva → voz activa
+
+**Detectar:**
+- "fue realizado por" → "realizó"
+- "es considerado" → "consideramos" / "la comunidad considera"
+- "han sido documentados" → "documentamos" / "los archivos documentan"
+- "será presentado" → "presentaremos"
+
+**Ejemplo:**
+```
+Antes: "El proyecto fue desarrollado en colaboración con la Embajada de Palestina."
+Después: "Desarrollamos el proyecto en colaboración con la Embajada de Palestina."
+```
+
+### 2. Adverbios en "-mente" → frases directas
+
+**Detectar:**
+- "significativamente" → "de manera notable" / "considerablemente"
+- "especialmente" → "en particular" / "sobre todo"
+- "actualmente" → "hoy" / "en este momento"
+- "evidentemente" → "como es claro" / "obviamente"
+- "particularmente" → "en especial"
+
+**Ejemplo:**
+```
+Antes: "Esto es particularmente relevante en el contexto actual."
+Después: "Esto cobra especial relevancia hoy."
+```
+
+### 3. Oraciones largas (>25 palabras) → dividir
+
+**Detectar:**
+- Oraciones con más de 25 palabras
+- Múltiples subordinadas encadenadas
+- Uso excesivo de comas para conectar ideas
+
+**Ejemplo:**
+```
+Antes: "La Cátedra, que nació como una iniciativa conjunta entre la Universidad Nacional de Colombia y la Embajada del Estado de Palestina, busca preservar la memoria histórica a través de medios digitales, lo cual permite llegar a audiencias más amplias que los formatos tradicionales."
+
+Después: "La Cátedra nació como una iniciativa conjunta entre la Universidad Nacional de Colombia y la Embajada del Estado de Palestina. Buscamos preservar la memoria histórica a través de medios digitales. Esta estrategia nos permite llegar a audiencias más amplias que los formatos tradicionales."
+```
+
+### 4. Eliminar muletillas de IA
+
+**Detectar y eliminar:**
+- "cabe destacar que" → eliminar o reemplazar por "notemos que"
+- "no es metáfora" → eliminar
+- "sin embargo" → usar con moderación, alternar con "pero", "ahora bien"
+- "por lo tanto" → "así", "por eso", "de ahí que"
+- "en conclusión" → eliminar (el texto académico continuo rara vez lo necesita)
+- "es importante mencionar" → eliminar o "notemos"
+- "vale la pena señalar" → eliminar
+- "cabe preguntarse" → "preguntémonos"
+
+**Ejemplo:**
+```
+Antes: "Cabe destacar que este enfoque, sin embargo, no es metáfora de un proceso mayor."
+Después: "Este enfoque no es metáfora de un proceso mayor."
+```
+
+### 5. Añadir referencias locales
+
+**Por cada párrafo, añadir al menos una referencia contextual:**
+- "como mencionamos en la clase del profesor [nombre]"
+- "en el contexto colombiano..."
+- "desde nuestra posición en Bogotá..."
+- "como hemos trabajado en la UNAL..."
+- "en diálogo con los movimientos sociales locales..."
+- "siguiendo la línea del seminario de..."
+
+**Ejemplo:**
+```
+Antes: "La resistencia palestina se expresa a través de múltiples formas culturales."
+Después: "La resistencia palestina se expresa a través de múltiples formas culturales, como hemos discutido en el seminario de Memoria y Territorio de la UNAL."
+```
+
+### 6. Contracciones solo en citas directas
+
+**Detectar:**
+- "pa'l" → "para el" (fuera de citas)
+- "del" → mantener (es estándar)
+- "al" → mantener (es estándar)
+- Contracciones informales en texto narrativo → expandir
+
+**Ejemplo:**
+```
+Antes: "Vamos a trabajar pa'l cambio." (narrativa)
+Después: "Vamos a trabajar para el cambio."
+
+Antes: "Como dijo el líder: 'Vamos pa'l frente'" (cita directa)
+Después: "Como dijo el líder: 'Vamos pa'l frente'" (mantener)
+```
+
+## Estilo editorial objetivo
+
+- **Tono:** académico pero accesible
+- **Persona:** primera del plural ("trabajamos", "proponemos", "desde nuestra perspectiva")
+- **Registro:** formal pero cálido, evitando frialdad burocrática
+- **Localidad:** referencias explícitas al contexto colombiano/latinoamericano
+- **Longitud de párrafo:** 3–6 oraciones, variadas en estructura
+
+## Formato de salida
+
+### Modo interactivo (default)
+
+Para cada archivo procesado:
+
+```markdown
+## Archivo: src/pages/Home.tsx
+
+### Cambio 1
+**Ubicación:** línea 45, dentro de `<p className="lede">`
+
+**Antes:**
+> La Cátedra fue establecida en 2023 como un esfuerzo conjunto entre la Universidad Nacional de Colombia y la Embajada del Estado de Palestina, con el objetivo de preservar la memoria histórica.
+
+**Después:**
+> Establecimos la Cátedra en 2023 como un esfuerzo conjunto entre la Universidad Nacional de Colombia y la Embajada del Estado de Palestina. Nuestro objetivo es preservar la memoria histórica.
+
+**Transformaciones aplicadas:**
+- Voz pasiva → activa ("fue establecida" → "establecimos")
+- Oración dividida (28 palabras → 2 oraciones de 12 y 8 palabras)
+- Referencia local añadida (implícita en "nuestro")
+
+[ ] Aprobar cambio
+[ ] Rechazar cambio
+[ ] Editar manualmente
+
+---
+```
+
+### Modo automático (--auto)
+
+1. **Antes de modificar:**
+   - Crear backup: `archivo.tsx.original`
+   - Solo si el archivo tendrá más de 5 cambios
+
+2. **Aplicar cambios:**
+   - Reescribir cada texto según las reglas
+   - Mantener estructura de componentes React
+   - No tocar JSX attributes que no sean texto visible
+
+3. **Resumen final:**
+```markdown
+# Resumen de humanización
+
+Archivos procesados: 6
+Archivos modificados: 5
+Backups creados: 3
+
+| Archivo | Cambios | Backup |
+|---------|---------|--------|
+| Home.tsx | 12 | ✅ |
+| ONGs.tsx | 8 | ✅ |
+| History.tsx | 15 | ✅ |
+| Archive.tsx | 6 | ❌ (< 5 cambios) |
+| Voces.tsx | 0 | - |
+| Genero.tsx | 9 | ✅ |
+
+Total de transformaciones:
+- Voz pasiva → activa: 18
+- Adverbios -mente eliminados: 12
+- Oraciones divididas: 8
+- Muletillas eliminadas: 15
+- Referencias locales añadidas: 24
+```
+
+## Instrucciones de ejecución
+
+1. **Leer** todos los archivos de páginas y componentes
+2. **Identificar** texto visible dentro de etiquetas semánticas
+3. **Para cada bloque de texto:**
+   - Aplicar reglas 1–6 según corresponda
+   - Contar palabras por oración
+   - Detectar muletillas y adverbios
+   - Añadir referencia local si no existe
+4. **Generar salida:**
+   - Modo interactivo: mostrar diffs uno por uno con opciones
+   - Modo automático: crear backups y aplicar todos los cambios
+5. **Validar:**
+   - No romper JSX
+   - Mantener significado original
+   - Verificar que las referencias locales sean coherentes
+
+## Ejemplos de transformación completa
+
+### Ejemplo 1: Párrafo introductorio
+
+```
+Antes:
+"Es importante mencionar que la Cátedra Caminos de Resistencia fue concebida como un espacio de diálogo entre la Universidad Nacional de Colombia y la Embajada del Estado de Palestina. Cabe destacar que este esfuerzo, sin embargo, no es metáfora de un proceso mayor de solidaridad académica, sino una manifestación concreta de compromiso con la memoria histórica."
+
+Después:
+"Concebimos la Cátedra Caminos de Resistencia como un espacio de diálogo entre la Universidad Nacional de Colombia y la Embajada del Estado de Palestina. Este esfuerzo no es metáfora de un proceso mayor de solidaridad académica, sino una manifestación concreta de compromiso con la memoria histórica, como hemos trabajado en el grupo de investigación de Estudios Latinoamericanos."
+```
+
+### Ejemplo 2: Descripción de proyecto
+
+```
+Antes:
+"Los archivos cartográficos fueron desarrollados significativamente para mostrar las transformaciones territoriales que han sido experimentadas por las comunidades palestinas a lo largo del tiempo, lo cual es especialmente relevante en el contexto del desplazamiento forzado."
+
+Después:
+"Desarrollamos los archivos cartográficos para mostrar las transformaciones territoriales que han experimentado las comunidades palestinas a lo largo del tiempo. Esta herramienta cobra especial relevancia en el contexto del desplazamiento forzado, un tema que hemos analizado en profundidad desde la perspectiva del conflicto colombiano."
+```
+
+## Contexto del proyecto
+
+- **Idioma:** español (contenido visible)
+- **Audiencia:** académica, estudiantes universitarios, investigadores
+- **Institución:** Universidad Nacional de Colombia + Embajada de Palestina
+- **Tono:** académico, cálido, local, comprometido
+- **No tocar:** código, lógica, imports, tipos, nombres de variables
+</file>
+
+<file path=".opencode/skills/audit-responsive/SKILL.md">
+---
+name: audit-responsive
+description: Ejecuta auditoría de responsividad y genera reporte de problemas de layout en móvil/tablet
+---
+
+# /audit-responsive
+
+**Uso:** `/audit-responsive`
+
+Ejecuta el agente `@audit-responsive` para escanear todo el proyecto en busca de problemas de responsividad.
+
+## Qué hace
+
+1. Escanea archivos:
+   - `src/pages/*.tsx`
+   - `src/components/*.tsx`
+   - `src/styles/global.css`
+   - `tailwind.config.js`
+
+2. Detecta patrones problemáticos:
+   - `overflow-x: auto` sin `-webkit-overflow-scrolling: touch`
+   - `white-space: nowrap` sin manejo de desbordamiento
+   - Grids con `span-*` sin breakpoint intermedio (640–980px)
+   - `font-size` < 12px en mobile
+   - `scrollBy`/`scrollLeft` sin desactivar en pantallas pequeñas
+
+3. Genera `responsiveness-report.md` en la raíz con:
+   - Lista de problemas por categoría
+   - Archivo y línea de cada problema
+   - Sugerencia de corrección
+
+## Cuándo usar
+
+- Antes de un deploy a producción
+- Cuando se reporten bugs visuales en móvil
+- Al añadir nuevos componentes con layouts complejos
+- En revisiones de código trimestrales
+
+## Flags
+
+No requiere flags. El agente solo lee archivos y genera reporte, no modifica código.
+
+## Ejemplo
+
+```
+/audit-responsive
+```
+
+El agente escaneará el proyecto y generará `responsiveness-report.md`. Revisa el archivo para ver los problemas encontrados y las correcciones sugeridas.
+</file>
+
+<file path=".opencode/skills/fix-colors/SKILL.md">
+---
+name: fix-colors
+description: Analiza literales de color y sugiere reemplazos por variables CSS (usa --apply para aplicar cambios)
+---
+
+# /fix-colors
+
+**Uso:** `/fix-colors` o `/fix-colors --apply`
+
+Ejecuta el agente `@fix-colors` para analizar todos los archivos en busca de literales de color (#hex, rgb, hsl) y sugerir reemplazos por variables CSS del proyecto.
+
+## Qué hace
+
+1. Escanea archivos:
+   - `src/**/*.tsx`
+   - `src/styles/global.css`
+   - `tailwind.config.js`
+   - `src/**/*.ts` (si contienen colores)
+
+2. Para cada literal detectado:
+   - Ignora colores en comentarios
+   - Busca variable CSS equivalente existente
+   - Si no existe y aparece >2 veces, sugiere nueva variable
+   - Verifica contraste WCAG 2.1 AA (≥4.5:1 para texto normal)
+
+3. Genera `color-tokens-report.md` con:
+   - Mapeo literal → variable
+   - Nuevas variables sugeridas
+   - Problemas de contraste detectados
+   - Bloque CSS para agregar al proyecto
+
+## Cuándo usar
+
+- Al iniciar refactorización de sistema de diseño
+- Cuando se detecten colores inconsistentes en la UI
+- Antes de implementar dark mode en nuevos componentes
+- En auditorías de accesibilidad
+
+## Flags
+
+| Flag | Comportamiento |
+|------|----------------|
+| (ninguno) | Solo genera reporte, no modifica archivos |
+| `--apply` | Aplica reemplazos automáticamente tras mostrar diff de cada cambio |
+
+## Ejemplos
+
+### Solo reporte
+```
+/fix-colors
+```
+
+Genera `color-tokens-report.md` para revisión manual.
+
+### Aplicar cambios
+```
+/fix-colors --apply
+```
+
+1. Muestra diff de cada reemplazo propuesto
+2. Espera confirmación del usuario
+3. Aplica cambios confirmados
+4. Crea backups `.original` solo si hay más de 10 cambios en un archivo
+
+## Variables existentes
+
+El agente mapea a estas variables de `src/styles/global.css`:
+
+- `--olive`, `--olive-deep`, `--olive-soft`
+- `--terracotta`, `--terracotta-soft`
+- `--carbon`, `--smoke`, `--paper`
+- `--ink`, `--ink-mute`
+- `--line`, `--line-soft`
+- `--bg`, `--bg-warm`, `--fg`, `--fg-mute`
+</file>
+
+<file path=".opencode/skills/humanize-text/SKILL.md">
+---
+name: humanize-text
+description: Reescribe textos generados por IA con tono académico local (usa --auto para aplicar sin confirmación)
+---
+
+# /humanize-text
+
+**Uso:** `/humanize-text` o `/humanize-text --auto`
+
+Ejecuta el agente `@humanize-text` para reescribir contenidos generados por IA en los archivos del proyecto, aplicando reglas de estilo editorial académico local.
+
+## Qué hace
+
+1. Procesa archivos:
+   - `src/pages/*.tsx`
+   - `src/components/*.tsx`
+   - Solo texto visible en: `p`, `h1`–`h6`, `li`, `blockquote`, `.lede`, `.pull-quote`, `.eyebrow`, `.kicker`
+
+2. Aplica transformaciones:
+   - **Voz pasiva → activa:** "fue realizado" → "realizamos"
+   - **Adverbios -mente → frases directas:** "significativamente" → "de manera notable"
+   - **Divide oraciones >25 palabras:** separa en 2–3 oraciones más cortas
+   - **Elimina muletillas:** "cabe destacar", "no es metáfora", "sin embargo" (uso excesivo)
+   - **Añade referencias locales:** "como trabajamos en la UNAL", "en el contexto colombiano"
+   - **Expande contracciones informales:** solo mantiene en citas directas
+
+3. Mantiene intacto:
+   - IDs, nombres de variables, imports
+   - Lógica de código y comentarios técnicos
+   - Estructura de componentes React
+
+## Cuándo usar
+
+- Después de generar contenido con IA
+- Antes de publicar contenido en producción
+- En revisión editorial de páginas existentes
+- Cuando el texto suene "robótico" o impersonal
+
+## Flags
+
+| Flag | Comportamiento |
+|------|----------------|
+| (ninguno) | Muestra diff interactivo de cada cambio, espera confirmación |
+| `--auto` | Aplica todos los cambios directamente, crea backups `.original` |
+
+## Ejemplos
+
+### Modo interactivo
+```
+/humanize-text
+```
+
+Para cada cambio propuesto:
+```
+## Archivo: src/pages/Home.tsx
+
+### Cambio 1
+**Ubicación:** línea 45, dentro de `<p className="lede">`
+
+**Antes:**
+> La Cátedra fue establecida en 2023...
+
+**Después:**
+> Establecimos la Cátedra en 2023...
+
+[ ] Aprobar cambio
+[ ] Rechazar cambio
+[ ] Editar manualmente
+```
+
+### Modo automático
+```
+/humanize-text --auto
+```
+
+1. Crea backup `archivo.tsx.original` (si hay >5 cambios)
+2. Aplica todas las transformaciones
+3. Genera resumen final con:
+   - Archivos procesados y modificados
+   - Total de transformaciones por tipo
+   - Backups creados
+
+## Estilo resultante
+
+- **Tono:** académico pero accesible
+- **Persona:** primera del plural ("trabajamos", "proponemos")
+- **Registro:** formal pero cálido
+- **Localidad:** referencias a UNAL, contexto colombiano
+- **Longitud:** párrafos de 3–6 oraciones variadas
+
+## Ejemplo de transformación
+
+```
+Antes:
+"Es importante mencionar que la Cátedra fue concebida como un espacio de diálogo entre la Universidad Nacional de Colombia y la Embajada del Estado de Palestina."
+
+Después:
+"Concebimos la Cátedra como un espacio de diálogo entre la Universidad Nacional de Colombia y la Embajada del Estado de Palestina, siguiendo la línea del seminario de Memoria y Territorio de la UNAL."
+```
 </file>
 
 <file path="design_files/c-tedra-palestina/chats/chat1.md">
@@ -3987,6 +5198,162 @@ The design medium is **HTML/CSS/JS** — these are prototypes, not production co
 </html>
 </file>
 
+<file path="OPECODE_SETUP.md">
+# OpenCode Setup — Catedra Caminos de Resistencia
+
+Configuracion de OpenCode para el proyecto. Tres agentes especializados disponibles como subagentes y comandos slash.
+
+## Estructura
+
+```
+opencode.json              # Config principal: provider, permisos, comandos, agentes
+.opencode/
+  agents/
+    audit-responsive.md    # Prompt completo del agente auditor de responsividad
+    fix-colors.md          # Prompt completo del agente de limpieza cromatica
+    humanize-text.md       # Prompt completo del agente reescritor de contenido
+  skills/
+    audit-responsive/
+      SKILL.md             # Documentacion del comando /audit-responsive
+    fix-colors/
+      SKILL.md             # Documentacion del comando /fix-colors
+    humanize-text/
+      SKILL.md             # Documentacion del comando /humanize-text
+```
+
+## Convenciones
+
+- **Agentes** definidos en `.opencode/agents/*.md` con frontmatter YAML (`description`, `mode`, `permission`) + prompt en markdown
+- **Metadata de agentes** duplicada en `opencode.json` bajo `"agent"` para control de permisos y visibilidad
+- **Comandos slash** en `opencode.json` bajo `"command"` usando `template` + `agent` para delegar al subagente
+- **Skills** en `.opencode/skills/<nombre>/SKILL.md` con frontmatter (`name`, `description`) — solo documentacion, no prompts
+
+## Comandos disponibles
+
+| Comando | Agente | Descripcion |
+|---------|--------|-------------|
+| `/audit-responsive` | `@audit-responsive` | Escanea responsividad, genera `responsiveness-report.md`. Solo lectura. |
+| `/fix-colors` | `@fix-colors` | Analiza literales de color, genera `color-tokens-report.md`. Con `--apply` aplica cambios. |
+| `/humanize-text` | `@humanize-text` | Reescribe textos IA con tono academico local. Con `--auto` aplica sin confirmacion. |
+
+## Como anadir un nuevo agente
+
+1. Crear `.opencode/agents/nuevo-agente.md` con frontmatter:
+
+```yaml
+---
+description: Que hace el agente
+mode: subagent
+permission:
+  edit: ask
+  bash: ask
+---
+# Agente ...
+
+Prompt completo aqui...
+```
+
+2. Agregar metadata en `opencode.json`:
+
+```jsonc
+{
+  "agent": {
+    "nuevo-agente": {
+      "description": "Que hace el agente",
+      "mode": "subagent",
+      "permission": { "edit": "ask", "bash": "ask" }
+    }
+  }
+}
+```
+
+3. (Opcional) Agregar comando slash en `opencode.json`:
+
+```jsonc
+{
+  "command": {
+    "nuevo-agente": {
+      "description": "Descripcion corta",
+      "template": "Ejecuta el agente @nuevo-agente para...",
+      "agent": "nuevo-agente"
+    }
+  }
+}
+```
+
+4. (Opcional) Crear skill en `.opencode/skills/nuevo-agente/SKILL.md` para documentacion.
+
+## Proveedores
+
+Configurar con `/connect` en el TUI. El archivo `opencode.json` tiene `"provider": {}` como base. Las credenciales se guardan en `~/.local/share/opencode/auth.json`.
+
+## Permisos globales
+
+```json
+{
+  "permission": {
+    "edit": "ask",
+    "bash": "ask"
+  }
+}
+```
+
+Cada agente puede sobrescribir estos permisos en su configuracion individual.
+</file>
+
+<file path="opencode.json">
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "edit": "ask",
+    "bash": "ask"
+  },
+  "command": {
+    "audit-responsive": {
+      "description": "Escanea el proyecto en busca de problemas de responsividad y genera un reporte",
+      "template": "Ejecuta el agente @audit-responsive para analizar todos los archivos del proyecto en busca de problemas de responsividad. Escanea especialmente:\n\n1. Elementos con `overflow-x: auto` que no tengan `-webkit-overflow-scrolling: touch`\n2. `white-space: nowrap` en contenedores sin breakpoint de desbordamiento\n3. Clases de grid que usan `span-*` sin media query para tablets (entre 640px y 980px)\n4. Textos con `font-size` menor a 12px en cualquier media query\n5. Uso de `scrollBy` o `scrollLeft` en JS que no se desactiven en pantallas pequeñas\n\nGenera un archivo `responsiveness-report.md` en la raíz del proyecto con:\n- Lista de problemas encontrados\n- Archivo y línea donde ocurre cada problema\n- Sugerencia de corrección para cada uno\n\nNo modifiques ningún archivo fuente, solo genera el reporte.",
+      "agent": "audit-responsive"
+    },
+    "fix-colors": {
+      "description": "Analiza literales de color y sugiere reemplazos por variables CSS (--apply para aplicar cambios)",
+      "template": "Ejecuta el agente @fix-colors para analizar todos los archivos .tsx, .css, .js, .json en busca de literales de color (#hex, rgb, hsl, nombres de color).\n\nReglas:\n- Ignorar colores dentro de comentarios\n- Si un color aparece más de 2 veces y no tiene token, sugerir la creación de una nueva variable CSS\n- Verificar que cada color usado tenga un par de contraste en modo claro y oscuro (WCAG 2.1 AA: ratio ≥ 4.5:1 para texto normal)\n- Mapear cada literal a variables existentes: --olive, --olive-deep, --olive-soft, --terracotta, --terracotta-soft, --carbon, --smoke, --paper, --ink, --ink-mute, --line, --line-soft, --bg, --bg-warm, --fg, --fg-mute\n\nGenera un archivo `color-tokens-report.md` con:\n- Mapeo literal → variable sugerida\n- Bloque de código CSS con nuevas definiciones si son necesarias\n- Advertencias de contraste insuficiente\n\n{{#if apply}}\nMODO APLICACIÓN: Reemplaza automáticamente los literales por las variables correspondientes. Muestra un diff de cada cambio antes de aplicarlo. Crea backups con extensión .original solo si hay cambios críticos.\n{{/if}}",
+      "agent": "fix-colors"
+    },
+    "humanize-text": {
+      "description": "Reescribe textos generados por IA con tono académico local y natural (--auto para aplicar sin confirmación)",
+      "template": "Ejecuta el agente @humanize-text para procesar los archivos que contienen texto visible: src/pages/*.tsx, src/components/*.tsx (solo los textos dentro de etiquetas p, h1..h6, li, blockquote, .lede, .pull-quote, etc.).\n\nReglas de transformación (sin cambiar el significado):\n1. Eliminar voz pasiva → convertir a activa\n2. Reemplazar adverbios terminados en \"-mente\" por frases más directas\n3. Dividir oraciones de más de 25 palabras\n4. Eliminar muletillas como \"cabe destacar\", \"no es metáfora\", \"sin embargo\", \"por lo tanto\"\n5. Añadir al menos una referencia local por párrafo (ej. \"como mencionamos en la clase del profesor X\", \"en el contexto colombiano...\")\n6. Usar contracciones solo en citas directas\n7. Mantener el contenido en español y el tono académico\n\n{{#if auto}}\nMODO AUTO: Aplica todos los cambios directamente. Crea un backup de cada archivo modificado con extensión .original antes de escribir.\n{{else}}\nMODO INTERACTIVO: Muestra un diff de cada cambio propuesto y espera confirmación antes de aplicar. El usuario debe poder aceptar o rechazar cada transformación individualmente.\n{{/if}}",
+      "agent": "humanize-text"
+    }
+  },
+  "agent": {
+    "audit-responsive": {
+      "description": "Agente de auditoría de responsividad — detecta layouts rotos en móvil/tablet",
+      "mode": "subagent",
+      "permission": {
+        "edit": "deny",
+        "bash": "ask"
+      }
+    },
+    "fix-colors": {
+      "description": "Agente de limpieza cromática — unifica tokens y elimina literales de color",
+      "mode": "subagent",
+      "permission": {
+        "edit": "ask",
+        "bash": "ask"
+      }
+    },
+    "humanize-text": {
+      "description": "Agente reescritor de contenido — humaniza textos generados por IA",
+      "mode": "subagent",
+      "permission": {
+        "edit": "ask",
+        "bash": "ask"
+      }
+    }
+  }
+}
+</file>
+
 <file path="postcss.config.js">
 export default {
   plugins: {
@@ -4574,615 +5941,6 @@ export function Genero() {
 }
 </file>
 
-<file path="src/pages/Voces.tsx">
-import { useState } from 'react';
-import { Reveal } from '../components/Reveal';
-import { ImageSlot } from '../components/ImageSlot';
-import { Icon } from '../lib/icons';
-
-/* ============================================================
-   Darwish interactive poem card
-   ============================================================ */
-function DarwishCard() {
-  const [active, setActive] = useState(0);
-
-  const poems = [
-    {
-      title: 'Carné de identidad',
-      year: '1964',
-      lines: [
-        'Registra:', 'Soy árabe.',
-        'Mi número de carné es cincuenta mil.',
-        'Tengo ocho hijos',
-        'y el noveno vendrá después del verano.',
-        '¿Te enfadas?',
-      ],
-    },
-    {
-      title: 'En esta tierra',
-      year: '1992',
-      lines: [
-        'En esta tierra hay lo que merece la vida:',
-        'fines de abril,',
-        'el olor del pan al amanecer,',
-        'una mujer que empieza el día con gimnasia...',
-        'La vida no es sino esta tierra.',
-      ],
-    },
-    {
-      title: 'El pasajero',
-      year: '1999',
-      lines: [
-        'Soy el pasajero de paso en palabras.',
-        'El viento habita en mis palabras.',
-        'Vine de allá. Vuelvo allá.',
-        'No hay donde ir sino hacia el origen.',
-      ],
-    },
-  ];
-
-  const p = poems[active];
-
-  return (
-    <div className="media-stub">
-      <div className="media-stub-head">
-        <div className="md-dot" />
-        <div style={{ flex: 1 }}>
-          <div className="md-now">Antología poética · Mahmoud Darwish</div>
-          <div className="md-title"><i>{p.title}</i></div>
-        </div>
-        <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'rgba(241,237,224,.52)', letterSpacing: '.1em' }}>
-          {p.year}
-        </div>
-      </div>
-
-      <div className="darwish-verse">
-        {p.lines.map((line, i) => <span key={i}>{line}<br /></span>)}
-      </div>
-
-      <ul className="md-list" style={{ marginTop: 18 }}>
-        {poems.map((q, i) => (
-          <li key={i} className={i === active ? 'is-active' : ''} onClick={() => setActive(i)}>
-            <span className="md-kind">{i === active ? <Icon.Play /> : 'Verso'}</span>
-            <span className="md-name"><i>{q.title}</i></span>
-            <span className="md-len">{q.year}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-/* ============================================================
-   TAB 1 — Arte y Cultura
-   ============================================================ */
-function ArteTab() {
-  return (
-    <section className="section">
-      <div className="wrap">
-
-        <Reveal>
-          <div className="voces-open-quote">
-            <div className="eyebrow"><span className="dot" />Apertura · Arte y resistencia</div>
-            <blockquote className="voces-bq">
-              "La fórmula de la indignación siempre debe acompañarse
-              con los{' '}
-              <em style={{ color: 'var(--terracotta)' }}>susurros de la poesía</em>"
-            </blockquote>
-            <cite className="voces-bq-attr">
-              — De Vietnam a Palestina · Herencia anticolonial
-            </cite>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.08}>
-          <div className="voces-darwish-band">
-            <div className="voces-darwish-inner">
-              <div>
-                <div className="eyebrow" style={{ color: 'rgba(241,237,224,.62)' }}>
-                  <span className="dot" style={{ background: '#e8b04a' }} />
-                  Poesía · Voz central
-                </div>
-                <h3 style={{
-                  fontFamily: 'var(--serif)',
-                  fontSize: 'clamp(32px, 4.5vw, 54px)',
-                  letterSpacing: '-.025em',
-                  lineHeight: 1.04,
-                  color: '#f1ede0',
-                  marginTop: 18,
-                }}>
-                  Mahmoud<br />Darwish
-                </h3>
-                <p style={{ marginTop: 20, color: 'rgba(241,237,224,.76)', fontSize: 15, lineHeight: 1.68, maxWidth: '36ch' }}>
-                  1941–2008. Poeta palestino considerado la voz más importante de la
-                  resistencia literaria árabe. Sus palabras sostuvieron la identidad
-                  de un pueblo mientras los mapas la negaban.
-                </p>
-                <div style={{
-                  marginTop: 28,
-                  fontFamily: 'var(--mono)',
-                  fontSize: 10.5,
-                  color: 'rgba(241,237,224,.38)',
-                  letterSpacing: '.15em',
-                  textTransform: 'uppercase',
-                  borderLeft: '2px solid var(--terracotta)',
-                  paddingLeft: 14,
-                  lineHeight: 1.85,
-                }}>
-                  Carné de identidad · 1964<br />
-                  Memoria para el olvido · 1982<br />
-                  El lecho de una extranjera · 1999
-                </div>
-              </div>
-              <div>
-                <DarwishCard />
-              </div>
-            </div>
-          </div>
-        </Reveal>
-
-        <div className="voces-masonry">
-
-          <Reveal>
-            <div className="voces-masonry-item">
-              <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-                <ImageSlot
-                  height={210}
-                  label="Mural · Arte callejero palestino · Campo de refugiados"
-                  variant="olive"
-                />
-                <div style={{ padding: '22px 24px' }}>
-                  <div className="kicker">Murales · Arte Urbano</div>
-                  <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                    La pared como cuaderno
-                  </h3>
-                  <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                    Desde Beirut hasta Ramallah, el mural es el archivo popular
-                    que no necesita permiso ni editor. Una pared basta para que
-                    la memoria persista donde el Estado quiere borradura.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.08}>
-            <div className="voces-masonry-item">
-              <div className="card">
-                <div className="kicker">Cine · Documental</div>
-                <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                  1948 · Muhammad Bakri
-                </h3>
-                <ImageSlot
-                  height={148}
-                  label="Fotograma · Documental 1948 · Muhammad Bakri · 1998"
-                  variant="terra"
-                />
-                <p style={{ color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65, marginTop: 14 }}>
-                  Una de las primeras miradas cinematográficas a la Nakba desde adentro.
-                  Bakri construye un contra-archivo audiovisual ante el silencio oficial,
-                  recuperando testimonios directos del desplazamiento.
-                </p>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.16}>
-            <div className="voces-masonry-item">
-              <div className="card">
-                <div className="kicker">Tatreez · Bordado Tradicional</div>
-                <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                  Memoria cosida a mano
-                </h3>
-                <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                  El tatreez —bordado palestino de más de tres mil años— es un sistema
-                  simbólico que identifica la región de origen de cada familia.
-                  Cada patrón es un apellido que el exilio no puede borrar.
-                </p>
-                <div style={{
-                  marginTop: 16,
-                  padding: '12px 16px',
-                  border: '1px dashed var(--line)',
-                  borderRadius: 10,
-                  fontFamily: 'var(--mono)',
-                  fontSize: 11,
-                  color: 'var(--terracotta)',
-                  letterSpacing: '.14em',
-                  textTransform: 'uppercase',
-                }}>
-                  UNESCO · Patrimonio Cultural Inmaterial · 2021
-                </div>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.08}>
-            <div className="voces-masonry-item">
-              <div className="card">
-                <div className="kicker">Pedagogía · Lúdica</div>
-                <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                  El juego como acto político
-                </h3>
-                <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                  Bajo bloqueo, el juego no es frivolidad: es el ejercicio del derecho
-                  a la infancia. La lúdica afirma la humanidad frente al intento
-                  sistemático de deshumanización.
-                </p>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.16}>
-            <div className="voces-masonry-item">
-              <div className="voces-float-quote">
-                <p className="voces-float-verse">
-                  "Escribo el nombre de mi tierra en el viento,
-                  pero el viento no sabe que mi tierra tiene nombre."
-                </p>
-                <cite className="voces-float-attr">— Mahmoud Darwish</cite>
-              </div>
-            </div>
-          </Reveal>
-
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
-   TAB 2 — Periodismo y Narrativas
-   ============================================================ */
-function PeriodismoTab() {
-  return (
-    <section className="section">
-      <div className="wrap">
-
-        <Reveal>
-          <div className="voces-traverso-band">
-            <div className="eyebrow">
-              <span className="dot" style={{ background: '#e8b04a' }} />
-              Periodismo · Encuadre editorial
-            </div>
-            <blockquote className="pull-quote" style={{ marginTop: 22 }}>
-              "El universalismo ha sido siempre{' '}
-              <span style={{ color: '#e8b04a' }}>Occidente extendiendo sus valores</span>
-              {' '}como si fueran universales."
-            </blockquote>
-            <cite className="quote-attrib" style={{ marginTop: 22, display: 'block' }}>
-              — Enzo Traverso
-            </cite>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.08}>
-          <div className="voces-editorial">
-            <div className="voces-editorial-lead">
-              <span className="voces-drop-cap">E</span>
-              <p style={{ fontSize: 17, lineHeight: 1.78, color: 'var(--fg)' }}>
-                l relato hegemónico sobre el conflicto palestino ha sido construido con herramientas
-                precisas: la <strong>dicotomía civilización vs. barbarie</strong>, el lenguaje de
-                "guerra" donde hay ocupación, la equivalencia falsa entre colonizador y colonizado.
-                Este encuadre no es accidental —es una tecnología política.
-              </p>
-            </div>
-            <div className="voces-editorial-cols">
-              <div>
-                <h4 style={{ fontFamily: 'var(--serif)', fontSize: 21, letterSpacing: '-.015em', marginBottom: 14 }}>
-                  La dicotomía civilización&thinsp;/&thinsp;barbarie
-                </h4>
-                <p style={{ color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.72 }}>
-                  Desde Fanon hasta Traverso, el pensamiento anticolonial ha identificado
-                  esta dicotomía como el mecanismo central de justificación del despojo.
-                  El "civilizado" tiene derecho a todo; el "bárbaro" carece de derechos
-                  que respetar.
-                </p>
-                <p style={{ color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.72, marginTop: 16 }}>
-                  En el caso palestino, el encuadre opera con precisión técnica: los medios
-                  dominantes hablan de "operaciones quirúrgicas" para los bombardeos
-                  y "terrorismo" para cualquier forma de resistencia.
-                </p>
-              </div>
-              <div>
-                <h4 style={{ fontFamily: 'var(--serif)', fontSize: 21, letterSpacing: '-.015em', marginBottom: 14 }}>
-                  El fraude Joan Peters
-                </h4>
-                <p style={{ color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.72 }}>
-                  El libro <em>From Time Immemorial</em> (1984) argumentaba que Palestina
-                  estaba "vacía" antes de la inmigración judía. Celebrado ampliamente
-                  en Occidente —hasta que Finkelstein y otros historiadores demostraron
-                  que era una fabricación sistemática de fuentes y estadísticas.
-                </p>
-                <p style={{ color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.72, marginTop: 16 }}>
-                  Los desmentidos nunca alcanzaron la difusión de las mentiras originales.
-                  Así funciona el sesgo mediático estructural.
-                </p>
-              </div>
-            </div>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.16}>
-          <div className="voces-dark-block">
-            <div className="voces-db-inner">
-              <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: '#8B1D22' }}>
-                Concepto · Memoria en disputa
-              </div>
-              <h3 style={{
-                fontFamily: 'var(--serif)',
-                fontSize: 'clamp(34px, 5.5vw, 62px)',
-                marginTop: 12,
-                letterSpacing: '-.025em',
-                lineHeight: 1.04,
-                color: '#fff',
-              }}>
-                Memoridicio
-              </h3>
-              <p style={{ fontSize: 16, lineHeight: 1.76, color: 'rgba(255,255,255,.8)', marginTop: 26 }}>
-                El <strong style={{ color: '#fff' }}>memoridicio</strong> nombra el proceso sistemático de
-                borrado de la memoria histórica de un pueblo: destrucción de archivos,
-                renombramiento de ciudades, negación de la cultura y la lengua,
-                eliminación de documentos civiles.
-              </p>
-              <p style={{ fontSize: 16, lineHeight: 1.76, color: 'rgba(255,255,255,.8)', marginTop: 16 }}>
-                En el caso palestino opera en múltiples registros simultáneos:
-                demolición de cementerios, prohibición de la enseñanza del árabe,
-                exclusión sistemática de las narrativas palestinas en los currículos
-                educativos occidentales.
-              </p>
-              <div className="voces-db-stats">
-                {[
-                  { v: '+500', k: 'Aldeas borradas · desde 1948' },
-                  { v: '418',  k: 'Topónimos árabes · renombrados' },
-                  { v: '15k+', k: 'Documentos destruidos' },
-                ].map(s => (
-                  <div key={s.k}>
-                    <div style={{ fontFamily: 'var(--serif)', fontSize: 42, color: '#8B1D22', lineHeight: 1 }}>{s.v}</div>
-                    <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,.38)', marginTop: 8 }}>{s.k}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="voces-db-footer">
-              <div style={{ fontFamily: 'var(--mono)', fontSize: 10.5, color: 'rgba(255,255,255,.34)', letterSpacing: '.14em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-                Contra el memoridicio
-              </div>
-              <div style={{ borderLeft: '2px solid #8B1D22', paddingLeft: 20, fontStyle: 'italic', color: 'rgba(255,255,255,.72)', fontSize: 15, lineHeight: 1.68 }}>
-                La historia oral —testimonios grabados, memorias transcritas, relatos
-                transmitidos de generación en generación— es el contra-archivo que el
-                poder no puede destruir porque vive en cuerpos, no en edificios.
-              </div>
-            </div>
-          </div>
-        </Reveal>
-
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
-   TAB 3 — Solidaridad y Sur Global
-   ============================================================ */
-function SolidaridadTab() {
-  return (
-    <section className="section">
-      <div className="wrap">
-
-        <Reveal>
-          <div className="voces-tutu">
-            <div className="eyebrow" style={{ color: 'rgba(241,237,224,.65)' }}>
-              <span className="dot" style={{ background: '#e8b04a' }} />
-              Apertura · Neutralidad imposible
-            </div>
-            <blockquote className="voces-tutu-verse">
-              "Si eliges ser neutral en situaciones de injusticia,
-              <em> has elegido el lado del opresor.</em>"
-            </blockquote>
-            <cite className="voces-tutu-attr">
-              — Desmond Tutu · Arzobispo · Premio Nobel de la Paz 1984
-            </cite>
-          </div>
-        </Reveal>
-
-        <div className="grid-2">
-
-          <Reveal>
-            <div className="card">
-              <div className="kicker">Sur Global · Genealogías compartidas</div>
-              <h3 style={{ marginTop: 10, fontSize: 'clamp(20px, 2.5vw, 28px)' }}>
-                Parentescos de lucha
-              </h3>
-              <p style={{ marginTop: 14, color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.7 }}>
-                La causa palestina es el nodo más visible de una red de resistencias
-                coloniales en el Sur Global. La solidaridad tercermundista, el movimiento
-                de no-alineados y las brigadas internacionales construyeron vínculos
-                orgánicos entre Palestina, Cuba, Vietnam y Colombia.
-              </p>
-              <div style={{ marginTop: 20, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                {['Tercermundismo', 'No-Alineados', 'Brigadas', 'Diáspora'].map(tag => (
-                  <span key={tag} style={{
-                    padding: '6px 12px', borderRadius: 999,
-                    border: '1px solid var(--olive)',
-                    fontFamily: 'var(--mono)', fontSize: 10.5,
-                    letterSpacing: '.12em', textTransform: 'uppercase',
-                    color: 'var(--olive)',
-                  }}>{tag}</span>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.08}>
-            <div className="card">
-              <div className="kicker">Judaísmo Antisionista</div>
-              <h3 style={{ marginTop: 10, fontSize: 'clamp(20px, 2.5vw, 28px)' }}>
-                Jewish Voice for Peace
-              </h3>
-              <p style={{ marginTop: 14, color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.7 }}>
-                Sionismo y judaísmo no son sinónimos. Jewish Voice for Peace y otros
-                movimientos antisionistas recuerdan que la crítica al Estado de Israel
-                no es antisemitismo —es una posición ética enraizada en tradiciones
-                propias de justicia.
-              </p>
-              <div style={{
-                marginTop: 18, padding: '14px 16px',
-                background: 'var(--olive-soft)', borderRadius: 10,
-                fontFamily: 'var(--mono)', fontSize: 11,
-                color: 'var(--olive)', letterSpacing: '.12em', textTransform: 'uppercase',
-              }}>
-                "Not in our name" · Coalición antisionista judía
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.08}>
-            <div className="card">
-              <div className="kicker">Universidad Nacional · Colombia</div>
-              <h3 style={{ marginTop: 10, fontSize: 'clamp(20px, 2.5vw, 28px)' }}>
-                La cátedra como acto político
-              </h3>
-              <p style={{ marginTop: 14, color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.7 }}>
-                La Universidad Nacional de Colombia abrió este espacio porque entiende
-                que la neutralidad académica frente al genocidio es complicidad
-                disfrazada de objetividad. Investigar es ya tomar posición.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.16}>
-            <div className="card">
-              <div className="kicker">Red de solidaridad · datos</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 16 }}>
-                {[
-                  { v: '50+',  k: 'Universidades en red' },
-                  { v: 'VIII', k: 'Cohortes documentadas' },
-                  { v: '9',    k: 'Facultades convocantes' },
-                  { v: '2024', k: 'Año del fallo CIJ' },
-                ].map(s => (
-                  <div key={s.k} style={{ paddingTop: 12, borderTop: '1px solid var(--line-soft)' }}>
-                    <div style={{ fontFamily: 'var(--serif)', fontSize: 36, letterSpacing: '-.02em', color: 'var(--terracotta)', lineHeight: 1 }}>{s.v}</div>
-                    <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '.15em', textTransform: 'uppercase', color: 'var(--fg-mute)', marginTop: 6 }}>{s.k}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-
-        </div>
-
-        <Reveal>
-          <div className="voces-cij">
-            <div className="voces-cij-header">
-              <div className="voces-cij-mono">
-                Corte Internacional de Justicia · La Haya · 2024
-              </div>
-              <h3 className="voces-cij-h3">
-                Fallo histórico sobre la ilegalidad de la ocupación
-              </h3>
-            </div>
-            <div className="voces-cij-body">
-              <div className="voces-cij-col">
-                <div className="voces-cij-col-label">Caso</div>
-                <p className="voces-cij-col-p">
-                  Opinión Consultiva solicitada por la Asamblea General de la ONU sobre
-                  las consecuencias jurídicas de las políticas y prácticas de Israel
-                  en el Territorio Palestino Ocupado, incluida Jerusalén Oriental.
-                </p>
-              </div>
-              <div className="voces-cij-col">
-                <div className="voces-cij-col-label">Resolución</div>
-                <p className="voces-cij-col-p">
-                  La CIJ determinó que la presencia continuada de Israel en el
-                  Territorio Palestino Ocupado es{' '}
-                  <strong className="voces-cij-strong">ilegal bajo el derecho
-                  internacional</strong>, y que Israel debe poner fin a su ocupación
-                  sin condiciones ni demora.
-                </p>
-              </div>
-              <div className="voces-cij-col">
-                <div className="voces-cij-col-label">Implicaciones</div>
-                <p className="voces-cij-col-p">
-                  Todos los Estados tienen la obligación de no reconocer como legal
-                  la situación resultante y de no prestar ayuda ni asistencia al
-                  mantenimiento de dicha presencia ilegal.
-                </p>
-              </div>
-            </div>
-            <div className="voces-cij-footer">
-              <span className="voces-cij-mono">19 · VII · 2024 · Opinión Consultiva</span>
-              <span className="voces-cij-mono" style={{ opacity: .55 }}>Res. A/ES-10/L.31/Rev.1</span>
-            </div>
-          </div>
-        </Reveal>
-
-      </div>
-    </section>
-  );
-}
-
-/* ============================================================
-   Main Voces page
-   ============================================================ */
-export function Voces() {
-  const [tab, setTab] = useState<'arte' | 'periodismo' | 'solidaridad'>('arte');
-
-  const tabs: { id: 'arte' | 'periodismo' | 'solidaridad'; label: string }[] = [
-    { id: 'arte',        label: 'Arte y Cultura' },
-    { id: 'periodismo',  label: 'Periodismo y Narrativas' },
-    { id: 'solidaridad', label: 'Solidaridad y Sur Global' },
-  ];
-
-  return (
-    <>
-      <header className="page-head">
-        <div className="wrap">
-          <div className="row">
-            <div>
-              <Reveal>
-                <div className="eyebrow"><span className="dot" />Página 05 · Voces</div>
-              </Reveal>
-              <Reveal delay={0.08}>
-                <h1 style={{ marginTop: 18 }}>
-                  Voces<br />
-                  <em style={{ fontStyle: 'italic', color: 'var(--terracotta)' }}>de la</em><br />
-                  Resistencia
-                </h1>
-              </Reveal>
-            </div>
-            <Reveal delay={0.16}>
-              <p className="lede">
-                <strong>Arte, periodismo y solidaridad</strong> como formas de
-                resistencia al borramiento. Tres miradas que sostienen la memoria
-                viva cuando los archivos callan.
-              </p>
-            </Reveal>
-          </div>
-
-          <Reveal delay={0.24}>
-            <div className="subtabs">
-              {tabs.map(t => (
-                <button
-                  key={t.id}
-                  className={'subtab ' + (tab === t.id ? 'is-active' : '')}
-                  onClick={() => setTab(t.id)}
-                >
-                  {t.label}
-                </button>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-      </header>
-
-      {tab === 'arte'        && <ArteTab />}
-      {tab === 'periodismo'  && <PeriodismoTab />}
-      {tab === 'solidaridad' && <SolidaridadTab />}
-    </>
-  );
-}
-</file>
-
 <file path="tailwind.config.js">
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -5197,7 +5955,7 @@ export default {
           soft: '#6f9456',
         },
         accent: {
-          DEFAULT: '#8B1D22',
+          DEFAULT: 'var(--terracotta)',
         },
         dark: '#121212',
         light: {
@@ -5465,6 +6223,37 @@ export default defineConfig({
 });
 </file>
 
+<file path=".gitignore">
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OpenCode reports
+*-report.md
+*.original
+</file>
+
 <file path="CLAUDE.md">
 # Cátedra Caminos de Resistencia — Guía de Diseño y Arquitectura
 
@@ -5622,36 +6411,6 @@ Mobile-first, breakpoints Tailwind por defecto. El breakpoint funcional principa
 Contenido visible en **español**. Código en **inglés**. Comentarios solo para marcar secciones: `{/* ============ NOMBRE ============ */}`.
 </file>
 
-<file path="package.json">
-{
-  "name": "palestina",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "@types/react": "^18.3.28",
-    "@types/react-dom": "^18.3.7",
-    "@vitejs/plugin-react": "^6.0.1",
-    "autoprefixer": "^10.5.0",
-    "postcss": "^8.5.14",
-    "tailwindcss": "^3.4.19",
-    "typescript": "~6.0.2",
-    "vite": "^8.0.12"
-  },
-  "dependencies": {
-    "framer-motion": "^12.38.0",
-    "lucide-react": "^1.14.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  }
-}
-</file>
-
 <file path="src/components/ImageSlot.tsx">
 import type { CSSProperties } from 'react';
 import type { ImageVariant } from '../lib/types';
@@ -5664,9 +6423,9 @@ interface ImageSlotProps {
 }
 
 const VARIANT_STRIPES: Record<ImageVariant, string> = {
-  olive:  'repeating-linear-gradient(135deg, rgba(46,71,49,0.10) 0 14px, transparent 14px 28px)',
-  terra:  'repeating-linear-gradient(135deg, rgba(139,29,34,0.10) 0 14px, transparent 14px 28px)',
-  carbon: 'repeating-linear-gradient(135deg, rgba(18,18,18,0.10) 0 14px, transparent 14px 28px)',
+  olive:  'repeating-linear-gradient(135deg, var(--olive-soft) 0 14px, transparent 14px 28px)',
+  terra:  'repeating-linear-gradient(135deg, var(--terracotta-soft) 0 14px, transparent 14px 28px)',
+  carbon: 'repeating-linear-gradient(135deg, var(--line-soft) 0 14px, transparent 14px 28px)',
 };
 
 export function ImageSlot({ height = 280, label, variant = 'olive', className = '' }: ImageSlotProps) {
@@ -5739,7 +6498,7 @@ export function Nav({ page, setPage, theme, toggleTheme }: NavProps) {
               {theme === 'dark' ? <Icon.Sun /> : <Icon.Moon />}
             </button>
             <button className="nav-cta" onClick={() => setPage('archive')}>
-              Explorar el Archivo
+              <span className="cta-text">Explorar el Archivo</span>
               <Icon.Arrow />
             </button>
             <button
@@ -5887,6 +6646,615 @@ export function OliveMark({ size = 28 }: { size?: number }) {
 }
 </file>
 
+<file path="src/pages/Voces.tsx">
+import { useState } from 'react';
+import { Reveal } from '../components/Reveal';
+import { ImageSlot } from '../components/ImageSlot';
+import { Icon } from '../lib/icons';
+
+/* ============================================================
+   Darwish interactive poem card
+   ============================================================ */
+function DarwishCard() {
+  const [active, setActive] = useState(0);
+
+  const poems = [
+    {
+      title: 'Carné de identidad',
+      year: '1964',
+      lines: [
+        'Registra:', 'Soy árabe.',
+        'Mi número de carné es cincuenta mil.',
+        'Tengo ocho hijos',
+        'y el noveno vendrá después del verano.',
+        '¿Te enfadas?',
+      ],
+    },
+    {
+      title: 'En esta tierra',
+      year: '1992',
+      lines: [
+        'En esta tierra hay lo que merece la vida:',
+        'fines de abril,',
+        'el olor del pan al amanecer,',
+        'una mujer que empieza el día con gimnasia...',
+        'La vida no es sino esta tierra.',
+      ],
+    },
+    {
+      title: 'El pasajero',
+      year: '1999',
+      lines: [
+        'Soy el pasajero de paso en palabras.',
+        'El viento habita en mis palabras.',
+        'Vine de allá. Vuelvo allá.',
+        'No hay donde ir sino hacia el origen.',
+      ],
+    },
+  ];
+
+  const p = poems[active];
+
+  return (
+    <div className="media-stub">
+      <div className="media-stub-head">
+        <div className="md-dot" />
+        <div style={{ flex: 1 }}>
+          <div className="md-now">Antología poética · Mahmoud Darwish</div>
+          <div className="md-title"><i>{p.title}</i></div>
+        </div>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'rgba(241,237,224,.52)', letterSpacing: '.1em' }}>
+          {p.year}
+        </div>
+      </div>
+
+      <div className="darwish-verse">
+        {p.lines.map((line, i) => <span key={i}>{line}<br /></span>)}
+      </div>
+
+      <ul className="md-list" style={{ marginTop: 18 }}>
+        {poems.map((q, i) => (
+          <li key={i} className={i === active ? 'is-active' : ''} onClick={() => setActive(i)}>
+            <span className="md-kind">{i === active ? <Icon.Play /> : 'Verso'}</span>
+            <span className="md-name"><i>{q.title}</i></span>
+            <span className="md-len">{q.year}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/* ============================================================
+   TAB 1 — Arte y Cultura
+   ============================================================ */
+function ArteTab() {
+  return (
+    <section className="section">
+      <div className="wrap">
+
+        <Reveal>
+          <div className="voces-open-quote">
+            <div className="eyebrow"><span className="dot" />Apertura · Arte y resistencia</div>
+            <blockquote className="voces-bq">
+              "La fórmula de la indignación siempre debe acompañarse
+              con los{' '}
+              <em style={{ color: 'var(--terracotta)' }}>susurros de la poesía</em>"
+            </blockquote>
+            <cite className="voces-bq-attr">
+              — De Vietnam a Palestina · Herencia anticolonial
+            </cite>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.08}>
+          <div className="voces-darwish-band">
+            <div className="voces-darwish-inner">
+              <div>
+                <div className="eyebrow" style={{ color: 'rgba(241,237,224,.62)' }}>
+                  <span className="dot" style={{ background: 'var(--gold-accent)' }} />
+                  Poesía · Voz central
+                </div>
+                <h3 style={{
+                  fontFamily: 'var(--serif)',
+                  fontSize: 'clamp(32px, 4.5vw, 54px)',
+                  letterSpacing: '-.025em',
+                  lineHeight: 1.04,
+                  color: '#f1ede0',
+                  marginTop: 18,
+                }}>
+                  Mahmoud<br />Darwish
+                </h3>
+                <p style={{ marginTop: 20, color: 'rgba(241,237,224,.76)', fontSize: 15, lineHeight: 1.68, maxWidth: '36ch' }}>
+                  1941–2008. Poeta palestino considerado la voz más importante de la
+                  resistencia literaria árabe. Sus palabras sostuvieron la identidad
+                  de un pueblo mientras los mapas la negaban.
+                </p>
+                <div style={{
+                  marginTop: 28,
+                  fontFamily: 'var(--mono)',
+                  fontSize: 10.5,
+                  color: 'rgba(241,237,224,.38)',
+                  letterSpacing: '.15em',
+                  textTransform: 'uppercase',
+                  borderLeft: '2px solid var(--terracotta)',
+                  paddingLeft: 14,
+                  lineHeight: 1.85,
+                }}>
+                  Carné de identidad · 1964<br />
+                  Memoria para el olvido · 1982<br />
+                  El lecho de una extranjera · 1999
+                </div>
+              </div>
+              <div>
+                <DarwishCard />
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+        <div className="voces-masonry">
+
+          <Reveal>
+            <div className="voces-masonry-item">
+              <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+                <ImageSlot
+                  height={210}
+                  label="Mural · Arte callejero palestino · Campo de refugiados"
+                  variant="olive"
+                />
+                <div style={{ padding: '22px 24px' }}>
+                  <div className="kicker">Murales · Arte Urbano</div>
+                  <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                    La pared como cuaderno
+                  </h3>
+                  <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
+                    Desde Beirut hasta Ramallah, el mural es el archivo popular
+                    que no necesita permiso ni editor. Una pared basta para que
+                    la memoria persista donde el Estado quiere borradura.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <div className="voces-masonry-item">
+              <div className="card">
+                <div className="kicker">Cine · Documental</div>
+                <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                  1948 · Muhammad Bakri
+                </h3>
+                <ImageSlot
+                  height={148}
+                  label="Fotograma · Documental 1948 · Muhammad Bakri · 1998"
+                  variant="terra"
+                />
+                <p style={{ color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65, marginTop: 14 }}>
+                  Una de las primeras miradas cinematográficas a la Nakba desde adentro.
+                  Bakri construye un contra-archivo audiovisual ante el silencio oficial,
+                  recuperando testimonios directos del desplazamiento.
+                </p>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.16}>
+            <div className="voces-masonry-item">
+              <div className="card">
+                <div className="kicker">Tatreez · Bordado Tradicional</div>
+                <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                  Memoria cosida a mano
+                </h3>
+                <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
+                  El tatreez —bordado palestino de más de tres mil años— es un sistema
+                  simbólico que identifica la región de origen de cada familia.
+                  Cada patrón es un apellido que el exilio no puede borrar.
+                </p>
+                <div style={{
+                  marginTop: 16,
+                  padding: '12px 16px',
+                  border: '1px dashed var(--line)',
+                  borderRadius: 10,
+                  fontFamily: 'var(--mono)',
+                  fontSize: 11,
+                  color: 'var(--terracotta)',
+                  letterSpacing: '.14em',
+                  textTransform: 'uppercase',
+                }}>
+                  UNESCO · Patrimonio Cultural Inmaterial · 2021
+                </div>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <div className="voces-masonry-item">
+              <div className="card">
+                <div className="kicker">Pedagogía · Lúdica</div>
+                <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                  El juego como acto político
+                </h3>
+                <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
+                  Bajo bloqueo, el juego no es frivolidad: es el ejercicio del derecho
+                  a la infancia. La lúdica afirma la humanidad frente al intento
+                  sistemático de deshumanización.
+                </p>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.16}>
+            <div className="voces-masonry-item">
+              <div className="voces-float-quote">
+                <p className="voces-float-verse">
+                  "Escribo el nombre de mi tierra en el viento,
+                  pero el viento no sabe que mi tierra tiene nombre."
+                </p>
+                <cite className="voces-float-attr">— Mahmoud Darwish</cite>
+              </div>
+            </div>
+          </Reveal>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   TAB 2 — Periodismo y Narrativas
+   ============================================================ */
+function PeriodismoTab() {
+  return (
+    <section className="section">
+      <div className="wrap">
+
+        <Reveal>
+          <div className="voces-traverso-band">
+            <div className="eyebrow">
+              <span className="dot" style={{ background: 'var(--gold-accent)' }} />
+              Periodismo · Encuadre editorial
+            </div>
+            <blockquote className="pull-quote" style={{ marginTop: 22 }}>
+              "El universalismo ha sido siempre{' '}
+              <span style={{ color: 'var(--gold-accent)' }}>Occidente extendiendo sus valores</span>
+              {' '}como si fueran universales."
+            </blockquote>
+            <cite className="quote-attrib" style={{ marginTop: 22, display: 'block' }}>
+              — Enzo Traverso
+            </cite>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.08}>
+          <div className="voces-editorial">
+            <div className="voces-editorial-lead">
+              <span className="voces-drop-cap">E</span>
+              <p style={{ fontSize: 17, lineHeight: 1.78, color: 'var(--fg)' }}>
+                l relato hegemónico sobre el conflicto palestino ha sido construido con herramientas
+                precisas: la <strong>dicotomía civilización vs. barbarie</strong>, el lenguaje de
+                "guerra" donde hay ocupación, la equivalencia falsa entre colonizador y colonizado.
+                Este encuadre no es accidental —es una tecnología política.
+              </p>
+            </div>
+            <div className="voces-editorial-cols">
+              <div>
+                <h4 style={{ fontFamily: 'var(--serif)', fontSize: 21, letterSpacing: '-.015em', marginBottom: 14 }}>
+                  La dicotomía civilización&thinsp;/&thinsp;barbarie
+                </h4>
+                <p style={{ color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.72 }}>
+                  Desde Fanon hasta Traverso, el pensamiento anticolonial ha identificado
+                  esta dicotomía como el mecanismo central de justificación del despojo.
+                  El "civilizado" tiene derecho a todo; el "bárbaro" carece de derechos
+                  que respetar.
+                </p>
+                <p style={{ color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.72, marginTop: 16 }}>
+                  En el caso palestino, el encuadre opera con precisión técnica: los medios
+                  dominantes hablan de "operaciones quirúrgicas" para los bombardeos
+                  y "terrorismo" para cualquier forma de resistencia.
+                </p>
+              </div>
+              <div>
+                <h4 style={{ fontFamily: 'var(--serif)', fontSize: 21, letterSpacing: '-.015em', marginBottom: 14 }}>
+                  El fraude Joan Peters
+                </h4>
+                <p style={{ color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.72 }}>
+                  El libro <em>From Time Immemorial</em> (1984) argumentaba que Palestina
+                  estaba "vacía" antes de la inmigración judía. Celebrado ampliamente
+                  en Occidente —hasta que Finkelstein y otros historiadores demostraron
+                  que era una fabricación sistemática de fuentes y estadísticas.
+                </p>
+                <p style={{ color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.72, marginTop: 16 }}>
+                  Los desmentidos nunca alcanzaron la difusión de las mentiras originales.
+                  Así funciona el sesgo mediático estructural.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.16}>
+          <div className="voces-dark-block">
+            <div className="voces-db-inner">
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--terracotta)' }}>
+                Concepto · Memoria en disputa
+              </div>
+              <h3 style={{
+                fontFamily: 'var(--serif)',
+                fontSize: 'clamp(34px, 5.5vw, 62px)',
+                marginTop: 12,
+                letterSpacing: '-.025em',
+                lineHeight: 1.04,
+                color: '#fff',
+              }}>
+                Memoridicio
+              </h3>
+              <p style={{ fontSize: 16, lineHeight: 1.76, color: 'rgba(255,255,255,.8)', marginTop: 26 }}>
+                El <strong style={{ color: '#fff' }}>memoridicio</strong> nombra el proceso sistemático de
+                borrado de la memoria histórica de un pueblo: destrucción de archivos,
+                renombramiento de ciudades, negación de la cultura y la lengua,
+                eliminación de documentos civiles.
+              </p>
+              <p style={{ fontSize: 16, lineHeight: 1.76, color: 'rgba(255,255,255,.8)', marginTop: 16 }}>
+                En el caso palestino opera en múltiples registros simultáneos:
+                demolición de cementerios, prohibición de la enseñanza del árabe,
+                exclusión sistemática de las narrativas palestinas en los currículos
+                educativos occidentales.
+              </p>
+              <div className="voces-db-stats">
+                {[
+                  { v: '+500', k: 'Aldeas borradas · desde 1948' },
+                  { v: '418',  k: 'Topónimos árabes · renombrados' },
+                  { v: '15k+', k: 'Documentos destruidos' },
+                ].map(s => (
+                  <div key={s.k}>
+                    <div style={{ fontFamily: 'var(--serif)', fontSize: 42, color: 'var(--terracotta)', lineHeight: 1 }}>{s.v}</div>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,.38)', marginTop: 8 }}>{s.k}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="voces-db-footer">
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 10.5, color: 'rgba(255,255,255,.34)', letterSpacing: '.14em', textTransform: 'uppercase', whiteSpace: 'normal' }}>
+                Contra el memoridicio
+              </div>
+              <div style={{ borderLeft: '2px solid var(--terracotta)', paddingLeft: 20, fontStyle: 'italic', color: 'rgba(255,255,255,.72)', fontSize: 15, lineHeight: 1.68 }}>
+                La historia oral —testimonios grabados, memorias transcritas, relatos
+                transmitidos de generación en generación— es el contra-archivo que el
+                poder no puede destruir porque vive en cuerpos, no en edificios.
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   TAB 3 — Solidaridad y Sur Global
+   ============================================================ */
+function SolidaridadTab() {
+  return (
+    <section className="section">
+      <div className="wrap">
+
+        <Reveal>
+          <div className="voces-tutu">
+            <div className="eyebrow" style={{ color: 'rgba(241,237,224,.65)' }}>
+              <span className="dot" style={{ background: 'var(--gold-accent)' }} />
+              Apertura · Neutralidad imposible
+            </div>
+            <blockquote className="voces-tutu-verse">
+              "Si eliges ser neutral en situaciones de injusticia,
+              <em> has elegido el lado del opresor.</em>"
+            </blockquote>
+            <cite className="voces-tutu-attr">
+              — Desmond Tutu · Arzobispo · Premio Nobel de la Paz 1984
+            </cite>
+          </div>
+        </Reveal>
+
+        <div className="grid-2">
+
+          <Reveal>
+            <div className="card">
+              <div className="kicker">Sur Global · Genealogías compartidas</div>
+              <h3 style={{ marginTop: 10, fontSize: 'clamp(20px, 2.5vw, 28px)' }}>
+                Parentescos de lucha
+              </h3>
+              <p style={{ marginTop: 14, color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.7 }}>
+                La causa palestina es el nodo más visible de una red de resistencias
+                coloniales en el Sur Global. La solidaridad tercermundista, el movimiento
+                de no-alineados y las brigadas internacionales construyeron vínculos
+                orgánicos entre Palestina, Cuba, Vietnam y Colombia.
+              </p>
+              <div style={{ marginTop: 20, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {['Tercermundismo', 'No-Alineados', 'Brigadas', 'Diáspora'].map(tag => (
+                  <span key={tag} style={{
+                    padding: '6px 12px', borderRadius: 999,
+                    border: '1px solid var(--olive)',
+                    fontFamily: 'var(--mono)', fontSize: 10.5,
+                    letterSpacing: '.12em', textTransform: 'uppercase',
+                    color: 'var(--olive)',
+                  }}>{tag}</span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <div className="card">
+              <div className="kicker">Judaísmo Antisionista</div>
+              <h3 style={{ marginTop: 10, fontSize: 'clamp(20px, 2.5vw, 28px)' }}>
+                Jewish Voice for Peace
+              </h3>
+              <p style={{ marginTop: 14, color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.7 }}>
+                Sionismo y judaísmo no son sinónimos. Jewish Voice for Peace y otros
+                movimientos antisionistas recuerdan que la crítica al Estado de Israel
+                no es antisemitismo —es una posición ética enraizada en tradiciones
+                propias de justicia.
+              </p>
+              <div style={{
+                marginTop: 18, padding: '14px 16px',
+                background: 'var(--olive-soft)', borderRadius: 10,
+                fontFamily: 'var(--mono)', fontSize: 11,
+                color: 'var(--olive)', letterSpacing: '.12em', textTransform: 'uppercase',
+              }}>
+                "Not in our name" · Coalición antisionista judía
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <div className="card">
+              <div className="kicker">Universidad Nacional · Colombia</div>
+              <h3 style={{ marginTop: 10, fontSize: 'clamp(20px, 2.5vw, 28px)' }}>
+                La cátedra como acto político
+              </h3>
+              <p style={{ marginTop: 14, color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.7 }}>
+                La Universidad Nacional de Colombia abrió este espacio porque entiende
+                que la neutralidad académica frente al genocidio es complicidad
+                disfrazada de objetividad. Investigar es ya tomar posición.
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.16}>
+            <div className="card">
+              <div className="kicker">Red de solidaridad · datos</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 16 }}>
+                {[
+                  { v: '50+',  k: 'Universidades en red' },
+                  { v: 'VIII', k: 'Cohortes documentadas' },
+                  { v: '9',    k: 'Facultades convocantes' },
+                  { v: '2024', k: 'Año del fallo CIJ' },
+                ].map(s => (
+                  <div key={s.k} style={{ paddingTop: 12, borderTop: '1px solid var(--line-soft)' }}>
+                    <div style={{ fontFamily: 'var(--serif)', fontSize: 36, letterSpacing: '-.02em', color: 'var(--terracotta)', lineHeight: 1 }}>{s.v}</div>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '.15em', textTransform: 'uppercase', color: 'var(--fg-mute)', marginTop: 6 }}>{s.k}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+        </div>
+
+        <Reveal>
+          <div className="voces-cij">
+            <div className="voces-cij-header">
+              <div className="voces-cij-mono">
+                Corte Internacional de Justicia · La Haya · 2024
+              </div>
+              <h3 className="voces-cij-h3">
+                Fallo histórico sobre la ilegalidad de la ocupación
+              </h3>
+            </div>
+            <div className="voces-cij-body">
+              <div className="voces-cij-col">
+                <div className="voces-cij-col-label">Caso</div>
+                <p className="voces-cij-col-p">
+                  Opinión Consultiva solicitada por la Asamblea General de la ONU sobre
+                  las consecuencias jurídicas de las políticas y prácticas de Israel
+                  en el Territorio Palestino Ocupado, incluida Jerusalén Oriental.
+                </p>
+              </div>
+              <div className="voces-cij-col">
+                <div className="voces-cij-col-label">Resolución</div>
+                <p className="voces-cij-col-p">
+                  La CIJ determinó que la presencia continuada de Israel en el
+                  Territorio Palestino Ocupado es{' '}
+                  <strong className="voces-cij-strong">ilegal bajo el derecho
+                  internacional</strong>, y que Israel debe poner fin a su ocupación
+                  sin condiciones ni demora.
+                </p>
+              </div>
+              <div className="voces-cij-col">
+                <div className="voces-cij-col-label">Implicaciones</div>
+                <p className="voces-cij-col-p">
+                  Todos los Estados tienen la obligación de no reconocer como legal
+                  la situación resultante y de no prestar ayuda ni asistencia al
+                  mantenimiento de dicha presencia ilegal.
+                </p>
+              </div>
+            </div>
+            <div className="voces-cij-footer">
+              <span className="voces-cij-mono">19 · VII · 2024 · Opinión Consultiva</span>
+              <span className="voces-cij-mono" style={{ opacity: .55 }}>Res. A/ES-10/L.31/Rev.1</span>
+            </div>
+          </div>
+        </Reveal>
+
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   Main Voces page
+   ============================================================ */
+export function Voces() {
+  const [tab, setTab] = useState<'arte' | 'periodismo' | 'solidaridad'>('arte');
+
+  const tabs: { id: 'arte' | 'periodismo' | 'solidaridad'; label: string }[] = [
+    { id: 'arte',        label: 'Arte y Cultura' },
+    { id: 'periodismo',  label: 'Periodismo y Narrativas' },
+    { id: 'solidaridad', label: 'Solidaridad y Sur Global' },
+  ];
+
+  return (
+    <>
+      <header className="page-head">
+        <div className="wrap">
+          <div className="row">
+            <div>
+              <Reveal>
+                <div className="eyebrow"><span className="dot" />Página 05 · Voces</div>
+              </Reveal>
+              <Reveal delay={0.08}>
+                <h1 style={{ marginTop: 18 }}>
+                  Voces<br />
+                  <em style={{ fontStyle: 'italic', color: 'var(--terracotta)' }}>de la</em><br />
+                  Resistencia
+                </h1>
+              </Reveal>
+            </div>
+            <Reveal delay={0.16}>
+              <p className="lede">
+                <strong>Arte, periodismo y solidaridad</strong> como formas de
+                resistencia al borramiento. Tres miradas que sostienen la memoria
+                viva cuando los archivos callan.
+              </p>
+            </Reveal>
+          </div>
+
+          <Reveal delay={0.24}>
+            <div className="subtabs">
+              {tabs.map(t => (
+                <button
+                  key={t.id}
+                  className={'subtab ' + (tab === t.id ? 'is-active' : '')}
+                  onClick={() => setTab(t.id)}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </header>
+
+      {tab === 'arte'        && <ArteTab />}
+      {tab === 'periodismo'  && <PeriodismoTab />}
+      {tab === 'solidaridad' && <SolidaridadTab />}
+    </>
+  );
+}
+</file>
+
 <file path="tsconfig.json">
 {
   "compilerOptions": {
@@ -5920,69 +7288,34 @@ export function OliveMark({ size = 28 }: { size?: number }) {
 }
 </file>
 
-<file path="src/components/Footer.tsx">
-import { PAGES, type PageId } from '../lib/types';
-
-interface FooterProps {
-  setPage: (p: PageId) => void;
-}
-
-export function Footer({ setPage }: FooterProps) {
-  return (
-    <footer className="footer">
-      <div className="wrap">
-        <div className="top">
-          <div>
-            <div className="mark">Caminos de Resistencia</div>
-            <p className="tag">Plataforma de memoria y solidaridad académica.</p>
-          </div>
-
-          <div>
-            <h4>Navegación Rápida</h4>
-            {PAGES.map(p => (
-              <a
-                key={p.id}
-                href="#"
-                onClick={(e) => { e.preventDefault(); setPage(p.id); window.scrollTo({ top: 0 }); }}
-              >
-                {p.label}
-              </a>
-            ))}
-          </div>
-
-          <div>
-            <h4>Respaldo Institucional</h4>
-            <ul className="footer-inst">
-              <li>Cátedra Caminos de Resistencia</li>
-              <li>Facultad de Derecho y Ciencias Políticas</li>
-              <li>Universidad Nacional de Colombia</li>
-              <li>Embajada del Estado de Palestina en Colombia</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="footer-brands">
-          <div className="footer-logo">
-            <div className="lg-mark">UNAL</div>
-            <div className="lg-sub">Fac. Derecho<br />y Ciencias Políticas</div>
-          </div>
-          <div className="footer-logo">
-            <div className="lg-mark">دولة فلسطين</div>
-            <div className="lg-sub">Embajada<br />del Estado de Palestina</div>
-          </div>
-          <div className="footer-logo">
-            <div className="lg-mark">Cátedra</div>
-            <div className="lg-sub">Caminos<br />de Resistencia</div>
-          </div>
-        </div>
-
-        <div className="bot">
-          <div>© 2026 Cátedra Caminos de Resistencia · Universidad Nacional de Colombia</div>
-          <div>Desarrollado por Ángel David Beltrán García — Ingeniería de Sistemas</div>
-        </div>
-      </div>
-    </footer>
-  );
+<file path="package.json">
+{
+  "name": "palestina",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "audit:all": "echo \"Ejecuta manualmente en OpenCode: /audit-responsive, /fix-colors, /humanize-text\""
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^6.0.1",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.14",
+    "tailwindcss": "^3.4.19",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.12"
+  },
+  "dependencies": {
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^1.14.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
 }
 </file>
 
@@ -6137,6 +7470,72 @@ export function App() {
       <main data-screen-label={`Page ${page}`}>{PageComp[page]}</main>
       <Footer setPage={setPage} />
     </>
+  );
+}
+</file>
+
+<file path="src/components/Footer.tsx">
+import { PAGES, type PageId } from '../lib/types';
+
+interface FooterProps {
+  setPage: (p: PageId) => void;
+}
+
+export function Footer({ setPage }: FooterProps) {
+  return (
+    <footer className="footer">
+      <div className="wrap">
+        <div className="top">
+          <div>
+            <div className="mark">Caminos de Resistencia</div>
+            <p className="tag">Plataforma de memoria y solidaridad académica.</p>
+          </div>
+
+          <div>
+            <h4>Navegación Rápida</h4>
+            {PAGES.map(p => (
+              <a
+                key={p.id}
+                href="#"
+                onClick={(e) => { e.preventDefault(); setPage(p.id); window.scrollTo(0, 0); }}
+              >
+                {p.label}
+              </a>
+            ))}
+          </div>
+
+          <div>
+            <h4>Respaldo Institucional</h4>
+            <ul className="footer-inst">
+              <li>Cátedra Caminos de Resistencia</li>
+              <li>Facultad de Derecho y Ciencias Políticas</li>
+              <li>Universidad Nacional de Colombia</li>
+              <li>Embajada del Estado de Palestina en Colombia</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="footer-brands">
+          <div className="footer-logo">
+            <div className="lg-mark">UNAL</div>
+            <div className="lg-sub">Fac. Derecho<br />y Ciencias Políticas</div>
+          </div>
+          <div className="footer-logo">
+            <div className="lg-mark">دولة فلسطين</div>
+            <div className="lg-sub">Embajada<br />del Estado de Palestina</div>
+          </div>
+          <div className="footer-logo">
+            <div className="lg-mark">Cátedra</div>
+            <div className="lg-sub">Caminos<br />de Resistencia</div>
+          </div>
+        </div>
+
+        <div className="bot">
+          <div>© 2026 Cátedra Caminos de Resistencia · Universidad Nacional de Colombia</div>
+          <div>Desarrollado por Ángel David Beltrán García — Ingeniería de Sistemas</div>
+        </div>
+      </div>
+    </footer>
   );
 }
 </file>
@@ -6559,7 +7958,7 @@ export function Home({ setPage }: HomeProps) {
             <div>
               <Reveal>
                 <div className="eyebrow" style={{ color: 'rgba(241,237,224,0.7)' }}>
-                  <span className="dot" style={{ background: '#e8b04a' }} /><span>Poética de la Tierra · voces</span>
+                  <span className="dot" style={{ background: 'var(--gold-accent)' }} /><span>Poética de la Tierra · voces</span>
                 </div>
               </Reveal>
 
@@ -6962,6 +8361,7 @@ export function History() {
   const [open, setOpen] = useState(-1);
 
   useEffect(() => {
+    if (window.innerWidth < 820) return;
     const el = railRef.current;
     if (!el) return;
     const onScroll = () => {
@@ -6975,6 +8375,7 @@ export function History() {
   }, []);
 
   const scroll = (dir: number) => {
+    if (window.innerWidth < 820) return;
     railRef.current?.scrollBy({ left: dir * 384, behavior: 'smooth' });
   };
 
@@ -7174,6 +8575,15 @@ export function History() {
     --line: rgba(18, 18, 18, 0.12);
     --line-soft: rgba(18, 18, 18, 0.06);
 
+    --gold-accent: #d4a04a;
+    --gold-accent-soft: rgba(212,160,74,0.10);
+    --text-on-terracotta: #fff7f1;
+    --text-on-carbon: #f5f1e6;
+    --footer-text: #d8d3c5;
+    --footer-mute: rgba(255,255,255,0.55);
+    --footer-line: rgba(255,255,255,0.08);
+    --podcast-accent: #d4a04a;
+
     --bg: var(--smoke);
     --bg-warm: var(--paper);
     --fg: var(--ink);
@@ -7199,7 +8609,11 @@ export function History() {
     --olive: #6f9456;
     --olive-deep: #4d6b3a;
     --olive-soft: rgba(140, 175, 130, 0.12);
-    --terracotta-soft: rgba(200, 80, 86, 0.14);
+    --terracotta: #d45a5e;
+    --terracotta-soft: rgba(212, 90, 94, 0.14);
+    --gold-accent: #e8b04a;
+    --gold-accent-soft: rgba(232,176,74,0.14);
+    --text-on-carbon: #0b0c0a;
   }
 
   html, body { margin: 0; padding: 0; }
@@ -7284,7 +8698,8 @@ export function History() {
     max-width: 1180px;
     transition: top .35s cubic-bezier(.2,.7,.2,1), max-width .35s cubic-bezier(.2,.7,.2,1);
   }
-  .nav-shell.is-scrolled { top: 12px; max-width: 940px; }
+  .nav-shell.is-scrolled { top: 12px; max-width: 1080px; }
+  .nav-shell.is-scrolled .nav { padding: 8px 12px 8px 18px; }
 
   .nav {
     display: flex;
@@ -7297,6 +8712,8 @@ export function History() {
     backdrop-filter: blur(18px) saturate(1.3);
     -webkit-backdrop-filter: blur(18px) saturate(1.3);
     border: 1px solid var(--line);
+    overflow-x: auto;
+    scrollbar-width: none;
     box-shadow:
       0 1px 0 rgba(255,255,255,.4) inset,
       0 12px 30px -18px rgba(0,0,0,.25);
@@ -7307,6 +8724,7 @@ export function History() {
       0 1px 0 rgba(255,255,255,.04) inset,
       0 12px 30px -16px rgba(0,0,0,.6);
   }
+  .nav::-webkit-scrollbar { display: none; }
 
   .brand {
     display: flex; align-items: center; gap: 10px;
@@ -7357,7 +8775,7 @@ export function History() {
   }
   .nav-link:hover { color: var(--terracotta); }
   .nav-link:hover::after { transform: scaleX(1); }
-  .nav-link.is-active { background: var(--olive); color: #f5f1e6; }
+  .nav-link.is-active { background: var(--olive); color: var(--text-on-carbon); }
   html.dark .nav-link.is-active,
   html[data-theme="dark"] .nav-link.is-active { background: #f1ede4; color: #0b0c0a; }
   .nav-link.is-active::after { display: none; }
@@ -7367,7 +8785,7 @@ export function History() {
     padding: 9px 14px 9px 16px;
     border-radius: 999px;
     background: var(--terracotta);
-    color: #fff7f1;
+    color: var(--text-on-terracotta);
     font-size: 13px;
     font-weight: 500;
     border: none;
@@ -7376,7 +8794,10 @@ export function History() {
     white-space: nowrap;
     transition: transform .2s ease, background-color .2s ease;
   }
-  .nav-cta:hover { transform: translateY(-1px); background: #6e1418; }
+  .nav-cta:hover { transform: translateY(-1px); background: var(--terracotta); }
+
+  html.dark .nav-cta:hover,
+  html[data-theme="dark"] .nav-cta:hover { background: #a33238; }
 
   .nav-meta { display: flex; align-items: center; gap: 6px; }
 
@@ -7488,7 +8909,7 @@ export function History() {
     pointer-events: none;
   }
   .quote-section .eyebrow { color: rgba(241,237,224,0.7); }
-  .quote-section .eyebrow .dot { background: #e8b04a; }
+  .quote-section .eyebrow .dot { background: var(--gold-accent); }
 
   .pull-quote {
     font-family: var(--serif);
@@ -7499,7 +8920,7 @@ export function History() {
     max-width: 18ch;
     text-wrap: balance;
   }
-  .pull-quote .leaf { color: #e8b04a; font-style: normal; }
+  .pull-quote .leaf { color: var(--gold-accent); font-style: normal; }
   .quote-attrib {
     font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
     margin-top: 32px;
@@ -7580,7 +9001,7 @@ export function History() {
     transition: color .2s ease, background .2s ease;
   }
   .subtab:hover { color: var(--fg); }
-  .subtab.is-active { background: var(--carbon); color: #f5f1e6; }
+  .subtab.is-active { background: var(--carbon); color: var(--text-on-carbon); }
   html.dark .subtab.is-active,
   html[data-theme="dark"] .subtab.is-active { background: #f1ede4; color: #0b0c0a; }
 
@@ -7822,7 +9243,7 @@ export function History() {
     transition: color .2s ease, border-color .2s ease, background .2s ease;
   }
   .chip:hover { color: var(--terracotta); border-color: var(--terracotta); }
-  .chip.is-on { background: var(--carbon); border-color: var(--carbon); color: #f5f1e6; }
+  .chip.is-on { background: var(--carbon); border-color: var(--carbon); color: var(--text-on-carbon); }
   html.dark .chip.is-on,
   html[data-theme="dark"] .chip.is-on { background: #f1ede4; border-color: #f1ede4; color: #0b0c0a; }
 
@@ -7863,7 +9284,7 @@ export function History() {
   .proj-thumb.kind-ensayo { background: var(--carbon); }
   .proj-thumb.kind-cartografia { background: var(--terracotta); }
   .proj-thumb.kind-video { background: linear-gradient(135deg, var(--olive) 0%, var(--carbon) 100%); }
-  .proj-thumb.kind-podcast { background: #d4a04a; }
+  .proj-thumb.kind-podcast { background: var(--gold-accent); }
   .proj-thumb::before {
     content: ""; position: absolute; inset: 0;
     background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 10px, transparent 10px 20px);
@@ -7913,23 +9334,23 @@ export function History() {
   .biblio-item .meta-r { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--fg-mute); }
 
   .footer {
-    background: var(--carbon); color: #d8d3c5;
+    background: var(--carbon); color: var(--footer-text);
     padding: 80px 0 32px;
     margin-top: 80px;
   }
   .footer .wrap > .top {
     display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 48px;
   }
-  .footer h4 { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,0.55); font-weight: 400; margin-bottom: 18px; }
-  .footer a { color: #d8d3c5; text-decoration: none; display: block; padding: 4px 0; font-size: 14px; transition: color .2s ease; }
-  .footer a:hover { color: #e8b04a; }
+  .footer h4 { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--footer-mute); font-weight: 400; margin-bottom: 18px; }
+  .footer a { color: var(--footer-text); text-decoration: none; display: block; padding: 4px 0; font-size: 14px; transition: color .2s ease; }
+  .footer a:hover { color: var(--gold-accent); }
   .footer .mark { font-family: var(--serif); font-size: 30px; letter-spacing: -0.02em; color: #fff; margin-bottom: 12px; }
   .footer .tag { font-size: 14px; color: rgba(255,255,255,0.6); max-width: 36ch; }
   .footer .bot {
     display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
     margin-top: 32px;
     padding-top: 24px;
-    border-top: 1px solid rgba(255,255,255,0.08);
+    border-top: 1px solid var(--footer-line);
     font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
     color: rgba(255,255,255,0.45);
   }
@@ -7938,14 +9359,14 @@ export function History() {
 
   .footer-brands {
     display: grid; grid-template-columns: 1.5fr 1fr 1fr;
-    border-top: 1px solid rgba(255,255,255,0.08);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-top: 1px solid var(--footer-line);
+    border-bottom: 1px solid var(--footer-line);
     margin: 48px 0 0;
   }
   .footer-logo {
     display: flex; flex-direction: column; gap: 6px;
     padding: 28px 32px;
-    border-right: 1px solid rgba(255,255,255,0.08);
+    border-right: 1px solid var(--footer-line);
   }
   .footer-logo:first-child { padding-left: 0; }
   .footer-logo:last-child { border-right: none; padding-right: 0; }
@@ -8003,8 +9424,11 @@ export function History() {
   .btn:hover { border-color: var(--terracotta); color: var(--terracotta); }
   .btn.solid { background: var(--olive); color: #f1ede0; border-color: var(--olive); }
   .btn.solid:hover { background: var(--olive-deep); color: #fff; border-color: var(--olive-deep); }
-  .btn.terra { background: var(--terracotta); color: #fff7f1; border-color: var(--terracotta); }
-  .btn.terra:hover { background: #6e1418; border-color: #6e1418; color: #fff; }
+  .btn.terra { background: var(--terracotta); color: var(--text-on-terracotta); border-color: var(--terracotta); }
+  .btn.terra:hover { background: #a02930; border-color: #a02930; color: #fff; }
+
+  html.dark .btn.terra:hover,
+  html[data-theme="dark"] .btn.terra:hover { background: #8B1D22; border-color: #8B1D22; }
 
   .kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--terracotta); }
 
@@ -8043,7 +9467,7 @@ export function History() {
     margin-top: 28px;
     text-wrap: balance;
   }
-  .poetica-quote .leaf { color: #e8b04a; font-style: normal; }
+  .poetica-quote .leaf { color: var(--gold-accent); font-style: normal; }
   .poetica-attrib {
     margin-top: 26px;
     font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
@@ -8083,7 +9507,7 @@ export function History() {
   }
   .md-wave span {
     flex: 1; min-width: 2px;
-    background: linear-gradient(to top, var(--terracotta), #e8b04a);
+    background: linear-gradient(to top, var(--terracotta), var(--gold-accent));
     border-radius: 2px;
     display: block;
     transition: opacity .3s ease;
@@ -8105,7 +9529,7 @@ export function History() {
     cursor: pointer;
   }
   .md-list li:hover { background: rgba(11,12,10,0.7); }
-  .md-list li.is-active { background: rgba(139,29,34,0.25); }
+  .md-list li.is-active { background: color-mix(in srgb, var(--terracotta) 25%, transparent); }
   .md-list li.is-active .md-name { color: #fff; }
   .md-list .md-kind {
     font-family: var(--mono); font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
@@ -8113,7 +9537,7 @@ export function History() {
     display: inline-flex; align-items: center;
   }
   .md-list .md-kind svg { width: 12px; height: 12px; color: var(--terracotta); }
-  .md-list li.is-active .md-kind svg { color: #e8b04a; }
+  .md-list li.is-active .md-kind svg { color: var(--gold-accent); }
   .md-list .md-name { color: rgba(241,237,224,0.88); }
   .md-list .md-name i { color: rgba(241,237,224,0.6); font-style: italic; }
   .md-list .md-len { font-family: var(--mono); font-size: 11px; color: rgba(241,237,224,0.45); }
@@ -8132,7 +9556,7 @@ export function History() {
     cursor: pointer;
     transition: background .2s ease, border-color .2s ease, color .2s ease;
   }
-  .btn-ghost-light:hover { background: rgba(241,237,224,0.08); border-color: rgba(232,176,74,0.6); color: #e8b04a; }
+  .btn-ghost-light:hover { background: rgba(241,237,224,0.08); border-color: rgba(232,176,74,0.6); color: var(--gold-accent); }
   .btn-ghost-light svg { width: 12px; height: 12px; }
 
   .simbo-grid {
@@ -8265,12 +9689,18 @@ export function History() {
   }
 }
 
-/* ============================================================
-   Responsive (raw — outside @layer to avoid PostCSS edge cases)
-   ============================================================ */
-@media (max-width: 880px) {
+  @media (max-width: 1100px) {
+    .nav-cta .cta-text { display: none; }
+    .nav-cta { padding: 9px 12px; }
+  }
+
+  /* ============================================================
+     Responsive (raw — outside @layer to avoid PostCSS edge cases)
+     ============================================================ */
+  @media (max-width: 880px) {
   .nav-links, .nav-cta { display: none; }
   .nav-burger { display: inline-flex; }
+  .brand { white-space: normal; }
 }
 @media (max-width: 720px) {
   .hero-foot { grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -8298,13 +9728,13 @@ export function History() {
   .reading-note { padding: 32px 24px; grid-template-columns: 1fr; gap: 20px; }
   .cta-strip { grid-template-columns: 1fr; gap: 20px; }
 }
-@media (max-width: 920px) {
+@media (max-width: 700px) {
   .sticky-story { grid-template-columns: 1fr; gap: 28px; }
   .sticky-story .stick { position: relative; top: 0; }
   .simbo-grid { grid-template-columns: 1fr; }
   .simbo-card { border-right: none; }
 }
-@media (max-width: 940px) { .poetica-grid { grid-template-columns: 1fr; gap: 56px; } }
+@media (max-width: 768px) { .poetica-grid { grid-template-columns: 1fr; gap: 56px; } }
 @media (max-width: 980px) {
   .card.s6, .card.s4, .card.s8 { grid-column: span 12; }
 }
@@ -8458,7 +9888,7 @@ export function History() {
   .footer a { font-size: 14.5px; }
   .footer-inst li { font-size: 13.5px; }
   .footer-brands { margin-top: 32px; }
-  .footer-logo { padding: 20px 0; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .footer-logo { padding: 20px 0; border-right: none; border-bottom: 1px solid var(--footer-line); }
   .footer-logo:last-child { border-bottom: none; }
   .footer .bot { font-size: 10px; flex-direction: column; align-items: flex-start; gap: 8px; }
 
@@ -8474,6 +9904,33 @@ export function History() {
   /* BUTTONS readable */
   .btn { font-size: 13.5px; padding: 11px 16px; }
   .nav-cta { font-size: 13px; }
+
+  /* ── minimum legible size overrides ── */
+  .card .tag,
+  .card .stat-strip .k,
+  .card-img,
+  .story-slot .cap,
+  .proj-thumb .kind-glyph,
+  .proj .meta,
+  .footer h4,
+  .footer-logo .lg-sub,
+  .md-now,
+  .image-slot .image-slot-label,
+  .myth-label-tag,
+  .myth-hint,
+  .myth-sources-hd,
+  .myth-source-item,
+  .pdt-alert-bar,
+  .pdt-list-n,
+  .voces-cij-col-label,
+  .card-readmore,
+  .brand small,
+  .hero-foot .stat .lbl,
+  .tl-meta,
+  .chip,
+  .md-list .md-kind {
+    font-size: 12px !important;
+  }
 }
 
 @media (max-width: 420px) {
@@ -8575,7 +10032,7 @@ export function History() {
   text-transform: uppercase;
   color: var(--terracotta);
   padding: 4px 10px;
-  border: 1px solid rgba(139,29,34,.45);
+  border: 1px solid color-mix(in srgb, var(--terracotta) 45%, transparent);
   border-radius: 4px;
   align-self: flex-start;
 }
@@ -8969,13 +10426,13 @@ html[data-theme="dark"] .pdt-stat-num--olive { color: var(--olive); }
 .footer-logos {
   display: flex; gap: 32px; align-items: center; margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  border-top: 1px solid var(--footer-line);
   flex-wrap: wrap;
 }
 .footer-logo {
   display: flex; flex-direction: column; gap: 4px;
   padding-right: 28px;
-  border-right: 1px solid rgba(255,255,255,0.08);
+  border-right: 1px solid var(--footer-line);
 }
 .footer-logo:last-child { border-right: none; padding-right: 0; }
 .footer-logo .lg-mark {
@@ -9114,7 +10571,7 @@ html[data-theme="dark"] .pdt-stat-num--olive { color: var(--olive); }
 .voces-traverso-band::before {
   content: "";
   position: absolute; inset: 0;
-  background: radial-gradient(55% 55% at 85% 20%, rgba(139,29,34,.22), transparent 60%);
+  background: radial-gradient(55% 55% at 85% 20%, color-mix(in srgb, var(--terracotta) 22%, transparent), transparent 60%);
   pointer-events: none;
 }
 .voces-traverso-band .pull-quote  { max-width: none; color: #f1ede0; position: relative; z-index: 1; }
@@ -9148,7 +10605,7 @@ html[data-theme="dark"] .pdt-stat-num--olive { color: var(--olive); }
 
 /* Memoridicio dark block */
 .voces-dark-block {
-  background: #121212;
+  background: var(--carbon);
   border-radius: 20px;
   padding: clamp(36px, 5vw, 64px) clamp(24px, 4.5vw, 56px);
   position: relative;
@@ -9157,7 +10614,7 @@ html[data-theme="dark"] .pdt-stat-num--olive { color: var(--olive); }
 .voces-dark-block::before {
   content: "";
   position: absolute; inset: 0;
-  background: radial-gradient(45% 50% at 15% 15%, rgba(139,29,34,.15), transparent 65%);
+  background: radial-gradient(45% 50% at 15% 15%, color-mix(in srgb, var(--terracotta) 15%, transparent), transparent 65%);
   pointer-events: none;
 }
 .voces-db-inner { position: relative; z-index: 1; }
@@ -9167,7 +10624,7 @@ html[data-theme="dark"] .pdt-stat-num--olive { color: var(--olive); }
   gap: 24px;
   margin-top: 40px;
   padding-top: 28px;
-  border-top: 1px solid rgba(139,29,34,.3);
+  border-top: 1px solid color-mix(in srgb, var(--terracotta) 30%, transparent);
 }
 @media (max-width: 580px) { .voces-db-stats { grid-template-columns: repeat(2, 1fr); } }
 .voces-db-footer {
@@ -9211,7 +10668,7 @@ html[data-theme="dark"] .pdt-stat-num--olive { color: var(--olive); }
   color: #f1ede0;
   position: relative; z-index: 1;
 }
-.voces-tutu-verse em { color: #e8b04a; font-style: italic; }
+.voces-tutu-verse em { color: var(--gold-accent); font-style: italic; }
 .voces-tutu-attr {
   display: block;
   font-family: var(--mono);
@@ -9226,8 +10683,8 @@ html[data-theme="dark"] .pdt-stat-num--olive { color: var(--olive); }
 
 /* CIJ legal block */
 .voces-cij {
-  background: #F5F5F5;
-  border: 1.5px solid #2E4731;
+  background: var(--smoke);
+  border: 1.5px solid var(--olive);
   border-radius: 6px;
   overflow: hidden;
   margin-top: 48px;
@@ -9238,7 +10695,7 @@ html[data-theme="dark"] .voces-cij {
 }
 .voces-cij-header {
   padding: clamp(24px, 3vw, 40px) clamp(24px, 4vw, 48px);
-  border-bottom: 1.5px solid #2E4731;
+  border-bottom: 1.5px solid var(--olive);
 }
 html[data-theme="dark"] .voces-cij-header { border-color: #3F5D43; }
 .voces-cij-h3 {
@@ -9254,7 +10711,7 @@ html[data-theme="dark"] .voces-cij-h3 { color: #cde8cf; }
   font-size: 10.5px;
   letter-spacing: .2em;
   text-transform: uppercase;
-  color: #2E4731;
+  color: var(--olive);
 }
 html[data-theme="dark"] .voces-cij-mono { color: #7ab87e; }
 .voces-cij-body {
@@ -9264,8 +10721,8 @@ html[data-theme="dark"] .voces-cij-mono { color: #7ab87e; }
 @media (max-width: 700px) { .voces-cij-body { grid-template-columns: 1fr; } }
 .voces-cij-col {
   padding: clamp(20px, 2.5vw, 32px) clamp(18px, 3vw, 32px);
-  border-right: 1px solid #2E4731;
-  border-bottom: 1px solid #2E4731;
+  border-right: 1px solid var(--olive);
+  border-bottom: 1px solid var(--olive);
 }
 .voces-cij-col:last-child { border-right: none; }
 @media (max-width: 700px) {
@@ -9278,7 +10735,7 @@ html[data-theme="dark"] .voces-cij-col { border-color: #3F5D43; }
   font-size: 10px;
   letter-spacing: .2em;
   text-transform: uppercase;
-  color: #2E4731;
+  color: var(--olive);
   margin-bottom: 12px;
 }
 html[data-theme="dark"] .voces-cij-col-label { color: #7ab87e; }
@@ -9299,7 +10756,7 @@ html[data-theme="dark"] .voces-cij-strong { color: #cde8cf; }
   flex-wrap: wrap;
   gap: 12px;
   background: rgba(46,71,49,.05);
-  border-top: 1px solid #2E4731;
+  border-top: 1px solid var(--olive);
 }
 html[data-theme="dark"] .voces-cij-footer {
   background: rgba(46,71,49,.18);
@@ -9424,12 +10881,45 @@ html[data-theme="dark"] .voces-cij-footer {
 @media (max-width: 480px) {
   /* Footer logos stack vertically */
   .footer-logos { flex-direction: column; align-items: flex-start; gap: 16px; }
-  .footer-logo { padding-right: 0; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 16px; width: 100%; }
+  .footer-logo { padding-right: 0; border-right: none; border-bottom: 1px solid var(--footer-line); padding-bottom: 16px; width: 100%; }
   .footer-logo:last-child { border-bottom: none; padding-bottom: 0; }
 }
 
 @media (max-width: 380px) {
   .mobile-sheet a { font-size: 28px; padding: 10px 0; }
+}
+
+/* ============================================================
+   Grid intermediate breakpoints (tablet 2-col过渡)
+   ============================================================ */
+
+@media (max-width: 900px) and (min-width: 821px) {
+  .glossary { grid-template-columns: repeat(2, 1fr); }
+  .gloss-item { border-right: 1px solid var(--line); }
+  .gloss-item:last-child { border-right: none; }
+}
+
+@media (max-width: 820px) and (min-width: 681px) {
+  .biblio { grid-template-columns: repeat(2, 1fr); }
+  .biblio-item { border-right: 1px solid var(--line); }
+  .biblio-item:nth-child(even) { border-right: none; }
+}
+
+@media (max-width: 920px) and (min-width: 701px) {
+  .simbo-grid { grid-template-columns: repeat(2, 1fr); }
+  .simbo-card { border-right: 1px solid var(--line); }
+  .simbo-card:last-child { border-right: none; }
+}
+
+@media (max-width: 960px) and (min-width: 701px) {
+  .voces-cij-body { grid-template-columns: repeat(2, 1fr); }
+  .voces-cij-col { border-right: 1px solid var(--olive); }
+  .voces-cij-col:last-child { border-right: none; }
+  html[data-theme="dark"] .voces-cij-col { border-color: #3F5D43; }
+}
+
+@media (max-width: 880px) and (min-width: 769px) {
+  .card.s4 { grid-column: span 6; }
 }
 
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }

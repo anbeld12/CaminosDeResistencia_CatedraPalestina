@@ -38,7 +38,7 @@ function QuotesMarquee({
 }
 
 /* ============================================================
-   PalestinaDeTodas — bento editorial gender section
+   PalestinaDeTodas — editorial gender section
    ============================================================ */
 const GENDER_DATA = {
   mentalHealth: [
@@ -72,7 +72,7 @@ function PalestinaDeTodas() {
           <div className="pdt-intro-grid">
             <h2 className="pdt-intro-title">
               La firmeza<br />
-              <em style={{ color: 'var(--terracotta)', fontStyle: 'italic' }}>que sostiene</em><br />
+              <em className="text-accent italic">que sostiene</em><br />
               el mundo
             </h2>
             <div className="pdt-intro-body">
@@ -82,7 +82,7 @@ function PalestinaDeTodas() {
                 parir y criar bajo ocupación. No es heroísmo extraordinario; es la arquitectura
                 invisible que sostiene una sociedad en permanente estado de emergencia.
               </p>
-              <p style={{ marginTop: 18 }}>
+              <p className="mt-[18px]">
                 Las mujeres palestinas son las principales portadoras del sumud. Administran hogares
                 que pueden ser demolidos de un día para otro, sostienen duelos sin cuerpo, mantienen
                 escuelas que funcionan bajo bombardeos. Esta sección documenta esa carga
@@ -93,75 +93,82 @@ function PalestinaDeTodas() {
         </div>
       </Reveal>
 
-      {/* ── BENTO GRID ───────────────────────────────────────── */}
-      <div className="pdt-bento">
+      {/* ── TWO-COLUMN GRID ──────────────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-        {/* Salud Mental y Cuidado */}
-        <Reveal>
-          <div className="pdt-card pdt-mental">
-            <div className="pdt-card-eyebrow">
-              <span className="kicker">/ Salud mental y cuidado</span>
+        {/* ========== LEFT COLUMN ========== */}
+        <div className="flex flex-col gap-8">
+
+          {/* Salud Mental y Cuidado */}
+          <Reveal>
+            <div className="pdt-card-modern">
+              <div className="kicker mb-4">
+                / Salud mental y cuidado
+              </div>
+              <ImageSlot
+                height={180}
+                label="Mujer palestina en espacio de refugio · retrato documental"
+                variant="olive"
+              />
+              <ul className="pdt-list">
+                {GENDER_DATA.mentalHealth.map((item, i) => (
+                  <li key={i} className="pdt-list-item">
+                    <span className="pdt-list-n">{String(i + 1).padStart(2, '0')}</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ImageSlot
-              height={180}
-              label="Mujer palestina en espacio de refugio · retrato documental"
-              variant="olive"
-            />
-            <ul className="pdt-list">
-              {GENDER_DATA.mentalHealth.map((item, i) => (
-                <li key={i} className="pdt-list-item">
-                  <span className="pdt-list-n">{String(i + 1).padStart(2, '0')}</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Reveal>
+          </Reveal>
 
-        {/* Violencia Sistémica */}
-        <Reveal delay={0.08}>
-          <div className="pdt-card pdt-violence">
-            <div className="pdt-card-eyebrow">
-              <span className="kicker" style={{ color: 'var(--terracotta)' }}>/ Violencia sistémica</span>
+          {/* Violencia Sistémica */}
+          <Reveal delay={0.08}>
+            <div className="pdt-card-modern pdt-warning-card">
+              <div className="kicker text-accent mb-1">
+                / Violencia sistémica
+              </div>
               <div className="pdt-alert-bar">
                 <span className="pdt-alert-dot" aria-hidden="true" />
                 Contenido documentado · tratado con la solemnidad que merece
               </div>
+              <ul className="pdt-list mt-2">
+                {GENDER_DATA.systemicViolence.map((item, i) => (
+                  <li key={i} className="pdt-list-item pdt-list-item--alert">
+                    <span className="pdt-list-n pdt-list-n--alert">{String(i + 1).padStart(2, '0')}</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="pdt-list" style={{ marginTop: 8 }}>
-              {GENDER_DATA.systemicViolence.map((item, i) => (
-                <li key={i} className="pdt-list-item pdt-list-item--alert">
-                  <span className="pdt-list-n pdt-list-n--alert">{String(i + 1).padStart(2, '0')}</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Reveal>
+          </Reveal>
 
-        {/* Stat · 26 oct */}
-        <Reveal>
-          <div className="pdt-card pdt-stat pdt-stat--olive">
-            <div className="pdt-stat-num">{GENDER_DATA.leadershipSumud.nationalDay}</div>
-            <div className="pdt-stat-note">{GENDER_DATA.leadershipSumud.nationalDayNote}</div>
-          </div>
-        </Reveal>
+        </div>
 
-        {/* Stat · 30 % */}
-        <Reveal delay={0.08}>
-          <div className="pdt-card pdt-stat">
-            <div className="pdt-stat-num pdt-stat-num--olive">{GENDER_DATA.leadershipSumud.politicalQuota}</div>
-            <div className="pdt-stat-note">{GENDER_DATA.leadershipSumud.politicalQuotaNote}</div>
-          </div>
-        </Reveal>
+        {/* ========== RIGHT COLUMN · Stats ========== */}
+        <div className="flex flex-col gap-8">
 
-        {/* Stat · 1.673 */}
-        <Reveal delay={0.16}>
-          <div className="pdt-card pdt-stat pdt-stat--terra">
-            <div className="pdt-stat-num pdt-stat-num--terra">{GENDER_DATA.leadershipSumud.students}</div>
-            <div className="pdt-stat-note">{GENDER_DATA.leadershipSumud.studentsNote}</div>
-          </div>
-        </Reveal>
+          <Reveal>
+            <div className="pdt-stat-card">
+              <div className="pdt-stat-number">{GENDER_DATA.leadershipSumud.nationalDay}</div>
+              <div className="pdt-stat-label">{GENDER_DATA.leadershipSumud.nationalDayNote}</div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <div className="pdt-stat-card">
+              <div className="pdt-stat-number">{GENDER_DATA.leadershipSumud.politicalQuota}</div>
+              <div className="pdt-stat-label">{GENDER_DATA.leadershipSumud.politicalQuotaNote}</div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.16}>
+            <div className="pdt-stat-card">
+              <div className="pdt-stat-number">{GENDER_DATA.leadershipSumud.students}</div>
+              <div className="pdt-stat-label">{GENDER_DATA.leadershipSumud.studentsNote}</div>
+            </div>
+          </Reveal>
+
+        </div>
 
       </div>
     </>
@@ -183,9 +190,9 @@ export function Genero() {
                 <div className="eyebrow"><span className="dot" />Página 04 · Género</div>
               </Reveal>
               <Reveal delay={0.08}>
-                <h1 style={{ marginTop: 18 }}>
+                <h1 className="mt-[18px]">
                   Palestina<br />
-                  <em style={{ fontStyle: 'italic', color: 'var(--terracotta)' }}>de todas</em>
+                  <em className="text-accent italic">de todas</em>
                 </h1>
               </Reveal>
             </div>
@@ -198,7 +205,7 @@ export function Genero() {
                   <br /><br />
                   <strong>Esta sección documenta esa doble carga —y esa doble fuerza.</strong>
                 </p>
-                <div style={{ marginTop: 28, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                <div className="mt-7 flex gap-2.5 flex-wrap">
                   <div className="pdt-pill">صمود · Sumud</div>
                   <div className="pdt-pill">Salud mental</div>
                   <div className="pdt-pill">Violencia sistémica</div>
@@ -211,7 +218,7 @@ export function Genero() {
       </header>
 
       {/* ── CONTENIDO PRINCIPAL ───────────────────────────────── */}
-      <section className="section" style={{ paddingTop: 0 }}>
+      <section className="section !pt-0">
         <div className="wrap">
           <PalestinaDeTodas />
         </div>
@@ -226,27 +233,20 @@ export function Genero() {
       />
 
       {/* ── NOTA INSTITUCIONAL ────────────────────────────────── */}
-      <section className="section" style={{ paddingTop: 24, paddingBottom: 80 }}>
+      <section className="section !pt-6 !pb-20">
         <div className="wrap">
           <Reveal>
             <div className="reading-note">
               <div>
-                <div style={{
-                  fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.18em',
-                  textTransform: 'uppercase', color: 'rgba(241,237,224,0.7)',
-                }}>
+                <div className="reading-note-eyebrow">
                   Nota metodológica
                 </div>
-                <p style={{
-                  fontFamily: 'var(--serif)', fontSize: 'clamp(18px, 2.2vw, 24px)',
-                  marginTop: 12, lineHeight: 1.3, maxWidth: '48ch',
-                  color: 'rgba(241,237,224,0.92)',
-                }}>
+                <p className="reading-note-body">
                   Los datos aquí presentados provienen de organizaciones documentales independientes.
                   El análisis de género no es auxiliar al conflicto —<em>es constitutivo de él.</em>
                 </p>
               </div>
-              <button className="btn terra" style={{ whiteSpace: 'nowrap' }}>
+              <button className="btn terra whitespace-nowrap">
                 Descargar ficha · PDF
               </button>
             </div>

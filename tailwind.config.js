@@ -11,7 +11,7 @@ export default {
           soft: '#6f9456',
         },
         accent: {
-          DEFAULT: '#8B1D22',
+          DEFAULT: 'var(--terracotta)',
         },
         dark: '#121212',
         light: {

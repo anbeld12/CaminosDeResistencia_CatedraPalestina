@@ -185,7 +185,7 @@ export function Home({ setPage }: HomeProps) {
             <div>
               <Reveal>
                 <div className="eyebrow" style={{ color: 'rgba(241,237,224,0.7)' }}>
-                  <span className="dot" style={{ background: '#e8b04a' }} /><span>Poética de la Tierra · voces</span>
+                  <span className="dot" style={{ background: 'var(--gold-accent)' }} /><span>Poética de la Tierra · voces</span>
                 </div>
               </Reveal>
 
@@ -414,7 +414,7 @@ interface SimboCardProps {
 
 function SimboCard({ n, term, meaning, body, glyph, accent }: SimboCardProps) {
   return (
-    <Reveal as="article" className={'simbo-card ' + (accent ? 'is-accent' : '')}>
+    <Reveal as="article" className={'simbo-card card-base ' + (accent ? 'is-accent' : '')}>
       <div className="simbo-card-glyph" aria-hidden="true">{glyph}</div>
       <div className="simbo-card-n">/ {n}</div>
       <h3 className="simbo-card-term">{term}</h3>

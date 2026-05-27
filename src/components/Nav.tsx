@@ -53,7 +53,7 @@ export function Nav({ page, setPage, theme, toggleTheme }: NavProps) {
               {theme === 'dark' ? <Icon.Sun /> : <Icon.Moon />}
             </button>
             <button className="nav-cta" onClick={() => setPage('archive')}>
-              Explorar el Archivo
+              <span className="cta-text">Explorar el Archivo</span>
               <Icon.Arrow />
             </button>
             <button

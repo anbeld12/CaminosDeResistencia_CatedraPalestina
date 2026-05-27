@@ -103,7 +103,7 @@ function ArteTab() {
             <div className="voces-darwish-inner">
               <div>
                 <div className="eyebrow" style={{ color: 'rgba(241,237,224,.62)' }}>
-                  <span className="dot" style={{ background: '#e8b04a' }} />
+                  <span className="dot" style={{ background: 'var(--gold-accent)' }} />
                   Poesía · Voz central
                 </div>
                 <h3 style={{
@@ -148,7 +148,7 @@ function ArteTab() {
 
           <Reveal>
             <div className="voces-masonry-item">
-              <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+              <div className="card card-base p-0 overflow-hidden">
                 <ImageSlot
                   height={210}
                   label="Mural · Arte callejero palestino · Campo de refugiados"
@@ -264,12 +264,12 @@ function PeriodismoTab() {
         <Reveal>
           <div className="voces-traverso-band">
             <div className="eyebrow">
-              <span className="dot" style={{ background: '#e8b04a' }} />
+              <span className="dot" style={{ background: 'var(--gold-accent)' }} />
               Periodismo · Encuadre editorial
             </div>
             <blockquote className="pull-quote" style={{ marginTop: 22 }}>
               "El universalismo ha sido siempre{' '}
-              <span style={{ color: '#e8b04a' }}>Occidente extendiendo sus valores</span>
+              <span style={{ color: 'var(--gold-accent)' }}>Occidente extendiendo sus valores</span>
               {' '}como si fueran universales."
             </blockquote>
             <cite className="quote-attrib" style={{ marginTop: 22, display: 'block' }}>
@@ -328,7 +328,7 @@ function PeriodismoTab() {
         <Reveal delay={0.16}>
           <div className="voces-dark-block">
             <div className="voces-db-inner">
-              <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: '#8B1D22' }}>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--terracotta)' }}>
                 Concepto · Memoria en disputa
               </div>
               <h3 style={{
@@ -360,7 +360,7 @@ function PeriodismoTab() {
                   { v: '15k+', k: 'Documentos destruidos' },
                 ].map(s => (
                   <div key={s.k}>
-                    <div style={{ fontFamily: 'var(--serif)', fontSize: 42, color: '#8B1D22', lineHeight: 1 }}>{s.v}</div>
+                    <div style={{ fontFamily: 'var(--serif)', fontSize: 42, color: 'var(--terracotta)', lineHeight: 1 }}>{s.v}</div>
                     <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,.38)', marginTop: 8 }}>{s.k}</div>
                   </div>
                 ))}
@@ -370,7 +370,7 @@ function PeriodismoTab() {
               <div style={{ fontFamily: 'var(--mono)', fontSize: 10.5, color: 'rgba(255,255,255,.34)', letterSpacing: '.14em', textTransform: 'uppercase', whiteSpace: 'normal' }}>
                 Contra el memoridicio
               </div>
-              <div style={{ borderLeft: '2px solid #8B1D22', paddingLeft: 20, fontStyle: 'italic', color: 'rgba(255,255,255,.72)', fontSize: 15, lineHeight: 1.68 }}>
+              <div style={{ borderLeft: '2px solid var(--terracotta)', paddingLeft: 20, fontStyle: 'italic', color: 'rgba(255,255,255,.72)', fontSize: 15, lineHeight: 1.68 }}>
                 La historia oral —testimonios grabados, memorias transcritas, relatos
                 transmitidos de generación en generación— es el contra-archivo que el
                 poder no puede destruir porque vive en cuerpos, no en edificios.
@@ -395,7 +395,7 @@ function SolidaridadTab() {
         <Reveal>
           <div className="voces-tutu">
             <div className="eyebrow" style={{ color: 'rgba(241,237,224,.65)' }}>
-              <span className="dot" style={{ background: '#e8b04a' }} />
+              <span className="dot" style={{ background: 'var(--gold-accent)' }} />
               Apertura · Neutralidad imposible
             </div>
             <blockquote className="voces-tutu-verse">

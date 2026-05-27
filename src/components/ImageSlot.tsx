@@ -9,9 +9,9 @@ interface ImageSlotProps {
 }
 
 const VARIANT_STRIPES: Record<ImageVariant, string> = {
-  olive:  'repeating-linear-gradient(135deg, rgba(46,71,49,0.10) 0 14px, transparent 14px 28px)',
-  terra:  'repeating-linear-gradient(135deg, rgba(139,29,34,0.10) 0 14px, transparent 14px 28px)',
-  carbon: 'repeating-linear-gradient(135deg, rgba(18,18,18,0.10) 0 14px, transparent 14px 28px)',
+  olive:  'repeating-linear-gradient(135deg, var(--olive-soft) 0 14px, transparent 14px 28px)',
+  terra:  'repeating-linear-gradient(135deg, var(--terracotta-soft) 0 14px, transparent 14px 28px)',
+  carbon: 'repeating-linear-gradient(135deg, var(--line-soft) 0 14px, transparent 14px 28px)',
 };
 
 export function ImageSlot({ height = 280, label, variant = 'olive', className = '' }: ImageSlotProps) {

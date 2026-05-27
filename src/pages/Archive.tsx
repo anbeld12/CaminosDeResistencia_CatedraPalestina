@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Reveal } from '../components/Reveal';
 import { Icon } from '../lib/icons';
@@ -37,9 +37,20 @@ function ProjectCard({ p, onOpen, list }: ProjectCardProps) {
 export function Archive() {
   const [tab, setTab] = useState<'projects' | 'biblio'>('projects');
   const [kind, setKind] = useState<string>('all');
-  const [view, setView] = useState<'grid' | 'list'>('grid');
+  const [view, setView] = useState<'grid' | 'list'>(() => {
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) return 'list';
+    return 'grid';
+  });
   const [query, setQuery] = useState('');
   const [openProj, setOpenProj] = useState<Project | null>(null);
+
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth <= 768) setView('list');
+    };
+    window.addEventListener('resize', onResize, { passive: true });
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   const filtered = useMemo(() => {
     return PROJECTS.filter(p =>
@@ -118,7 +129,7 @@ export function Archive() {
                   <span className="font-mono text-xs md:text-[11px] tracking-[0.14em] uppercase text-fg-mute">
                     {filtered.length} de {PROJECTS.length}
                   </span>
-                  <div className="viewtoggle">
+                  <div className="viewtoggle hidden md:flex">
                     <button className={view === 'grid' ? 'is-on' : ''} onClick={() => setView('grid')}><Icon.Grid /></button>
                     <button className={view === 'list' ? 'is-on' : ''} onClick={() => setView('list')}><Icon.Rows /></button>
                   </div>
