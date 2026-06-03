@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useRef, useMemo, useEffect } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { Reveal } from '../components/Reveal';
 import { Icon } from '../lib/icons';
 import type { PageId } from '../lib/types';
@@ -214,61 +215,7 @@ export function Home({ setPage }: HomeProps) {
             </div>
 
             <Reveal delay={0.3}>
-              <div className="media-stub">
-                <div className="media-stub-head">
-                  <div className="md-dot" />
-                  <div className="flex-1">
-                    <div className="md-now">Reproduciendo · sin sonido</div>
-                    <div className="md-title">Marcel Khalifé — <i>Rita y el fusil</i></div>
-                  </div>
-                  <div className="md-time">02:14 / 04:38</div>
-                </div>
-
-                <div className="md-wave" aria-hidden="true">
-                  {Array.from({ length: 48 }).map((_, i) => {
-                    const h = 6 + Math.abs(Math.sin(i * 0.7) * 22) + (i % 4 === 0 ? 8 : 0);
-                    const played = i / 48 < 0.46;
-                    return <span key={i} style={{ height: h, opacity: played ? 1 : 0.35 }} />;
-                  })}
-                </div>
-
-                <ul className="md-list">
-                  <li>
-                    <span className="md-kind">Poema</span>
-                    <span className="md-name">Mahmoud Darwish — <i>Carné de identidad</i></span>
-                    <span className="md-len">03:42</span>
-                  </li>
-                  <li className="is-active">
-                    <span className="md-kind"><Icon.Play /></span>
-                    <span className="md-name">Marcel Khalifé — <i>Rita y el fusil</i></span>
-                    <span className="md-len">04:38</span>
-                  </li>
-                  <li>
-                    <span className="md-kind">Cine</span>
-                    <span className="md-name">Elia Suleiman — <i>Intervención divina</i> (frag.)</span>
-                    <span className="md-len">07:08</span>
-                  </li>
-                  <li>
-                    <span className="md-kind">Canto</span>
-                    <span className="md-name">DAM — <i>Min Irhabi?</i></span>
-                    <span className="md-len">04:12</span>
-                  </li>
-                  <li>
-                    <span className="md-kind">Poema</span>
-                    <span className="md-name">Fadwa Tuqan — <i>Bastará para mí</i></span>
-                    <span className="md-len">02:18</span>
-                  </li>
-                </ul>
-
-                <div className="md-foot">
-                  <span className="font-mono text-[11px] md:text-[10.5px] tracking-[0.15em]" style={{ color: 'rgba(241,237,224,0.55)' }}>
-                    Curaduría · Cátedra Caminos de Resistencia
-                  </span>
-                  <button className="btn-ghost-light">
-                    Abrir antología completa <Icon.External />
-                  </button>
-                </div>
-              </div>
+              <AudioPlayer />
             </Reveal>
           </div>
         </div>
@@ -370,13 +317,21 @@ const STATIONS = [
 function OliveGlyph() {
   return (
     <svg viewBox="0 0 80 80" width="100%" height="100%" fill="none" stroke="currentColor" strokeWidth="1.2">
-      <path d="M14 64 Q 40 12, 66 64" />
-      <ellipse cx="24" cy="50" rx="6" ry="2.4" transform="rotate(-30 24 50)" fill="currentColor" stroke="none" />
-      <ellipse cx="34" cy="36" rx="6" ry="2.4" transform="rotate(-30 34 36)" fill="currentColor" stroke="none" />
-      <ellipse cx="46" cy="36" rx="6" ry="2.4" transform="rotate(30 46 36)" fill="currentColor" stroke="none" />
-      <ellipse cx="56" cy="50" rx="6" ry="2.4" transform="rotate(30 56 50)" fill="currentColor" stroke="none" />
-      <ellipse cx="40" cy="22" rx="6" ry="2.4" fill="currentColor" stroke="none" />
-      <line x1="40" y1="64" x2="40" y2="74" />
+      <path d="M20 62 Q 38 16, 62 56" />
+      <path d="M0,-7 C-3.5,-2, -3.5,2, 0,7 C3.5,2, 3.5,-2, 0,-7 Z" fill="currentColor" stroke="none"
+            transform="translate(28,43) rotate(-32)" />
+      <path d="M0,-7 C-3.5,-2, -3.5,2, 0,7 C3.5,2, 3.5,-2, 0,-7 Z" fill="currentColor" stroke="none"
+            transform="translate(35,33) rotate(-15)" />
+      <path d="M0,-6 C-3,-1.5, -3,1.5, 0,6 C3,1.5, 3,-1.5, 0,-6 Z" fill="currentColor" stroke="none"
+            transform="translate(42,25) rotate(0)" />
+      <path d="M0,-7 C-3.5,-2, -3.5,2, 0,7 C3.5,2, 3.5,-2, 0,-7 Z" fill="currentColor" stroke="none"
+            transform="translate(50,34) rotate(22)" />
+      <path d="M0,-7 C-3.5,-2, -3.5,2, 0,7 C3.5,2, 3.5,-2, 0,-7 Z" fill="currentColor" stroke="none"
+            transform="translate(58,46) rotate(42)" />
+      <ellipse cx="50" cy="48" rx="3" ry="4.5" transform="rotate(28 50 48)"
+               fill="currentColor" stroke="none" />
+      <line x1="20" y1="62" x2="62" y2="56" />
+      <line x1="40" y1="62" x2="40" y2="74" />
     </svg>
   );
 }
@@ -421,5 +376,194 @@ function SimboCard({ n, term, meaning, body, glyph, accent }: SimboCardProps) {
       <div className="simbo-card-meaning">{meaning}</div>
       <p className="simbo-card-body">{body}</p>
     </Reveal>
+  );
+}
+
+const POETRY_PLAYLIST = [
+  {
+    id: 1,
+    title: 'Mi Ciudad Está Triste',
+    author: 'Fairuz / Canción de resistencia',
+    embedUrl: 'https://www.youtube.com/embed/99fdlKZNGRU',
+  },
+  {
+    id: 2,
+    title: 'Carnet de Identidad',
+    author: 'Mahmoud Darwish',
+    embedUrl: 'https://www.youtube.com/embed/_ZMkpeDl624',
+  },
+  {
+    id: 3,
+    title: 'Rita (Rita y el fusil)',
+    author: 'Mahmoud Darwish / Marcel Khalifé',
+    embedUrl: 'https://www.youtube.com/embed/UEeU-tx0SBU',
+  },
+  {
+    id: 4,
+    title: 'Intervención Divina',
+    author: 'Banda sonora / Elia Suleiman',
+    embedUrl: 'https://www.youtube.com/embed/eYDAjwymkIg',
+  },
+  {
+    id: 5,
+    title: 'Min Irhabi? (¿Quién es el terrorista?)',
+    author: 'DAM',
+    embedUrl: 'https://www.youtube.com/embed/fR1jCY-i5fc',
+  },
+];
+
+const BAR_COUNT = 24;
+const WIGGLE_PATTERNS = ['w1', 'w2', 'w3', 'w4'];
+
+function AudioPlayer() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(sectionRef, { amount: 0.3, once: true });
+  const [activeTrackId, setActiveTrackId] = useState(1);
+  const [showVideo, setShowVideo] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+
+  const activeTrack = POETRY_PLAYLIST.find((t) => t.id === activeTrackId) ?? POETRY_PLAYLIST[0];
+
+  useEffect(() => {
+    if (isInView) setIsPlaying(true);
+  }, [isInView]);
+
+  const barPatterns = useRef(
+    Array.from({ length: BAR_COUNT }, (_, i) => WIGGLE_PATTERNS[i % WIGGLE_PATTERNS.length])
+  );
+
+  const iframeSrc = useMemo(() => {
+    if (!isPlaying || !showVideo) {
+      return `${activeTrack.embedUrl}?autoplay=0&enablejsapi=1${isMuted ? '&mute=1' : ''}`;
+    }
+    return `${activeTrack.embedUrl}?autoplay=1&enablejsapi=1${isMuted ? '&mute=1' : ''}`;
+  }, [activeTrack.embedUrl, isPlaying, isMuted, showVideo]);
+
+  const barsActive = isPlaying && isInView;
+
+  return (
+    <div className="audio-player" ref={sectionRef}>
+      {/* ======== HEAD ======== */}
+      <div className="audio-player-head">
+        <div className="md-dot" style={barsActive ? undefined : { animationPlayState: 'paused' }} />
+        <div className="title-block">
+          <div className="now-label">
+            {barsActive ? 'Reproduciendo · sin sonido' : isPlaying ? 'Cargando' : 'Pausado'}
+          </div>
+          <div className="track-title">
+            {activeTrack.title}
+          </div>
+          <div className="track-author">{activeTrack.author}</div>
+        </div>
+        <div className="audio-controls">
+          <button
+            type="button"
+            className={`audio-ctrl-btn ${isMuted ? 'is-muted' : ''}`}
+            onClick={() => setIsMuted((m) => !m)}
+            aria-label={isMuted ? 'Activar sonido' : 'Silenciar'}
+          >
+            {isMuted ? <Icon.VolumeX /> : <Icon.Volume />}
+          </button>
+          <button
+            type="button"
+            className="audio-ctrl-btn"
+            onClick={() => setIsPlaying((p) => !p)}
+            aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
+          >
+            {isPlaying ? <Icon.Pause /> : <Icon.Play />}
+          </button>
+        </div>
+      </div>
+
+      {/* ======== FREQ BARS ======== */}
+      <div className="freq-bars" aria-hidden="true">
+        {Array.from({ length: BAR_COUNT }, (_, i) => (
+          <div
+            key={i}
+            className={`freq-bar ${barPatterns.current[i]} ${barsActive ? 'is-active' : ''}`}
+            style={{
+              opacity: barsActive ? 1 : 0.5,
+              animationDelay: barsActive ? `${(i * 0.06).toFixed(2)}s` : undefined,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* ======== ACCORDION ======== */}
+      <button
+        type="button"
+        className="audio-accordion-btn"
+        onClick={() => setShowVideo((v) => !v)}
+        aria-expanded={showVideo}
+      >
+        <span className="left-side">
+          <div className="w-4 h-4 shrink-0 flex items-center">
+            <Icon.Music />
+          </div>
+          Ver interpretación visual
+        </span>
+        <span className={`chevron ${showVideo ? 'is-up' : ''}`}>
+          <div className="w-4 h-4 shrink-0 flex items-center">
+            <Icon.ChevronDown />
+          </div>
+        </span>
+      </button>
+
+      <div className={`audio-video-wrapper ${showVideo ? 'is-open' : ''}`}>
+        <div className="aspect-video">
+          <iframe
+            src={iframeSrc}
+            title={activeTrack.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full rounded-xl"
+            style={{ display: 'block' }}
+            loading="lazy"
+          />
+        </div>
+      </div>
+
+      {/* ======== PLAYLIST ======== */}
+      <ul className="audio-playlist">
+        {POETRY_PLAYLIST.map((track) => {
+          const isActive = track.id === activeTrackId;
+          return (
+            <li key={track.id}>
+              <button
+                type="button"
+                className={`audio-playlist-item ${isActive ? 'is-active' : ''}`}
+                onClick={() => {
+                  setActiveTrackId(track.id);
+                  setShowVideo(false);
+                  setIsPlaying(true);
+                }}
+              >
+                <span className="pl-index">
+                  {isActive ? <Icon.Play /> : String(track.id).padStart(2, '0')}
+                </span>
+                <div>
+                  <span className="pl-name">{track.title}</span>
+                  <span className="pl-author">{track.author}</span>
+                </div>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+
+      {/* ======== FOOTER ======== */}
+      <div className="audio-player-footer">
+        <span className="font-mono text-[11px] md:text-[10.5px] tracking-[0.15em]" style={{ color: 'rgba(241,237,224,0.55)' }}>
+          Curaduría · Cátedra Caminos de Resistencia
+        </span>
+        <button className="btn-ghost-light">
+          Abrir antología completa
+          <span className="w-3.5 h-3.5 shrink-0 flex items-center">
+            <Icon.External />
+          </span>
+        </button>
+      </div>
+    </div>
   );
 }

@@ -51,6 +51,42 @@ export const Icon = {
       <path d="M8 5v14l11-7z"/>
     </svg>
   ),
+  Pause: () => (
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+    </svg>
+  ),
+  ChevronDown: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+  ),
+  ChevronUp: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  ),
+  Music: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 18V5l12-2v13"/>
+      <circle cx="6" cy="18" r="3"/>
+      <circle cx="18" cy="16" r="3"/>
+    </svg>
+  ),
+  Volume: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+    </svg>
+  ),
+  VolumeX: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <line x1="22" y1="9" x2="16" y2="15"/>
+      <line x1="16" y1="9" x2="22" y2="15"/>
+    </svg>
+  ),
   External: () => (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
       <path d="M7 17L17 7M9 7h8v8"/>
