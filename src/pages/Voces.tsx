@@ -54,7 +54,7 @@ function DarwishCard() {
           <div className="md-now">Antología poética · Mahmoud Darwish</div>
           <div className="md-title"><i>{p.title}</i></div>
         </div>
-        <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'rgba(241,237,224,.52)', letterSpacing: '.1em' }}>
+         <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--on-dark-legal)', letterSpacing: '.1em' }}>
           {p.year}
         </div>
       </div>
@@ -102,7 +102,7 @@ function ArteTab() {
           <div className="voces-darwish-band">
             <div className="voces-darwish-inner">
               <div>
-                <div className="eyebrow" style={{ color: 'rgba(241,237,224,.62)' }}>
+                <div className="eyebrow" style={{ color: 'var(--on-dark-mute)' }}>
                   <span className="dot" style={{ background: 'var(--gold-accent)' }} />
                   Poesía · Voz central
                 </div>
@@ -125,7 +125,7 @@ function ArteTab() {
                   marginTop: 28,
                   fontFamily: 'var(--mono)',
                   fontSize: 10.5,
-                  color: 'rgba(241,237,224,.65)',
+                  color: 'var(--on-dark-dim)',
                   letterSpacing: '.15em',
                   textTransform: 'uppercase',
                   borderLeft: '2px solid var(--terracotta)',
@@ -361,13 +361,13 @@ function PeriodismoTab() {
                 ].map(s => (
                   <div key={s.k}>
                     <div style={{ fontFamily: 'var(--serif)', fontSize: 42, color: 'var(--terracotta)', lineHeight: 1 }}>{s.v}</div>
-                    <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,.38)', marginTop: 8 }}>{s.k}</div>
+                     <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,.50)', marginTop: 8 }}>{s.k}</div>
                   </div>
                 ))}
               </div>
             </div>
             <div className="voces-db-footer">
-              <div style={{ fontFamily: 'var(--mono)', fontSize: 10.5, color: 'rgba(255,255,255,.34)', letterSpacing: '.14em', textTransform: 'uppercase', whiteSpace: 'normal' }}>
+               <div style={{ fontFamily: 'var(--mono)', fontSize: 10.5, color: 'rgba(255,255,255,.50)', letterSpacing: '.14em', textTransform: 'uppercase', whiteSpace: 'normal' }}>
                 Contra el memoridicio
               </div>
               <div style={{ borderLeft: '2px solid var(--terracotta)', paddingLeft: 20, fontStyle: 'italic', color: 'rgba(255,255,255,.72)', fontSize: 15, lineHeight: 1.68 }}>

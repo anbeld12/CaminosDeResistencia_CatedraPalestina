@@ -29,7 +29,7 @@
     --footer-mute: rgba(255,255,255,0.55);
     --footer-line: rgba(255,255,255,0.08);
     --podcast-accent: #d4a04a;
-    --on-dark-legal: rgba(241, 237, 228, 0.55);
+    --on-dark-legal: rgba(241, 237, 228, 0.60);
 
     --bg: var(--smoke);
     --bg-warm: var(--paper);
@@ -52,12 +52,12 @@
     --fg: #f1ede4;
     --fg-mute: #c8c4bc;
     --fg-dim: #b0aba0;
-    --fg-soft: rgba(241, 237, 228, 0.45);
+    --fg-soft: rgba(241, 237, 228, 0.50);
 
     --on-dark-fg: #f1ede4;
     --on-dark-mute: rgba(241, 237, 228, 0.80);
     --on-dark-dim: rgba(241, 237, 228, 0.65);
-    --on-dark-legal: rgba(241, 237, 228, 0.55);
+    --on-dark-legal: rgba(241, 237, 228, 0.60);
 
     --footer-mute: rgba(255, 255, 255, 0.70);
     --footer-dim: rgba(255, 255, 255, 0.55);
@@ -2063,7 +2063,7 @@ html[data-theme="dark"] .myth-sources-hd {
   font-size: 11px;
   letter-spacing: .18em;
   text-transform: uppercase;
-  color: rgba(241,237,224,0.7);
+  color: var(--on-dark-mute);
 }
 .reading-note-body {
   font-family: var(--serif);
@@ -2172,7 +2172,7 @@ html[data-theme="dark"] .myth-sources-hd {
   font-style: italic;
   letter-spacing: 0;
 }
-.qm-dark  .qm-source { color: rgba(241,237,224,.62); }
+.qm-dark  .qm-source { color: var(--on-dark-mute); }
 .qm-light .qm-source { color: var(--fg-mute); }
 
 /* ============================================================
@@ -2329,7 +2329,7 @@ html[data-theme="dark"] .myth-sources-hd {
   font-size: 10.5px;
   letter-spacing: .15em;
   text-transform: uppercase;
-  color: rgba(241,237,224,.56);
+  color: var(--on-dark-legal);
   margin-top: 20px;
   font-style: normal;
 }
@@ -2351,8 +2351,8 @@ html[data-theme="dark"] .myth-sources-hd {
   pointer-events: none;
 }
 .voces-traverso-band .pull-quote  { max-width: none; color: #f1ede0; position: relative; z-index: 1; }
-.voces-traverso-band .quote-attrib { color: rgba(241,237,224,.62); position: relative; z-index: 1; }
-.voces-traverso-band .eyebrow     { color: rgba(241,237,224,.62); position: relative; z-index: 1; }
+.voces-traverso-band .quote-attrib { color: var(--on-dark-mute); position: relative; z-index: 1; }
+.voces-traverso-band .eyebrow     { color: var(--on-dark-mute); position: relative; z-index: 1; }
 
 /* Editorial layout */
 .voces-editorial { margin-bottom: 48px; }
@@ -2451,7 +2451,7 @@ html[data-theme="dark"] .myth-sources-hd {
   font-size: 11px;
   letter-spacing: .16em;
   text-transform: uppercase;
-  color: rgba(241,237,224,.6);
+  color: var(--on-dark-legal);
   margin-top: 30px;
   font-style: normal;
   position: relative; z-index: 1;

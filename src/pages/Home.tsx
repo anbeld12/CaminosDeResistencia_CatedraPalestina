@@ -185,7 +185,7 @@ export function Home({ setPage }: HomeProps) {
           <div className="poetica-grid">
             <div>
               <Reveal>
-                <div className="eyebrow" style={{ color: 'rgba(241,237,224,0.7)' }}>
+                <div className="eyebrow" style={{ color: 'var(--on-dark-mute)' }}>
                   <span className="dot" style={{ background: 'var(--gold-accent)' }} /><span>Poética de la Tierra · voces</span>
                 </div>
               </Reveal>
@@ -205,7 +205,7 @@ export function Home({ setPage }: HomeProps) {
               </Reveal>
 
               <Reveal delay={0.2}>
-                <p className="mt-9 max-w-[46ch] text-base md:text-[15px] leading-[1.7] md:leading-[1.65]" style={{ color: 'rgba(241,237,224,0.78)' }}>
+                <p className="mt-9 max-w-[46ch] text-base md:text-[15px] leading-[1.7] md:leading-[1.65]" style={{ color: 'var(--on-dark-fg)' }}>
                   Si el ocupante toma la tierra, el poeta nombra la tierra. Si el archivo
                   quema, el cantor recuerda. Esta cátedra recoge un cuerpo poético, musical
                   y cinematográfico que ha sostenido la palabra <i>Palestina</i> durante
@@ -553,6 +553,9 @@ function AudioPlayer() {
 
       {/* ======== FOOTER ======== */}
       <div className="audio-player-footer">
+        <p className="text-[10px] opacity-50 tracking-normal text-justify leading-normal block px-4 py-2">
+          Aviso académico: Los recursos multimedia aquí enlazados provienen de plataformas públicas y se presentan con fines exclusivamente pedagógicos y de preservación de memoria. Las opiniones de las obras pertenecen a sus creadores y no representan a las instancias educativas o culturales que apoyan el desarrollo de este espacio.
+        </p>
         <p className="text-[10px] md:text-[9.5px] leading-relaxed text-center w-full mb-3" style={{ color: 'var(--on-dark-legal)' }}>
           Las obras poéticas, sonoras y audiovisuales aquí incrustadas son propiedad intelectual de sus respectivos autores, intérpretes y productoras. Su exposición en esta plataforma se realiza bajo el amparo del derecho de cita y uso justo (fair use) con fines estrictamente educativos, de memoria e investigación académica, sin ánimo de lucro.
         </p>

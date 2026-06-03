@@ -182,7 +182,7 @@ export function History() {
         <div className="wrap">
           <Reveal className="reading-note">
             <div>
-              <div className="font-mono text-xs md:text-[11px] tracking-[0.18em] uppercase" style={{ color: 'rgba(241,237,224,0.7)' }}>
+              <div className="font-mono text-xs md:text-[11px] tracking-[0.18em] uppercase" style={{ color: 'var(--on-dark-mute)' }}>
                 Nota de método
               </div>
               <p className="font-serif text-[clamp(20px,5.5vw,28px)] mt-3 leading-snug max-w-full md:max-w-[44ch]">

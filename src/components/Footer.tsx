@@ -11,7 +11,7 @@ export function Footer({ setPage }: FooterProps) {
         <div className="top">
           <div>
             <div className="mark">Caminos de Resistencia</div>
-            <p className="tag">Plataforma de memoria y solidaridad académica.</p>
+            <p className="tag">Plataforma autónoma de memoria, investigación y solidaridad académica.</p>
           </div>
 
           <div>
@@ -28,39 +28,27 @@ export function Footer({ setPage }: FooterProps) {
           </div>
 
           <div>
-            <h4>Respaldo Institucional</h4>
+            <h4>Acompañamiento</h4>
             <ul className="footer-inst">
-              <li>Cátedra Caminos de Resistencia</li>
-              <li>Facultad de Derecho y Ciencias Políticas</li>
-              <li>Universidad Nacional de Colombia</li>
-              <li>Embajada del Estado de Palestina en Colombia</li>
+              <li>Cátedra Caminos De Resistencia</li>
+              <li>Iniciativa Y Gestión Colectiva Estudiantil</li>
+              <li>Apoyo: Facultad De Ciencias Políticas Anfitriona</li>
+              <li>Acompañamiento Cultural: Delegaciones Internacionales Aliadas</li>
             </ul>
           </div>
         </div>
 
-        <div className="footer-brands">
-          <div className="footer-logo">
-            <div className="lg-mark">UNAL</div>
-            <div className="lg-sub">Fac. Derecho<br />y Ciencias Políticas</div>
-          </div>
-          <div className="footer-logo">
-            <div className="lg-mark">دولة فلسطين</div>
-            <div className="lg-sub">Embajada<br />del Estado de Palestina</div>
-          </div>
-          <div className="footer-logo">
-            <div className="lg-mark">Cátedra</div>
-            <div className="lg-sub">Caminos<br />de Resistencia</div>
-          </div>
-        </div>
-
         <div className="bot">
-          <div>© 2026 Cátedra Caminos de Resistencia · Universidad Nacional de Colombia</div>
+          <div>© 2026 Cátedra Caminos de Resistencia · Colectividad Estudiantil Autónoma</div>
           <div>Desarrollado por Ángel David Beltrán García — Ingeniería de Sistemas</div>
         </div>
 
         <div className="border-t border-white/10 pt-6 mt-6 text-center">
-          <p className="text-[10px] leading-relaxed max-w-[80ch] mx-auto" style={{ color: 'var(--on-dark-legal)' }}>
-            Las obras poéticas, sonoras y audiovisuales aquí incrustadas son propiedad intelectual de sus respectivos autores, intérpretes y productoras. Su exposición en esta plataforma se realiza bajo el amparo del derecho de cita y uso justo (fair use) con fines estrictamente educativos, de memoria e investigación académica, sin ánimo de lucro.
+          <p className="text-[11px] leading-relaxed max-w-none text-justify" style={{ color: 'var(--on-dark-legal)' }}>
+            Las obras poéticas, sonoras, audiovisuales y los materiales académicos aquí compilados pertenecen a sus respectivos autores, intérpretes, productoras y comunidades creadoras. Su inclusión en esta plataforma se realiza bajo el derecho de cita y uso justo (<i>fair use</i>), con fines exclusivamente pedagógicos, de memoria, investigación y difusión académica autónoma, sin ánimo de lucro.
+          </p>
+          <p className="text-[11px] leading-relaxed max-w-none text-justify mt-3" style={{ color: 'var(--on-dark-legal)' }}>
+            Este es un espacio gestado y sostenido por la comunidad estudiantil de la facultad anfitriona, bajo la coordinación de la Cátedra Caminos de Resistencia. Los contenidos, análisis y opiniones aquí expresados son responsabilidad exclusiva de sus autores y de la colectividad estudiantil que lo impulsa. En ningún caso constituyen una línea editorial oficial ni comprometen la postura institucional o responsabilidad legal de la institución de educación pública anfitriona, sus facultades, ni de las delegaciones diplomáticas o culturales que han brindado acompañamiento o espacios de diálogo al proyecto.
           </p>
         </div>
       </div>
