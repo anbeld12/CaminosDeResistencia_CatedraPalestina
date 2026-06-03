@@ -389,25 +389,25 @@ const POETRY_PLAYLIST = [
   {
     id: 2,
     title: 'Carnet de Identidad',
-    author: 'Mahmoud Darwish',
+    author: 'Mahmoud Darwish / Poema',
     embedUrl: 'https://www.youtube.com/embed/_ZMkpeDl624',
   },
   {
     id: 3,
     title: 'Rita (Rita y el fusil)',
-    author: 'Mahmoud Darwish / Marcel Khalifé',
+    author: 'Mahmoud Darwish / Marcel Khalifé / Canción',
     embedUrl: 'https://www.youtube.com/embed/UEeU-tx0SBU',
   },
   {
     id: 4,
     title: 'Intervención Divina',
-    author: 'Banda sonora / Elia Suleiman',
+    author: 'Elia Suleiman / Película',
     embedUrl: 'https://www.youtube.com/embed/eYDAjwymkIg',
   },
   {
     id: 5,
     title: 'Min Irhabi? (¿Quién es el terrorista?)',
-    author: 'DAM',
+    author: 'DAM / Canción',
     embedUrl: 'https://www.youtube.com/embed/fR1jCY-i5fc',
   },
 ];
@@ -477,18 +477,17 @@ function AudioPlayer() {
       </div>
 
       {/* ======== FREQ BARS ======== */}
-      <div className="freq-bars" aria-hidden="true">
-        {Array.from({ length: BAR_COUNT }, (_, i) => (
-          <div
-            key={i}
-            className={`freq-bar ${barPatterns.current[i]} ${barsActive ? 'is-active' : ''}`}
-            style={{
-              opacity: barsActive ? 1 : 0.5,
-              animationDelay: barsActive ? `${(i * 0.06).toFixed(2)}s` : undefined,
-            }}
-          />
-        ))}
-      </div>
+      {barsActive && (
+        <div className="freq-bars" aria-hidden="true">
+          {Array.from({ length: BAR_COUNT }, (_, i) => (
+            <div
+              key={i}
+              className={`freq-bar ${barPatterns.current[i]} is-active`}
+              style={{ animationDelay: `${(i * 0.06).toFixed(2)}s` }}
+            />
+          ))}
+        </div>
+      )}
 
       {/* ======== ACCORDION ======== */}
       <button
