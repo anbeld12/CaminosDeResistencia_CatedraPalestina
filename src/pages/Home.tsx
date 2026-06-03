@@ -553,7 +553,10 @@ function AudioPlayer() {
 
       {/* ======== FOOTER ======== */}
       <div className="audio-player-footer">
-        <span className="font-mono text-[11px] md:text-[10.5px] tracking-[0.15em]" style={{ color: 'rgba(241,237,224,0.55)' }}>
+        <p className="text-[10px] md:text-[9.5px] leading-relaxed text-center w-full mb-3" style={{ color: 'var(--on-dark-legal)' }}>
+          Las obras poéticas, sonoras y audiovisuales aquí incrustadas son propiedad intelectual de sus respectivos autores, intérpretes y productoras. Su exposición en esta plataforma se realiza bajo el amparo del derecho de cita y uso justo (fair use) con fines estrictamente educativos, de memoria e investigación académica, sin ánimo de lucro.
+        </p>
+        <span className="font-mono text-[11px] md:text-[10.5px] tracking-[0.15em]" style={{ color: 'var(--on-dark-legal)' }}>
           Curaduría · Cátedra Caminos de Resistencia
         </span>
         <button className="btn-ghost-light">

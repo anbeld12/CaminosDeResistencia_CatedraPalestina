@@ -29,6 +29,7 @@
     --footer-mute: rgba(255,255,255,0.55);
     --footer-line: rgba(255,255,255,0.08);
     --podcast-accent: #d4a04a;
+    --on-dark-legal: rgba(241, 237, 228, 0.55);
 
     --bg: var(--smoke);
     --bg-warm: var(--paper);
@@ -56,6 +57,7 @@
     --on-dark-fg: #f1ede4;
     --on-dark-mute: rgba(241, 237, 228, 0.80);
     --on-dark-dim: rgba(241, 237, 228, 0.65);
+    --on-dark-legal: rgba(241, 237, 228, 0.55);
 
     --footer-mute: rgba(255, 255, 255, 0.70);
     --footer-dim: rgba(255, 255, 255, 0.55);

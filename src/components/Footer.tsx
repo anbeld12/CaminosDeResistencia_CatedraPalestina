@@ -57,6 +57,12 @@ export function Footer({ setPage }: FooterProps) {
           <div>© 2026 Cátedra Caminos de Resistencia · Universidad Nacional de Colombia</div>
           <div>Desarrollado por Ángel David Beltrán García — Ingeniería de Sistemas</div>
         </div>
+
+        <div className="border-t border-white/10 pt-6 mt-6 text-center">
+          <p className="text-[10px] leading-relaxed max-w-[80ch] mx-auto" style={{ color: 'var(--on-dark-legal)' }}>
+            Las obras poéticas, sonoras y audiovisuales aquí incrustadas son propiedad intelectual de sus respectivos autores, intérpretes y productoras. Su exposición en esta plataforma se realiza bajo el amparo del derecho de cita y uso justo (fair use) con fines estrictamente educativos, de memoria e investigación académica, sin ánimo de lucro.
+          </p>
+        </div>
       </div>
     </footer>
   );
