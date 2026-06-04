@@ -80,6 +80,29 @@ function DarwishCard() {
    TAB 1 — Arte y Cultura
    ============================================================ */
 function ArteTab() {
+  const muralImages = [
+    {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Bethlehem-02-West_Bank_Wall.jpg',
+      alt: 'Muralismo a gran escala sobre los bloques de hormigón del muro de separación en Belén.',
+      credit: 'Fotografía por Ian and Wendy Sewell (CC BY-SA 3.0). Vía Wikimedia Commons.',
+    },
+    {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/1/16/Handala.jpg',
+      alt: 'Grafiti del icónico personaje Handala de Naji al-Ali pintado sobre la infraestructura del muro.',
+      credit: 'Registro urbano por シャター (CC BY-SA 4.0). Vía Wikimedia Commons.',
+    },
+    {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/1/1b/Graffiti_on_the_Bethlehem_wall_05.jpg',
+      alt: 'Perspectiva de expresiones artísticas y mensajes de protesta en el muro de Belén.',
+      credit: 'Fotografía por Davide Mauro (CC BY-SA 4.0). Vía Wikimedia Commons.',
+    },
+    {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Bethlehem_Wall_Graffiti_-_Ich_bin_ein_Berliner.jpg',
+      alt: 'Intervención de arte callejero de carácter político internacional sobre el concreto.',
+      credit: 'Fotografía por Marc Venezia (CC BY-SA 3.0). Vía Wikimedia Commons.',
+    },
+  ];
+
   return (
     <section className="section">
       <div className="wrap">
@@ -146,106 +169,378 @@ function ArteTab() {
 
         <div className="voces-masonry">
 
-          <Reveal>
-            <div className="voces-masonry-item">
-              <div className="card card-base p-0 overflow-hidden">
-                <ImageSlot
-                  height={210}
-                  label="Mural · Arte callejero palestino · Campo de refugiados"
-                  variant="olive"
-                />
-                <div style={{ padding: '22px 24px' }}>
-                  <div className="kicker">Murales · Arte Urbano</div>
+          {/* ======== Flat layout — tablet + mobile (CSS columns) ======== */}
+          <div className="voces-layout-flat">
+            <Reveal>
+              <div className="voces-masonry-item">
+                <div className="card card-base p-0 overflow-hidden">
+                  <div className="relative w-full">
+                    <div className="flex gap-4 overflow-x-auto pb-3 hide-scrollbar snap-x snap-mandatory">
+                      {muralImages.map((img, index) => (
+                        <div key={index} className="min-w-[90%] shrink-0 snap-center md:min-w-[80%]">
+                          <ImageSlot
+                            alt={img.alt}
+                            className="group"
+                            credit={img.credit}
+                            height={210}
+                            label={`Mural · Belén · ${index + 1}/${muralImages.length}`}
+                            src={img.src}
+                            variant="olive"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="pb-3 text-center font-mono text-[10px] md:text-[9px] text-fg-mute">
+                    ← Deslizar murales →
+                  </div>
+                  <div style={{ padding: '22px 24px' }}>
+                    <div className="kicker">Murales · Arte Urbano</div>
+                    <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                      La pared como cuaderno
+                    </h3>
+                    <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
+                      Desde Beirut hasta Ramallah, el mural es el archivo popular
+                      que no necesita permiso ni editor. Una pared basta para que
+                      la memoria persista donde el Estado quiere borradura.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.08}>
+              <div className="voces-masonry-item">
+                <div className="card">
+                  <div className="kicker">Cine · Documental</div>
                   <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                    La pared como cuaderno
+                    1948 · Muhammad Bakri
                   </h3>
-                  <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                    Desde Beirut hasta Ramallah, el mural es el archivo popular
-                    que no necesita permiso ni editor. Una pared basta para que
-                    la memoria persista donde el Estado quiere borradura.
+                  <ImageSlot
+                    alt="Póster oficial del documental '1948' del director Mohammad Bakri. Registro y preservación de la memoria oral palestina."
+                    credit="Material promocional y de archivo indexado en IMDb (1998). Exhibición digital con fines estrictamente académicos, pedagógicos y de crítica cinematográfica bajo el amparo del Derecho de Cita (Fair Use)."
+                    label="Documental 1948 · Muhammad Bakri"
+                    src="/images/voces/documental-1948-bakri.webp"
+                    variant="terra"
+                  />
+                  <p style={{ color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65, marginTop: 14 }}>
+                    Una de las primeras miradas cinematográficas a la Nakba desde adentro.
+                    Bakri construye un contra-archivo audiovisual ante el silencio oficial,
+                    recuperando testimonios directos del desplazamiento.
                   </p>
                 </div>
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
 
-          <Reveal delay={0.08}>
-            <div className="voces-masonry-item">
-              <div className="card">
-                <div className="kicker">Cine · Documental</div>
-                <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                  1948 · Muhammad Bakri
-                </h3>
-                <ImageSlot
-                  height={148}
-                  label="Fotograma · Documental 1948 · Muhammad Bakri · 1998"
-                  variant="terra"
-                />
-                <p style={{ color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65, marginTop: 14 }}>
-                  Una de las primeras miradas cinematográficas a la Nakba desde adentro.
-                  Bakri construye un contra-archivo audiovisual ante el silencio oficial,
-                  recuperando testimonios directos del desplazamiento.
-                </p>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.16}>
-            <div className="voces-masonry-item">
-              <div className="card">
-                <div className="kicker">Tatreez · Bordado Tradicional</div>
-                <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                  Memoria cosida a mano
-                </h3>
-                <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                  El tatreez —bordado palestino de más de tres mil años— es un sistema
-                  simbólico que identifica la región de origen de cada familia.
-                  Cada patrón es un apellido que el exilio no puede borrar.
-                </p>
-                <div style={{
-                  marginTop: 16,
-                  padding: '12px 16px',
-                  border: '1px dashed var(--line)',
-                  borderRadius: 10,
-                  fontFamily: 'var(--mono)',
-                  fontSize: 11,
-                  color: 'var(--terracotta)',
-                  letterSpacing: '.14em',
-                  textTransform: 'uppercase',
-                }}>
-                  UNESCO · Patrimonio Cultural Inmaterial · 2021
+            <Reveal delay={0.16}>
+              <div className="voces-masonry-item">
+                <div className="card">
+                  <div className="kicker">Pedagogía · Lúdica</div>
+                  <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                    El juego como acto político
+                  </h3>
+                  <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
+                    Bajo bloqueo, el juego no es frivolidad: es el ejercicio del derecho
+                    a la infancia. La lúdica afirma la humanidad frente al intento
+                    sistemático de deshumanización.
+                  </p>
                 </div>
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
 
-          <Reveal delay={0.08}>
-            <div className="voces-masonry-item">
-              <div className="card">
-                <div className="kicker">Pedagogía · Lúdica</div>
-                <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                  El juego como acto político
-                </h3>
-                <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                  Bajo bloqueo, el juego no es frivolidad: es el ejercicio del derecho
-                  a la infancia. La lúdica afirma la humanidad frente al intento
-                  sistemático de deshumanización.
-                </p>
+            <Reveal delay={0.16}>
+              <div className="voces-masonry-item">
+                <div className="voces-float-quote">
+                  <p className="voces-float-verse">
+                    "Escribo el nombre de mi tierra en el viento,
+                    pero el viento no sabe que mi tierra tiene nombre."
+                  </p>
+                  <cite className="voces-float-attr">— Mahmoud Darwish</cite>
+                </div>
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
 
-          <Reveal delay={0.16}>
-            <div className="voces-masonry-item">
-              <div className="voces-float-quote">
-                <p className="voces-float-verse">
-                  "Escribo el nombre de mi tierra en el viento,
-                  pero el viento no sabe que mi tierra tiene nombre."
-                </p>
-                <cite className="voces-float-attr">— Mahmoud Darwish</cite>
+            <Reveal delay={0.24}>
+              <div className="voces-masonry-item">
+                <div className="card">
+                  <div className="kicker">Tatreez · Bordado Tradicional</div>
+                  <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                    Memoria cosida a mano
+                  </h3>
+                  <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
+                    El tatreez —bordado palestino de más de tres mil años— es un sistema
+                    simbólico que identifica la región de origen de cada familia.
+                    Cada patrón es un apellido que el exilio no puede borrar.
+                  </p>
+                  <div style={{
+                    marginTop: 16,
+                    padding: '12px 16px',
+                    border: '1px dashed var(--line)',
+                    borderRadius: 10,
+                    fontFamily: 'var(--mono)',
+                    fontSize: 11,
+                    color: 'var(--terracotta)',
+                    letterSpacing: '.14em',
+                    textTransform: 'uppercase',
+                  }}>
+                    UNESCO · Patrimonio Cultural Inmaterial · 2021
+                  </div>
+                </div>
               </div>
+            </Reveal>
+          </div>
+
+          {/* ======== Tablet layout — flex columns 2-col ======== */}
+          <div className="voces-layout-2col">
+            <div className="voces-col">
+              <Reveal>
+                <div className="voces-masonry-item">
+                  <div className="card card-base p-0 overflow-hidden">
+                    <div className="relative w-full">
+                      <div className="flex gap-4 overflow-x-auto pb-3 hide-scrollbar snap-x snap-mandatory">
+                        {muralImages.map((img, index) => (
+                          <div key={index} className="min-w-[90%] shrink-0 snap-center md:min-w-[80%]">
+                            <ImageSlot
+                              alt={img.alt}
+                              className="group"
+                              credit={img.credit}
+                              height={210}
+                              label={`Mural · Belén · ${index + 1}/${muralImages.length}`}
+                              src={img.src}
+                              variant="olive"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="pb-3 text-center font-mono text-[10px] md:text-[9px] text-fg-mute">
+                      ← Deslizar murales →
+                    </div>
+                    <div style={{ padding: '22px 24px' }}>
+                      <div className="kicker">Murales · Arte Urbano</div>
+                      <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                        La pared como cuaderno
+                      </h3>
+                      <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
+                        Desde Beirut hasta Ramallah, el mural es el archivo popular
+                        que no necesita permiso ni editor. Una pared basta para que
+                        la memoria persista donde el Estado quiere borradura.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.08}>
+                <div className="voces-masonry-item">
+                  <div className="card">
+                    <div className="kicker">Pedagogía · Lúdica</div>
+                    <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                      El juego como acto político
+                    </h3>
+                    <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
+                      Bajo bloqueo, el juego no es frivolidad: es el ejercicio del derecho
+                      a la infancia. La lúdica afirma la humanidad frente al intento
+                      sistemático de deshumanización.
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.16}>
+                <div className="voces-masonry-item">
+                  <div className="card">
+                    <div className="kicker">Tatreez · Bordado Tradicional</div>
+                    <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                      Memoria cosida a mano
+                    </h3>
+                    <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
+                      El tatreez —bordado palestino de más de tres mil años— es un sistema
+                      simbólico que identifica la región de origen de cada familia.
+                      Cada patrón es un apellido que el exilio no puede borrar.
+                    </p>
+                    <div style={{
+                      marginTop: 16,
+                      padding: '12px 16px',
+                      border: '1px dashed var(--line)',
+                      borderRadius: 10,
+                      fontFamily: 'var(--mono)',
+                      fontSize: 11,
+                      color: 'var(--terracotta)',
+                      letterSpacing: '.14em',
+                      textTransform: 'uppercase',
+                    }}>
+                      UNESCO · Patrimonio Cultural Inmaterial · 2021
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
             </div>
-          </Reveal>
+
+            <div className="voces-col">
+              <Reveal delay={0.08}>
+                <div className="voces-masonry-item">
+                  <div className="card">
+                    <div className="kicker">Cine · Documental</div>
+                    <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                      1948 · Muhammad Bakri
+                    </h3>
+                    <ImageSlot
+                      alt="Póster oficial del documental '1948' del director Mohammad Bakri. Registro y preservación de la memoria oral palestina."
+                      credit="Material promocional y de archivo indexado en IMDb (1998). Exhibición digital con fines estrictamente académicos, pedagógicos y de crítica cinematográfica bajo el amparo del Derecho de Cita (Fair Use)."
+                      label="Documental 1948 · Muhammad Bakri"
+                      src="/images/voces/documental-1948-bakri.webp"
+                      variant="terra"
+                    />
+                    <p style={{ color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65, marginTop: 14 }}>
+                      Una de las primeras miradas cinematográficas a la Nakba desde adentro.
+                      Bakri construye un contra-archivo audiovisual ante el silencio oficial,
+                      recuperando testimonios directos del desplazamiento.
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.16}>
+                <div className="voces-masonry-item">
+                  <div className="voces-float-quote">
+                    <p className="voces-float-verse">
+                      "Escribo el nombre de mi tierra en el viento,
+                      pero el viento no sabe que mi tierra tiene nombre."
+                    </p>
+                    <cite className="voces-float-attr">— Mahmoud Darwish</cite>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+
+          {/* ======== Desktop layout — flex columns 3-col ======== */}
+          <div className="voces-layout-cols">
+            <div className="voces-col">
+              <Reveal>
+                <div className="voces-masonry-item">
+                  <div className="card card-base p-0 overflow-hidden">
+                    <div className="relative w-full">
+                      <div className="flex gap-4 overflow-x-auto pb-3 hide-scrollbar snap-x snap-mandatory">
+                        {muralImages.map((img, index) => (
+                          <div key={index} className="min-w-[90%] shrink-0 snap-center md:min-w-[80%]">
+                            <ImageSlot
+                              alt={img.alt}
+                              className="group"
+                              credit={img.credit}
+                              height={210}
+                              label={`Mural · Belén · ${index + 1}/${muralImages.length}`}
+                              src={img.src}
+                              variant="olive"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="pb-3 text-center font-mono text-[10px] md:text-[9px] text-fg-mute">
+                      ← Deslizar murales →
+                    </div>
+                    <div style={{ padding: '22px 24px' }}>
+                      <div className="kicker">Murales · Arte Urbano</div>
+                      <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                        La pared como cuaderno
+                      </h3>
+                      <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
+                        Desde Beirut hasta Ramallah, el mural es el archivo popular
+                        que no necesita permiso ni editor. Una pared basta para que
+                        la memoria persista donde el Estado quiere borradura.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.08}>
+                <div className="voces-masonry-item">
+                  <div className="card">
+                    <div className="kicker">Pedagogía · Lúdica</div>
+                    <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                      El juego como acto político
+                    </h3>
+                    <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
+                      Bajo bloqueo, el juego no es frivolidad: es el ejercicio del derecho
+                      a la infancia. La lúdica afirma la humanidad frente al intento
+                      sistemático de deshumanización.
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+
+            <div className="voces-col">
+              <Reveal delay={0.08}>
+                <div className="voces-masonry-item">
+                  <div className="card">
+                    <div className="kicker">Cine · Documental</div>
+                    <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                      1948 · Muhammad Bakri
+                    </h3>
+                    <ImageSlot
+                      alt="Póster oficial del documental '1948' del director Mohammad Bakri. Registro y preservación de la memoria oral palestina."
+                      credit="Material promocional y de archivo indexado en IMDb (1998). Exhibición digital con fines estrictamente académicos, pedagógicos y de crítica cinematográfica bajo el amparo del Derecho de Cita (Fair Use)."
+                      label="Documental 1948 · Muhammad Bakri"
+                      src="/images/voces/documental-1948-bakri.webp"
+                      variant="terra"
+                    />
+                    <p style={{ color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65, marginTop: 14 }}>
+                      Una de las primeras miradas cinematográficas a la Nakba desde adentro.
+                      Bakri construye un contra-archivo audiovisual ante el silencio oficial,
+                      recuperando testimonios directos del desplazamiento.
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+
+            <div className="voces-col">
+              <Reveal delay={0.16}>
+                <div className="voces-masonry-item">
+                  <div className="card">
+                    <div className="kicker">Tatreez · Bordado Tradicional</div>
+                    <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
+                      Memoria cosida a mano
+                    </h3>
+                    <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
+                      El tatreez —bordado palestino de más de tres mil años— es un sistema
+                      simbólico que identifica la región de origen de cada familia.
+                      Cada patrón es un apellido que el exilio no puede borrar.
+                    </p>
+                    <div style={{
+                      marginTop: 16,
+                      padding: '12px 16px',
+                      border: '1px dashed var(--line)',
+                      borderRadius: 10,
+                      fontFamily: 'var(--mono)',
+                      fontSize: 11,
+                      color: 'var(--terracotta)',
+                      letterSpacing: '.14em',
+                      textTransform: 'uppercase',
+                    }}>
+                      UNESCO · Patrimonio Cultural Inmaterial · 2021
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.24}>
+                <div className="voces-masonry-item">
+                  <div className="voces-float-quote">
+                    <p className="voces-float-verse">
+                      "Escribo el nombre de mi tierra en el viento,
+                      pero el viento no sabe que mi tierra tiene nombre."
+                    </p>
+                    <cite className="voces-float-attr">— Mahmoud Darwish</cite>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
 
         </div>
       </div>

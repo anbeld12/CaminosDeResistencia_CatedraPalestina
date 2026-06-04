@@ -203,7 +203,7 @@ export function ONGs() {
                     </div>
                   ))}
                 </div>
-                <div className="text-center text-[10px] text-emerald-900/50 dark:text-emerald-400/40 font-mono pointer-events-none select-none mt-3 tracking-wider">
+                <div className="text-center font-mono text-[11px] md:text-[10px] text-fg-mute pointer-events-none select-none mt-3 tracking-wider">
                   ← Deslizar para ver galería →
                 </div>
               </div>
