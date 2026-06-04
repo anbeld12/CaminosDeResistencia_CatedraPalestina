@@ -10,6 +10,9 @@ export const ONG_CARDS: OngCard[] = [
     img: 'olive',
     label: 'Tanques azules en azoteas · cisterna improvisada',
     size: 's6',
+    src: '/images/ongs/water-tanks-jenin.webp',
+    alt: 'Tanque de almacenamiento de agua en una azotea de Yenín, Cisjordania. Reflejo de las dinámicas de racionamiento hídrico.',
+    credit: 'Fotografía por Guillaume Paumier (CC-BY 3.0). Registro documental en Yenín, Territorios Palestinos Ocupados.',
   },
   {
     tag: '/ Salud mental',
@@ -20,6 +23,9 @@ export const ONG_CARDS: OngCard[] = [
     img: 'terra',
     label: 'Manos suturando bajo luz de lámpara de bolsillo',
     size: 's6',
+    src: '/images/ongs/msf-gaza-hospital.webp',
+    alt: 'Personal de la ONG Médicos Sin Fronteras junto a pacientes en un complejo hospitalario en Gaza.',
+    credit: 'Fotografía oficial de Médicos Sin Fronteras (MSF, Octubre 2024). Difusión legítima en entorno universitario bajo Derecho de Cita y Uso Justo (Fair Use) con fines estrictamente educativos y de memoria histórica.',
   },
   {
     tag: '/ Sumud',
@@ -30,6 +36,11 @@ export const ONG_CARDS: OngCard[] = [
     img: 'olive',
     label: 'Olivo recién plantado entre escombros · tierra removida',
     size: 's12',
+    imgHeight: 480,
+    src: '/images/ongs/sumud-olive-sapling.webp',
+    alt: 'Retoño de olivo de 3 a 5 años de edad arrancado en Salfit. Documentación del desarraigo agrícola.',
+    credit: 'Fotografía documental: Agencia WAFA (Febrero 2022). Obras de memoria histórica expuestas bajo la exención de fines educativos y de investigación.',
+    objectPosition: '50% 80%',
   },
 ];
 

@@ -9,7 +9,7 @@ export const TIMELINE: TimelineEntry[] = [
   { year: '1993', title: 'Acuerdos de Oslo', body: 'Reconocimiento mutuo y promesa de Estado palestino en cinco años. Treinta y tres años después, el mapa de los asentamientos hace inviable la geografía prometida.', tags: ['Oslo', 'Promesa rota'], major: false },
   { year: '2007', title: 'Bloqueo de Gaza', body: 'Tras la victoria electoral de Hamás, Israel impone un cierre que dura — al momento de esta cátedra — diecinueve años. Gaza queda definida desde entonces como "espacio sin salida".', tags: ['Bloqueo'], major: false },
   { year: '2024', title: 'Opinión de la CIJ', body: 'La Corte Internacional de Justicia declara ilegal la ocupación israelí del territorio palestino y exige su fin "lo antes posible". Por primera vez, la ilegalidad queda nombrada en latín jurídico.', tags: ['CIJ', 'Derecho'], major: true },
-  { year: '2026', title: 'Cátedra Caminos de Resistencia', body: 'La UNAL abre la primera cátedra colombiana dedicada íntegramente al caso palestino — leído desde el sur global y la pedagogía sentipensante.', tags: ['UNAL', 'Aula'], major: false },
+  { year: '2024-2', title: 'Cátedra Caminos de Resistencia', body: 'La UNAL abre la primera cátedra colombiana dedicada íntegramente al caso palestino — leído desde el sur global y la pedagogía sentipensante.', tags: ['UNAL', 'Aula'], major: false },
 ];
 
 export const GLOSSARY: GlossaryEntry[] = [

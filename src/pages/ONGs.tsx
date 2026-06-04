@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
+import type { ImageVariant } from '../lib/types';
 import { ONG_CARDS, ONG_PARTNERS, FIELD_STEPS } from '../data/ongs';
 
 type Tab = 'vida' | 'partners' | 'field';
@@ -13,6 +14,34 @@ const TABS: { id: Tab; label: string }[] = [
 
 export function ONGs() {
   const [tab, setTab] = useState<Tab>('vida');
+
+  const brigadaImages = [
+    {
+      src: '/images/ongs/olive-harvest-brigades-1.webp',
+      alt: 'Voluntarios internacionales en campaña de recolección de aceitunas. Acompañamiento protector en terreno.',
+      credit: 'Campaña de Solidaridad: Alternative Tourism Group (ATG Palestine). Reproducción con fines educativos y de memoria.'
+    },
+    {
+      src: '/images/ongs/olive-harvest-brigades-2.webp',
+      alt: 'Distribución y plantación de plantines de olivo para agricultores amenazados por confiscación de tierras.',
+      credit: "Archivo documental: Campaña 'Olive Tree' (YMCA / JAI). Difusión bajo exención de fines académicos (Fair Use)."
+    },
+    {
+      src: '/images/ongs/olive-harvest-brigades-3.webp',
+      alt: 'Plantación comunitaria de olivos como medida de resistencia pacífica y protección del territorio.',
+      credit: 'Registro: Holylands Arts / JAI Palestine (Plant an Olive Tree Campaign). Uso no comercial y pedagógico.'
+    },
+    {
+      src: '/images/ongs/olive-harvest-brigades-4.webp',
+      alt: 'Brigadistas internacionales colaborando con familias palestinas en la cosecha anual.',
+      credit: 'Campaña de Solidaridad: Alternative Tourism Group (ATG Palestine). Reproducción con fines educativos y de memoria.'
+    },
+    {
+      src: '/images/ongs/olive-harvest-brigades-5.webp',
+      alt: 'Voluntarios protegiendo olivares amenazados por la expansión de infraestructuras de separación.',
+      credit: 'Registro: Holylands Arts / JAI Palestine (Plant an Olive Tree Campaign). Uso no comercial y pedagógico.'
+    }
+  ];
 
   return (
     <>
@@ -60,8 +89,21 @@ export function ONGs() {
           <div className="wrap">
             <div className="cards">
               {ONG_CARDS.map((c, i) => (
-                <Reveal as="article" key={i} delay={Math.min(i + 1, 3) * 0.08} className={'card ' + c.size}>
-                  <div className={'card-img ' + (c.img === 'terra' ? 'terra' : '')}>{c.label}</div>
+                <Reveal as="article" key={i} delay={Math.min(i + 1, 3) * 0.08} className={'card group ' + c.size}>
+                  {c.src ? (
+                    <ImageSlot
+                      height={c.imgHeight ?? 250}
+                      label={c.label}
+                      src={c.src}
+                      alt={c.alt}
+                      credit={c.credit}
+                      variant={c.img as ImageVariant}
+                      className="mb-5"
+                      objectPosition={c.objectPosition}
+                    />
+                  ) : (
+                    <div className={'card-img ' + (c.img === 'terra' ? 'terra' : '')}>{c.label}</div>
+                  )}
                   <div className="tag">{c.tag}</div>
                   <h3>{c.title}</h3>
                   <p className="body">{c.body}</p>
@@ -124,7 +166,18 @@ export function ONGs() {
                   <button className="btn">Protocolo · PDF</button>
                 </div>
               </div>
-              <ImageSlot height={360} label="Brigada en olivar · oct. 2025" />
+              <div className="w-full overflow-hidden">
+                <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 pb-4 -mb-4">
+                  {brigadaImages.map((img, i) => (
+                    <div key={i} className="min-w-[85%] md:min-w-[70%] snap-center shrink-0">
+                      <ImageSlot height={360} src={img.src} alt={img.alt} credit={img.credit} label={`Brigada ${i + 1} · oct. 2025`} variant="olive" className="group" />
+                    </div>
+                  ))}
+                </div>
+                <div className="text-center text-[10px] text-emerald-900/50 dark:text-emerald-400/40 font-mono pointer-events-none select-none mt-3 tracking-wider">
+                  ← Deslizar para ver galería →
+                </div>
+              </div>
             </Reveal>
 
             <div className="h-20" />

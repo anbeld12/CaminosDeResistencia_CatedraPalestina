@@ -61,6 +61,11 @@ export interface OngCard {
   img: ImageVariant;
   label: string;
   size: 's6' | 's12';
+  imgHeight?: number;
+  src?: string;
+  alt?: string;
+  credit?: string;
+  objectPosition?: string;
 }
 
 export interface OngPartner {
