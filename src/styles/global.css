@@ -327,19 +327,13 @@
     opacity: 0.5;
     mask-image: linear-gradient(to bottom, transparent, black 30%, black 80%, transparent);
   }
-  .hero-meta {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    margin-bottom: 40px;
-    gap: 32px;
-    flex-wrap: wrap;
-  }
   .hero-title { font-style: italic; }
   .hero-title .neutral { font-style: normal; font-weight: 800; }
   .hero-title em { font-style: italic; color: var(--terracotta); }
 
   .hero-foot {
     display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 28px;
-    margin-top: 56px;
+    margin-top: clamp(32px, 6vh, 56px);
     padding-top: 24px;
     border-top: 1px solid var(--line);
   }

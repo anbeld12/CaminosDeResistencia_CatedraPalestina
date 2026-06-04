@@ -1,9 +1,52 @@
 import type { ReactNode } from 'react';
-import { useState, useRef, useMemo, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Reveal } from '../components/Reveal';
 import { Icon } from '../lib/icons';
 import type { PageId } from '../lib/types';
+
+/* ============ YOUTUBE IFrame API TYPES ============ */
+declare global {
+  interface Window {
+    YT?: {
+      Player: new (
+        element: HTMLElement | string,
+        config: YTPlayerConfig,
+      ) => YTPlayer;
+      PlayerState: {
+        PLAYING: number;
+        PAUSED: number;
+        ENDED: number;
+      };
+    };
+  }
+}
+
+interface YTPlayerConfig {
+  videoId?: string;
+  playerVars?: {
+    autoplay?: number;
+    mute?: number;
+    enablejsapi?: number;
+    controls?: number;
+    modestbranding?: number;
+    rel?: number;
+  };
+  events?: {
+    onReady?: () => void;
+    onStateChange?: (event: { data: number }) => void;
+  };
+}
+
+interface YTPlayer {
+  playVideo(): void;
+  pauseVideo(): void;
+  mute(): void;
+  unMute(): void;
+  loadVideoById(videoId: string): void;
+  cueVideoById(videoId: string): void;
+  destroy(): void;
+}
 
 interface HomeProps {
   setPage: (p: PageId) => void;
@@ -27,26 +70,21 @@ export function Home({ setPage }: HomeProps) {
           </svg>
         </div>
 
-        <div className="wrap w-full">
-          <Reveal className="hero-meta">
-            <div>
-              <div className="eyebrow"><span className="dot" /><span>Plataforma de Memoria y Solidaridad Académica · UNAL</span></div>
-              <div className="mt-3.5 font-mono text-[13px] md:text-xs text-fg-mute tracking-[0.1em] leading-relaxed">
-                Repositorio permanente · Facultad de Derecho y Ciencias Políticas
-              </div>
-            </div>
-            <div className="text-left md:text-right w-full md:max-w-[320px]">
-              <div className="font-mono text-xs md:text-[11px] text-fg-mute tracking-[0.18em] uppercase mb-2.5">
-                001 / Inicio
-              </div>
-              <div className="text-base md:text-sm text-fg-mute leading-relaxed">
-                Un espacio sentipensante de educación pública desde Colombia, en solidaridad con Palestina.
-              </div>
+        <div className="wrap w-full grid grid-cols-1 gap-x-8 items-end md:grid-cols-[1fr_320px]">
+          {/* ── Crown: eyebrow + section indicator ── */}
+          <Reveal className="order-1 md:col-start-1 md:row-start-1">
+            <div className="eyebrow"><span className="dot" /><span>Plataforma de Memoria y Solidaridad Académica · UNAL</span></div>
+          </Reveal>
+
+          <Reveal className="text-left md:text-right order-2 md:col-start-2 md:row-start-1 md:max-w-[320px]">
+            <div className="font-mono text-xs md:text-[11px] text-fg-mute tracking-[0.18em] uppercase mb-2.5">
+              001 / Inicio
             </div>
           </Reveal>
 
+          {/* ── Hero title ── */}
           <motion.h1
-            className="hero-title"
+            className="hero-title order-3 md:col-span-2 md:mt-10"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
@@ -55,7 +93,21 @@ export function Home({ setPage }: HomeProps) {
             <em>de</em> Resistencia
           </motion.h1>
 
-          <Reveal className="hero-foot" delay={0.3}>
+          {/* ── Dense text: repositioned below title on mobile ── */}
+          <Reveal className="order-4 md:col-start-1 md:row-start-2" delay={0.1}>
+            <div className="font-mono text-[13px] md:text-xs text-fg-mute tracking-[0.1em] leading-relaxed">
+              Repositorio permanente · Facultad de Derecho y Ciencias Políticas
+            </div>
+          </Reveal>
+
+          <Reveal className="text-left md:text-right order-5 md:col-start-2 md:row-start-2 md:max-w-[320px]" delay={0.2}>
+            <div className="text-base md:text-sm text-fg-mute leading-relaxed">
+              Un espacio sentipensante de educación pública desde Colombia, en solidaridad con Palestina.
+            </div>
+          </Reveal>
+
+          {/* ── Stats ── */}
+          <Reveal className="hero-foot order-6 md:col-span-2" delay={0.3}>
             <div className="stat">
               <span className="num">VIII</span>
               <span className="lbl">Cohortes · documentadas</span>
@@ -423,22 +475,80 @@ function AudioPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
 
+  const playerRef = useRef<YTPlayer | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [apiReady, setApiReady] = useState(false);
+  const [playerReady, setPlayerReady] = useState(false);
+
   const activeTrack = POETRY_PLAYLIST.find((t) => t.id === activeTrackId) ?? POETRY_PLAYLIST[0];
 
   useEffect(() => {
     if (isInView) setIsPlaying(true);
   }, [isInView]);
 
+  /* ============ YOUTUBE API ============ */
+  useEffect(() => {
+    if (window.YT?.Player) { setApiReady(true); return; }
+    (window as any).onYouTubeIframeAPIReady = () => setApiReady(true);
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    const firstScript = document.getElementsByTagName('script')[0];
+    firstScript?.parentNode?.insertBefore(tag, firstScript);
+    return () => { delete (window as any).onYouTubeIframeAPIReady; };
+  }, []);
+
+  useEffect(() => {
+    if (!apiReady || !containerRef.current || playerRef.current) return;
+    const vid = POETRY_PLAYLIST[0].embedUrl.split('/').pop()!;
+    playerRef.current = new window.YT!.Player(containerRef.current, {
+      videoId: vid,
+      playerVars: {
+        autoplay: 0,
+        mute: 0,
+        enablejsapi: 1,
+        controls: 1,
+        modestbranding: 1,
+        rel: 0,
+      },
+      events: {
+        onReady: () => setPlayerReady(true),
+        onStateChange: (e) => {
+          if (e.data === window.YT!.PlayerState.PLAYING) setIsPlaying(true);
+          else if (
+            e.data === window.YT!.PlayerState.PAUSED ||
+            e.data === window.YT!.PlayerState.ENDED
+          ) setIsPlaying(false);
+        },
+      },
+    });
+    return () => {
+      playerRef.current?.destroy();
+      playerRef.current = null;
+    };
+  }, [apiReady]);
+
+  useEffect(() => {
+    if (!playerRef.current || !playerReady) return;
+    if (isPlaying) playerRef.current.playVideo();
+    else playerRef.current.pauseVideo();
+  }, [isPlaying, playerReady]);
+
+  useEffect(() => {
+    if (!playerRef.current || !playerReady) return;
+    if (isMuted) playerRef.current.mute();
+    else playerRef.current.unMute();
+  }, [isMuted, playerReady]);
+
+  useEffect(() => {
+    if (!playerRef.current || !playerReady) return;
+    const id = activeTrack.embedUrl.split('/').pop()!;
+    if (isPlaying) playerRef.current.loadVideoById(id);
+    else playerRef.current.cueVideoById(id);
+  }, [activeTrackId, playerReady]);
+
   const barPatterns = useRef(
     Array.from({ length: BAR_COUNT }, (_, i) => WIGGLE_PATTERNS[i % WIGGLE_PATTERNS.length])
   );
-
-  const iframeSrc = useMemo(() => {
-    if (!isPlaying || !showVideo) {
-      return `${activeTrack.embedUrl}?autoplay=0&enablejsapi=1${isMuted ? '&mute=1' : ''}`;
-    }
-    return `${activeTrack.embedUrl}?autoplay=1&enablejsapi=1${isMuted ? '&mute=1' : ''}`;
-  }, [activeTrack.embedUrl, isPlaying, isMuted, showVideo]);
 
   const barsActive = isPlaying && isInView;
 
@@ -449,7 +559,7 @@ function AudioPlayer() {
         <div className="md-dot" style={barsActive ? undefined : { animationPlayState: 'paused' }} />
         <div className="title-block">
           <div className="now-label">
-            {barsActive ? 'Reproduciendo · sin sonido' : isPlaying ? 'Cargando' : 'Pausado'}
+            {barsActive ? (isMuted ? 'Reproduciendo · silenciado' : 'Reproduciendo') : isPlaying ? 'Cargando' : 'Pausado'}
           </div>
           <div className="track-title">
             {activeTrack.title}
@@ -510,16 +620,8 @@ function AudioPlayer() {
       </button>
 
       <div className={`audio-video-wrapper ${showVideo ? 'is-open' : ''}`}>
-        <div className="aspect-video">
-          <iframe
-            src={iframeSrc}
-            title={activeTrack.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="w-full h-full rounded-xl"
-            style={{ display: 'block' }}
-            loading="lazy"
-          />
+        <div className="aspect-video rounded-xl overflow-hidden">
+          <div ref={containerRef} className="w-full h-full" />
         </div>
       </div>
 
