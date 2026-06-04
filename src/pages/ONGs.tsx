@@ -43,6 +43,29 @@ export function ONGs() {
     }
   ];
 
+  const joinOrganizations = [
+    {
+      name: "ISM (International Solidarity Movement)",
+      description: "Movimiento liderado por palestinos. Coordina acompañamiento civil para disuadir ataques y documentar abusos. Requiere postulación previa y un compromiso mínimo de 2 semanas durante la cosecha.",
+      link: "https://palsolidarity.org/join/"
+    },
+    {
+      name: "JAI / YMCA & Alternative Tourism Group",
+      description: "Organizan un programa anual de 10 días en otoño para brindar protección civil y apoyo logístico a las familias agricultoras palestinas que enfrentan restricciones de acceso a sus tierras.",
+      link: "https://www.jai-pal.org/"
+    },
+    {
+      name: "The Excellence Center in Palestine",
+      description: "Centro basado en Hebrón que vincula a voluntarios internacionales con agricultores locales para proveer asistencia directa en la cosecha y generar inmersión cultural y de derechos humanos.",
+      link: "https://excellencenter.org/"
+    },
+    {
+      name: "Center for Jewish Nonviolence (CJNV)",
+      description: "Coalición de activistas que organizan delegaciones anuales para acompañar a los agricultores en la cosecha, operando como escudo pacífico y red de documentación.",
+      link: "https://cjnv.org/olive-harvest/"
+    }
+  ];
+
   return (
     <>
       <header className="page-head">
@@ -161,9 +184,15 @@ export function ONGs() {
                   Cisjordania. Acompañar no es producir — es estar ahí cuando se intenta arrancar el árbol.
                   La presencia es una unidad de medida política.
                 </p>
-                <div className="mt-7 flex gap-2.5">
-                  <button className="btn terra">Cómo unirse</button>
-                  <button className="btn">Protocolo · PDF</button>
+                <div className="mt-7">
+                  <button
+                    className="btn terra"
+                    onClick={() => {
+                      document.getElementById('join-entities')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }}
+                  >
+                    Cómo unirse
+                  </button>
                 </div>
               </div>
               <div className="w-full overflow-hidden">
@@ -181,6 +210,28 @@ export function ONGs() {
             </Reveal>
 
             <div className="h-20" />
+
+            <Reveal id="join-entities">
+              <div className="hr-rule mb-6">
+                <span>Entidades que gestionan el voluntariado</span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                {joinOrganizations.map((org, idx) => (
+                  <Reveal as="article" key={idx} delay={idx * 0.08} className="p-6 bg-stone-50 border border-stone-200 rounded-xl hover:shadow-md transition-shadow">
+                    <h4 className="text-lg font-bold text-emerald-900 mb-2">{org.name}</h4>
+                    <p className="text-sm text-stone-700 mb-4 leading-relaxed">{org.description}</p>
+                    <a
+                      href={org.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center text-xs font-semibold text-emerald-700 hover:text-emerald-950 uppercase tracking-wider"
+                    >
+                      Sitio Oficial ↗
+                    </a>
+                  </Reveal>
+                ))}
+              </div>
+            </Reveal>
 
             <div className="grid-3">
               {FIELD_STEPS.map((s, i) => (
