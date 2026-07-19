@@ -1,23 +1,36 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
+import { ZoomIn, ZoomOut, RotateCcw, RotateCw } from 'lucide-react';
 import { Icon } from '../lib/icons';
 
-interface ImageBookProps {
+interface ImageBookPage {
   src: string;
   alt?: string;
+}
+
+interface ImageBookProps {
+  src?: string;
+  alt?: string;
+  pages?: ImageBookPage[];
   label?: string;
   credit?: string;
-  naturalWidth: number;
-  naturalHeight: number;
+  naturalWidth?: number;
+  naturalHeight?: number;
   className?: string;
 }
 
-export function ImageBook({ src, alt, label, credit, naturalWidth, naturalHeight, className = '' }: ImageBookProps) {
+export function ImageBook({ src, alt, pages, label, credit, naturalWidth, naturalHeight, className = '' }: ImageBookProps) {
   const [open, setOpen] = useState(false);
   const [scale, setScale] = useState(1);
+  const [rotate, setRotate] = useState(0);
+  const [imgIndex, setImgIndex] = useState(0);
   const stageRef = useRef<HTMLDivElement>(null);
   const [stage, setStage] = useState({ w: 800, h: 500 });
+  const [loadedN, setLoadedN] = useState({ w: 0, h: 0 });
+
+  const isMulti = !!pages;
+  const currentSrc = isMulti ? pages[imgIndex].src : src!;
+  const currentAlt = isMulti ? (pages[imgIndex].alt ?? label) : (alt ?? label);
 
   useEffect(() => {
     const el = stageRef.current;
@@ -32,19 +45,38 @@ export function ImageBook({ src, alt, label, credit, naturalWidth, naturalHeight
   useEffect(() => {
     if (!open) {
       setScale(1);
+      setRotate(0);
+      setImgIndex(0);
     }
   }, [open]);
 
   useEffect(() => {
     if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    setScale(1);
+    setRotate(0);
+  }, [open, imgIndex]);
+
+  useEffect(() => {
+    if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
+      if (isMulti) {
+        if (e.key === 'ArrowLeft') setImgIndex(i => Math.max(i - 1, 0));
+        if (e.key === 'ArrowRight') setImgIndex(i => Math.min(i + 1, pages.length - 1));
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [open]);
+  }, [open, isMulti, pages]);
 
-  const aspect = naturalWidth / naturalHeight;
+  const aspect = loadedN.w > 0 ? loadedN.w / loadedN.h : (naturalWidth && naturalHeight ? naturalWidth / naturalHeight : 1);
   const maxFitW = stage.w;
   const maxFitH = stage.h;
   const fitByH = maxFitH * aspect;
@@ -67,6 +99,15 @@ export function ImageBook({ src, alt, label, credit, naturalWidth, naturalHeight
     else setScale(1);
   };
 
+  const handleImgLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget;
+    if (img.naturalWidth) {
+      setLoadedN({ w: img.naturalWidth, h: img.naturalHeight });
+    }
+  };
+
+  const triggerSrc = isMulti ? pages[0].src : src!;
+
   return (
     <div className={'image-book ' + className}>
       {/* ============ TRIGGER ============ */}
@@ -75,10 +116,10 @@ export function ImageBook({ src, alt, label, credit, naturalWidth, naturalHeight
         onClick={() => setOpen(true)}
         role="button"
         tabIndex={0}
-        aria-label={`Abrir visor: ${label ?? alt ?? src}`}
+        aria-label={`Abrir visor: ${label ?? triggerSrc}`}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setOpen(true); }}
       >
-        <img src={src} alt="" aria-hidden className="image-book-trigger-bg" />
+        <img src={triggerSrc} alt="" aria-hidden className="image-book-trigger-bg" />
         <div className="image-book-trigger-shade" />
         <span className="image-book-trigger-cta absolute bottom-3 right-3 z-10">
           <Icon.Search /> Abrir visor
@@ -123,11 +164,37 @@ export function ImageBook({ src, alt, label, credit, naturalWidth, naturalHeight
               {/* Header */}
               <div className="image-book-modal-header">
                 <div className="kicker truncate">{label}</div>
+
+                {isMulti && pages.length > 1 && (
+                  <div className="flex items-center gap-1.5 flex-shrink-0">
+                    <button
+                      className="icon-btn !w-[30px] !h-[30px]"
+                      onClick={() => setImgIndex(i => Math.max(i - 1, 0))}
+                      disabled={imgIndex === 0}
+                      aria-label="Página anterior"
+                    >
+                      <Icon.ArrowLeft />
+                    </button>
+                    <span className="font-mono text-[11px] tracking-[0.1em] text-fg-mute min-w-[44px] text-center">
+                      {imgIndex + 1}/{pages.length}
+                    </span>
+                    <button
+                      className="icon-btn !w-[30px] !h-[30px]"
+                      onClick={() => setImgIndex(i => Math.min(i + 1, pages.length - 1))}
+                      disabled={imgIndex === pages.length - 1}
+                      aria-label="Página siguiente"
+                    >
+                      <Icon.Arrow />
+                    </button>
+                  </div>
+                )}
+
                 <div className="image-book-modal-zoom">
                   <button onClick={zoomOut} aria-label="Alejar"><ZoomOut size={14} /></button>
                   <span className="image-book-modal-zoom-pct">{Math.round(scale * 100)}%</span>
                   <button onClick={zoomIn} aria-label="Acercar"><ZoomIn size={14} /></button>
-                  <button onClick={zoomReset} aria-label="Restablecer zoom"><RotateCcw size={14} /></button>
+                  <button onClick={() => setRotate(r => r === 0 ? 180 : 0)} aria-label="Rotar 180°"><RotateCw size={14} /></button>
+                  <button onClick={zoomReset} aria-label="Restablecer"><RotateCcw size={14} /></button>
                 </div>
                 <button className="image-book-modal-close" onClick={() => setOpen(false)} aria-label="Cerrar">
                   <Icon.Close />
@@ -148,13 +215,16 @@ export function ImageBook({ src, alt, label, credit, naturalWidth, naturalHeight
                   dragElastic={0}
                 >
                   <img
-                    src={src}
-                    alt={alt ?? label ?? ''}
+                    key={currentSrc}
+                    src={currentSrc}
+                    alt={currentAlt ?? ''}
                     draggable={false}
                     className="image-book-modal-img"
+                    onLoad={handleImgLoad}
                     style={{
                       width: baseW * scale,
                       height: baseH * scale,
+                      transform: `rotate(${rotate}deg)`,
                     }}
                   />
                 </motion.div>

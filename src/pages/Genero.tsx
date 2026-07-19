@@ -1,6 +1,8 @@
 import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
+import { ImageBook } from '../components/ImageBook';
 import { PROJECTS_2025_1 } from '../data/projects-2025-1';
+import { FANZINE_G12 } from '../data/fanzine-g12';
 import { Icon } from '../lib/icons';
 import type { Project } from '../lib/types';
 
@@ -203,6 +205,24 @@ function PalestinaDeTodas() {
             <div className="pdt-stat-card">
               <div className="pdt-stat-number">{GENDER_DATA.leadershipSumud.students}</div>
               <div className="pdt-stat-label">{GENDER_DATA.leadershipSumud.studentsNote}</div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.24}>
+            <div className="flex flex-col gap-4">
+              <ImageBook
+                pages={FANZINE_G12.pages}
+                label={FANZINE_G12.label}
+                credit={FANZINE_G12.credit}
+              />
+              <a
+                href={PROJECTS_2025_1.find(p => p.id === 12)?.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn terra self-start"
+              >
+                Abrir fanzine <Icon.External />
+              </a>
             </div>
           </Reveal>
 
