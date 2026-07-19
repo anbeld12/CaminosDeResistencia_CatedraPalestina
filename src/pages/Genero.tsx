@@ -141,8 +141,12 @@ function PalestinaDeTodas() {
               </div>
               <ImageSlot
                 height={180}
+                src="/images/archive/2025-I/thumbs/10_Collage_Grupo10_MujerPalestina.webp"
+                alt="Collage · Mujer Palestina: Resistencia entre el Conflicto y Esperanza · Grupo 10"
                 label="Mujer palestina en espacio de refugio · retrato documental"
                 variant="olive"
+                credit="Collage elaborado por el Grupo 10 (2025-I) en el marco del módulo final de la Cátedra Caminos de Resistencia. Reproducción digital con fines estrictamente pedagógicos y de memoria (Uso Justo)."
+                className="group"
               />
               <ul className="pdt-list">
                 {GENDER_DATA.mentalHealth.map((item, i) => (

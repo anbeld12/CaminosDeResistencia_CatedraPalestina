@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Reveal } from '../components/Reveal';
 import { MythCards } from '../components/MythCards';
 import { Icon } from '../lib/icons';
-import { ImageSlot } from '../components/ImageSlot';
+import { ImageBook } from '../components/ImageBook';
 import { TIMELINE, GLOSSARY } from '../data/history';
+import { TIMELINE_G3 } from '../data/timeline-g3';
 import { PROJECTS_2025_1 } from '../data/projects-2025-1';
 
 export function History() {
@@ -96,21 +97,28 @@ export function History() {
       </section>
 
       {/* ============ MAP CALLOUT ============ */}
-      <section className="section bg-[var(--bg-warm)]">
+      <section id="timeline-g3" className="section bg-[var(--bg-warm)]">
         <div className="wrap">
           <div className="grid-2">
             <Reveal>
-              <div className="eyebrow"><span className="dot" /><span>Cartografía del despojo · 1947 → hoy</span></div>
+              <div className="eyebrow"><span className="dot" /><span>Cartografía · Grupo 3 · 2025-I</span></div>
               <h2 className="mt-5 text-[clamp(28px,7vw,56px)] leading-tight">
-                La geografía <em className="text-accent italic">—también—</em> se desplaza.
+                La historia <em className="text-accent italic">—también—</em> se lee en páginas.
               </h2>
               <p className="mt-4 text-fg-mute text-base leading-relaxed max-w-full md:max-w-[48ch]">
-                Cuatro mapas leídos juntos cuentan la historia sin necesidad de palabras: el territorio
-                palestino bajo el Mandato Británico, el Plan de Partición de la ONU, el armisticio de 1949,
-                y la fragmentación posterior a Oslo. La superficie verde se contrae como una hoja seca.
+                Una línea de tiempo elaborada por el Grupo 3 que abarca desde las civilizaciones
+                cananeas hasta la época contemporánea. Haz clic para abrir el visor y explorar
+                cada sección con zoom y desplazamiento libre.
               </p>
             </Reveal>
-            <ImageSlot height={420} label="Cuatro mapas comparativos · contraste cromático verde/negro" variant="terra" className="has-grain" />
+            <ImageBook
+              src={TIMELINE_G3.src}
+              alt={TIMELINE_G3.alt}
+              label={TIMELINE_G3.label}
+              credit={TIMELINE_G3.credit}
+              naturalWidth={TIMELINE_G3.naturalWidth}
+              naturalHeight={TIMELINE_G3.naturalHeight}
+            />
           </div>
         </div>
       </section>
@@ -191,7 +199,7 @@ export function History() {
               {
                 id: 28,
                 title: 'Línea de Tiempo: Territorio Palestino',
-                body: 'Línea de tiempo física de 3 pliegos que recorre la historia del territorio palestino desde las civilizaciones cananeas (3500 a.C.) hasta la época contemporánea. Incluye un código QR con versión interactiva.',
+                body: 'Línea de tiempo física de 3 pliegos que recorre la historia del territorio palestino desde las civilizaciones cananeas (3500 a.C.) hasta la época contemporánea. Ahora disponible como visor interactivo en esta misma página.',
                 group: 'Grupo 3',
               },
               {
@@ -217,14 +225,20 @@ export function History() {
                     </h3>
                     <p className="mt-2 text-fg-mute text-sm leading-relaxed">{body}</p>
                     <div className="mt-4">
-                      <a
-                        href={proj?.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn terra"
-                      >
-                        Ver recurso <Icon.External />
-                      </a>
+                      {id === 28 ? (
+                        <a href="#timeline-g3" className="btn terra">
+                          Ver recurso <Icon.Arrow />
+                        </a>
+                      ) : (
+                        <a
+                          href={proj?.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn terra"
+                        >
+                          Ver recurso <Icon.External />
+                        </a>
+                      )}
                     </div>
                   </div>
                 </Reveal>

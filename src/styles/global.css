@@ -1425,7 +1425,162 @@
     height: auto !important;
     display: block !important;
   }
-  
+
+  /* ── ImageBook · Trigger + Modal viewer ── */
+  .image-book { width: 100%; }
+
+  .image-book-trigger {
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    cursor: pointer;
+    min-height: 240px;
+    display: flex;
+    align-items: flex-end;
+    padding: 28px;
+    transition: border-color .25s ease, transform .25s ease, box-shadow .35s ease;
+  }
+  @media (min-width: 768px) { .image-book-trigger { min-height: 300px; } }
+  @media (hover: hover) {
+    .image-book-trigger:hover {
+      border-color: var(--terracotta);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px -24px rgba(0,0,0,0.2);
+    }
+  }
+  .image-book-trigger:focus-visible {
+    outline: 2px solid var(--terracotta);
+    outline-offset: 2px;
+  }
+  .image-book-trigger-bg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: 0 50%;
+    pointer-events: none;
+    transition: transform .35s ease;
+  }
+  @media (hover: hover) {
+    .image-book-trigger:hover .image-book-trigger-bg { transform: scale(1.04); }
+  }
+  .image-book-trigger-shade {
+    position: absolute; inset: 0;
+    pointer-events: none;
+    background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.02) 100%);
+  }
+  .image-book-trigger-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: var(--terracotta);
+    color: var(--text-on-terracotta);
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background .2s ease, transform .2s ease;
+  }
+  .image-book-trigger:hover .image-book-trigger-cta { background: #a02930; }
+  .image-book-trigger-cta svg { width: 14px; height: 14px; }
+
+  /* ── Modal ── */
+  .image-book-modal-veil {
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .image-book-modal {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    width: 100%;
+    max-width: min(95vw, 1100px);
+    max-height: 94vh;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 40px 80px -30px rgba(0,0,0,0.5);
+  }
+  .image-book-modal-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px 12px 20px;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .image-book-modal-header .kicker {
+    flex: 1;
+    min-width: 0;
+  }
+  .image-book-modal-zoom {
+    display: flex; align-items: center; gap: 4px;
+    flex-shrink: 0;
+  }
+  .image-book-modal-zoom button {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--fg);
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+  }
+  .image-book-modal-zoom button:hover { background: var(--olive-soft); color: var(--terracotta); }
+  .image-book-modal-zoom button svg { width: 14px; height: 14px; }
+  .image-book-modal-zoom-pct {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    color: var(--fg-mute);
+    min-width: 48px;
+    text-align: center;
+  }
+  .image-book-modal-close {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--fg);
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background .2s ease;
+  }
+  .image-book-modal-close:hover { background: var(--terracotta-soft); color: var(--terracotta); }
+  .image-book-modal-close svg { width: 14px; height: 14px; }
+
+  .image-book-modal-stage {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 40vh;
+    padding: 0;
+  }
+  .image-book-modal-stage:active { cursor: default; }
+
+  .image-book-modal-pan {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image-book-modal-img {
+    display: block;
+    max-width: none;
+    max-height: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    transition: width .15s ease, height .15s ease;
+    will-change: width, height;
+    flex-shrink: 0;
+  }
 }
 
 /* ── Hide scrollbar for carousels ── */
