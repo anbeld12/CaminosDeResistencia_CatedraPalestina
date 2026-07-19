@@ -124,6 +124,7 @@ export function Home({ setPage }: HomeProps) {
               <span className="lbl">Años · de despojo</span>
             </div>
             <div className="stat">
+              {/* HARDCODE 2026 — IV Edición completada en 2025-II. Verificar anualmente. */}
               <span className="num">IV</span>
               <span className="lbl">Ediciones · de la cátedra</span>
             </div>

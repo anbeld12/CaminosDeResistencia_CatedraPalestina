@@ -84,10 +84,10 @@ const GENDER_DATA = {
     'El duelo sin cuerpo —la imposibilidad de enterrar y llorar a los muertos— genera traumas de duelo complejo documentados por Médicos Sin Fronteras.',
   ],
   systemicViolence: [
-    'Los checkpoints militares bloquean el acceso a hospitales: 18 bebés nacidos en puestos de control registrados entre 2000 y 2010 (OMS).',
+    'Los checkpoints militares bloquean el acceso a hospitales: al menos 68 mujeres palestinas se vieron obligadas a dar a luz en puestos de control entre 2000 y 2006, con 35 recién nacidos fallecidos y 5 muertes maternas (ACNUDH, 2007).',
     'Las detenidas palestinas enfrentan aislamiento, denegación de atención médica y violencia de género institucional (Addameer, 2023).',
     'El bloqueo de Gaza impide el acceso a anticonceptivos, oncológicos y medicación prenatal.',
-    'Siete periodistas mujeres asesinadas en Gaza entre octubre de 2023 y mayo de 2024 (Comité para la Protección de los Periodistas).',
+    'Siete periodistas mujeres asesinadas en Gaza entre octubre de 2023 y mayo de 2024 (CPJ). A mediados de 2026, la cifra acumulada de periodistas asesinados en la región asciende a 259, la mayoría palestinos en Gaza (CPJ, 2026).',
   ],
   leadershipSumud: {
     nationalDay: '26 oct.',
@@ -229,6 +229,19 @@ function PalestinaDeTodas() {
         </div>
 
       </div>
+
+      <Reveal>
+        <details className="mt-12 group">
+          <summary className="font-mono text-[11px] tracking-[0.18em] uppercase text-fg-mute cursor-pointer hover:text-accent transition-colors">
+            Fuentes y metodología
+          </summary>
+          <div className="mt-4 p-5 bg-[var(--bg-warm)] border border-[var(--line)] rounded-[14px] text-[13px] text-fg-mute leading-relaxed space-y-2">
+            <p><strong>Salud mental infantil:</strong> UNICEF, <em>The Gaza Child-Focused Assessment</em> (2026); Alliance CPHA, <em>Putting the Pieces back Together</em> (2026).</p>
+            <p><strong>Partos en puestos de control:</strong> ACNUDH, <em>Palestinian women giving birth at checkpoints</em> (A/HRC/4/57, 2007); Ministerio de Salud de Palestina / WAFA (2023).</p>
+            <p><strong>Periodistas asesinadas:</strong> CPJ, <em>Journalist casualties in the Israel-Gaza war</em>, base de datos actualizada a 2026.</p>
+          </div>
+        </details>
+      </Reveal>
     </>
   );
 }
