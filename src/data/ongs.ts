@@ -1,4 +1,4 @@
-import type { FieldStep, OngCard, OngPartner } from '../lib/types';
+import type { OngCard, OngPartner } from '../lib/types';
 
 export const ONG_CARDS: OngCard[] = [
   {
@@ -53,8 +53,3 @@ export const ONG_PARTNERS: OngPartner[] = [
   { name: 'Médicos Sin Fronteras (MSF)', city: 'Ginebra — Global', since: '1971', focus: 'Emergencia médica', url: 'https://www.msf.es/territorio/palestina' },
 ];
 
-export const FIELD_STEPS: FieldStep[] = [
-  { n: '01', t: 'Solicitud', d: 'Carta de motivación + carné UNAL vigente. Cierre: 30 de agosto.' },
-  { n: '02', t: 'Formación', d: 'Tres sesiones obligatorias: contexto, primeros auxilios, derecho humanitario.' },
-  { n: '03', t: 'Viaje', d: 'Acompañamiento entre el 6 y el 20 de octubre. Estancia en Beit Sahour.' },
-];

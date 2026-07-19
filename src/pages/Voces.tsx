@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
+import { ImageGallery } from '../components/ImageGallery';
 import { Icon } from '../lib/icons';
 import { PODCAST_SERIES, PROJECTS_2025_1 } from '../data/projects-2025-1';
 
@@ -52,11 +53,11 @@ function DarwishCard() {
     <div className="media-stub">
       <div className="media-stub-head">
         <div className="md-dot" />
-        <div style={{ flex: 1 }}>
+        <div className="flex-1">
           <div className="md-now">Antología poética · Mahmoud Darwish</div>
           <div className="md-title"><i>{p.title}</i></div>
         </div>
-         <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--on-dark-legal)', letterSpacing: '.1em' }}>
+         <div className="font-mono text-[11px] text-[var(--on-dark-legal)] tracking-[.1em]">
           {p.year}
         </div>
       </div>
@@ -65,7 +66,7 @@ function DarwishCard() {
         {p.lines.map((line, i) => <span key={i}>{line}<br /></span>)}
       </div>
 
-      <ul className="md-list" style={{ marginTop: 18 }}>
+      <ul className="md-list mt-[18px]">
         {poems.map((q, i) => (
           <li key={i} className={i === active ? 'is-active' : ''} onClick={() => setActive(i)}>
             <span className="md-kind">{i === active ? <Icon.Play /> : 'Verso'}</span>
@@ -106,6 +107,7 @@ function ArteTab() {
   ];
 
   return (
+    <>
     <section className="section">
       <div className="wrap">
 
@@ -115,7 +117,7 @@ function ArteTab() {
             <blockquote className="voces-bq">
               "La fórmula de la indignación siempre debe acompañarse
               con los{' '}
-              <em style={{ color: 'var(--terracotta)' }}>susurros de la poesía</em>"
+              <em className="text-accent">susurros de la poesía</em>"
             </blockquote>
             <cite className="voces-bq-attr">
               — De Vietnam a Palestina · Herencia anticolonial
@@ -127,36 +129,19 @@ function ArteTab() {
           <div className="voces-darwish-band">
             <div className="voces-darwish-inner">
               <div>
-                <div className="eyebrow" style={{ color: 'var(--on-dark-mute)' }}>
-                  <span className="dot" style={{ background: 'var(--gold-accent)' }} />
+                <div className="eyebrow text-[var(--on-dark-mute)]">
+                  <span className="dot bg-[var(--gold-accent)]" />
                   Poesía · Voz central
                 </div>
-                <h3 style={{
-                  fontFamily: 'var(--serif)',
-                  fontSize: 'clamp(32px, 4.5vw, 54px)',
-                  letterSpacing: '-.025em',
-                  lineHeight: 1.04,
-                  color: '#f1ede0',
-                  marginTop: 18,
-                }}>
+                <h3 className="voces-darwish-name">
                   Mahmoud<br />Darwish
                 </h3>
-                <p style={{ marginTop: 20, color: 'rgba(241,237,224,.76)', fontSize: 15, lineHeight: 1.68, maxWidth: '36ch' }}>
+                <p className="voces-darwish-bio">
                   1941–2008. Poeta palestino considerado la voz más importante de la
                   resistencia literaria árabe. Sus palabras sostuvieron la identidad
                   de un pueblo mientras los mapas la negaban.
                 </p>
-                <div style={{
-                  marginTop: 28,
-                  fontFamily: 'var(--mono)',
-                  fontSize: 10.5,
-                  color: 'var(--on-dark-dim)',
-                  letterSpacing: '.15em',
-                  textTransform: 'uppercase',
-                  borderLeft: '2px solid var(--terracotta)',
-                  paddingLeft: 14,
-                  lineHeight: 1.85,
-                }}>
+                <div className="voces-darwish-works">
                   Carné de identidad · 1964<br />
                   Memoria para el olvido · 1982<br />
                   El lecho de una extranjera · 1999
@@ -170,383 +155,139 @@ function ArteTab() {
         </Reveal>
 
         <div className="voces-masonry">
-
-          {/* ======== Flat layout — tablet + mobile (CSS columns) ======== */}
-          <div className="voces-layout-flat">
-            <Reveal>
-              <div className="voces-masonry-item">
-                <div className="card card-base p-0 overflow-hidden">
-                  <div className="relative w-full">
-                    <div className="flex gap-4 overflow-x-auto pb-3 hide-scrollbar snap-x snap-mandatory">
-                      {muralImages.map((img, index) => (
-                        <div key={index} className="min-w-[90%] shrink-0 snap-center md:min-w-[80%]">
-                          <ImageSlot
-                            alt={img.alt}
-                            className="group"
-                            credit={img.credit}
-                            height={210}
-                            label={`Mural · Belén · ${index + 1}/${muralImages.length}`}
-                            src={img.src}
-                            variant="olive"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="pb-3 text-center font-mono text-[10px] md:text-[9px] text-fg-mute">
-                    ← Deslizar murales →
-                  </div>
-                  <div style={{ padding: '22px 24px' }}>
-                    <div className="kicker">Murales · Arte Urbano</div>
-                    <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                      La pared como cuaderno
-                    </h3>
-                    <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                      Desde Beirut hasta Ramallah, el mural es el archivo popular
-                      que no necesita permiso ni editor. Una pared basta para que
-                      la memoria persista donde el Estado quiere borradura.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.08}>
-              <div className="voces-masonry-item">
-                <div className="card">
-                  <div className="kicker">Cine · Documental</div>
-                  <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                    1948 · Muhammad Bakri
-                  </h3>
-                  <ImageSlot
-                    alt="Póster oficial del documental '1948' del director Mohammad Bakri. Registro y preservación de la memoria oral palestina."
-                    credit="Material promocional y de archivo indexado en IMDb (1998). Exhibición digital con fines estrictamente académicos, pedagógicos y de crítica cinematográfica bajo el amparo del Derecho de Cita (Fair Use)."
-                    label="Documental 1948 · Muhammad Bakri"
-                    src="/images/voces/documental-1948-bakri.webp"
-                    variant="terra"
-                  />
-                  <p style={{ color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65, marginTop: 14 }}>
-                    Una de las primeras miradas cinematográficas a la Nakba desde adentro.
-                    Bakri construye un contra-archivo audiovisual ante el silencio oficial,
-                    recuperando testimonios directos del desplazamiento.
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.16}>
-              <div className="voces-masonry-item">
-                <div className="card">
-                  <div className="kicker">Pedagogía · Lúdica</div>
-                  <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                    El juego como acto político
-                  </h3>
-                  <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                    Bajo bloqueo, el juego no es frivolidad: es el ejercicio del derecho
-                    a la infancia. La lúdica afirma la humanidad frente al intento
-                    sistemático de deshumanización.
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.16}>
-              <div className="voces-masonry-item">
-                <div className="voces-float-quote">
-                  <p className="voces-float-verse">
-                    "Escribo el nombre de mi tierra en el viento,
-                    pero el viento no sabe que mi tierra tiene nombre."
-                  </p>
-                  <cite className="voces-float-attr">— Mahmoud Darwish</cite>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.24}>
-              <div className="voces-masonry-item">
-                <div className="card">
-                  <div className="kicker">Tatreez · Bordado Tradicional</div>
-                  <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                    Memoria cosida a mano
-                  </h3>
-                  <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                    El tatreez —bordado palestino de más de tres mil años— es un sistema
-                    simbólico que identifica la región de origen de cada familia.
-                    Cada patrón es un apellido que el exilio no puede borrar.
-                  </p>
-                  <div style={{
-                    marginTop: 16,
-                    padding: '12px 16px',
-                    border: '1px dashed var(--line)',
-                    borderRadius: 10,
-                    fontFamily: 'var(--mono)',
-                    fontSize: 11,
-                    color: 'var(--terracotta)',
-                    letterSpacing: '.14em',
-                    textTransform: 'uppercase',
-                  }}>
-                    UNESCO · Patrimonio Cultural Inmaterial · 2021
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-
-          {/* ======== Tablet layout — flex columns 2-col ======== */}
-          <div className="voces-layout-2col">
-            <div className="voces-col">
-              <Reveal>
-                <div className="voces-masonry-item">
-                  <div className="card card-base p-0 overflow-hidden">
-                    <div className="relative w-full">
-                      <div className="flex gap-4 overflow-x-auto pb-3 hide-scrollbar snap-x snap-mandatory">
-                        {muralImages.map((img, index) => (
-                          <div key={index} className="min-w-[90%] shrink-0 snap-center md:min-w-[80%]">
-                            <ImageSlot
-                              alt={img.alt}
-                              className="group"
-                              credit={img.credit}
-                              height={210}
-                              label={`Mural · Belén · ${index + 1}/${muralImages.length}`}
-                              src={img.src}
-                              variant="olive"
-                            />
-                          </div>
-                        ))}
+          <Reveal>
+            <div className="card card-base p-0 overflow-hidden">
+              <div className="relative w-full">
+                <ImageGallery hint="← Deslizar murales →">
+                  <div className="flex gap-4">
+                    {muralImages.map((img, index) => (
+                      <div key={index} className="min-w-[90%] shrink-0 snap-center md:min-w-[80%]">
+                        <ImageSlot
+                          alt={img.alt}
+                          className="group"
+                          credit={img.credit}
+                          height={210}
+                          label={`Mural · Belén · ${index + 1}/${muralImages.length}`}
+                          src={img.src}
+                          variant="olive"
+                        />
                       </div>
-                    </div>
-                    <div className="pb-3 text-center font-mono text-[10px] md:text-[9px] text-fg-mute">
-                      ← Deslizar murales →
-                    </div>
-                    <div style={{ padding: '22px 24px' }}>
-                      <div className="kicker">Murales · Arte Urbano</div>
-                      <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                        La pared como cuaderno
-                      </h3>
-                      <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                        Desde Beirut hasta Ramallah, el mural es el archivo popular
-                        que no necesita permiso ni editor. Una pared basta para que
-                        la memoria persista donde el Estado quiere borradura.
-                      </p>
-                    </div>
+                    ))}
                   </div>
-                </div>
-              </Reveal>
-
-              <Reveal delay={0.08}>
-                <div className="voces-masonry-item">
-                  <div className="card">
-                    <div className="kicker">Pedagogía · Lúdica</div>
-                    <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                      El juego como acto político
-                    </h3>
-                    <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                      Bajo bloqueo, el juego no es frivolidad: es el ejercicio del derecho
-                      a la infancia. La lúdica afirma la humanidad frente al intento
-                      sistemático de deshumanización.
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-
-              <Reveal delay={0.16}>
-                <div className="voces-masonry-item">
-                  <div className="card">
-                    <div className="kicker">Tatreez · Bordado Tradicional</div>
-                    <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                      Memoria cosida a mano
-                    </h3>
-                    <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                      El tatreez —bordado palestino de más de tres mil años— es un sistema
-                      simbólico que identifica la región de origen de cada familia.
-                      Cada patrón es un apellido que el exilio no puede borrar.
-                    </p>
-                    <div style={{
-                      marginTop: 16,
-                      padding: '12px 16px',
-                      border: '1px dashed var(--line)',
-                      borderRadius: 10,
-                      fontFamily: 'var(--mono)',
-                      fontSize: 11,
-                      color: 'var(--terracotta)',
-                      letterSpacing: '.14em',
-                      textTransform: 'uppercase',
-                    }}>
-                      UNESCO · Patrimonio Cultural Inmaterial · 2021
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
+                </ImageGallery>
+              </div>
+              <div className="voces-card-pad">
+                <div className="kicker">Murales · Arte Urbano</div>
+                <h3 className="voces-card-title">La pared como cuaderno</h3>
+                <p className="voces-card-body">
+                  Desde Beirut hasta Ramallah, el mural es el archivo popular
+                  que no necesita permiso ni editor. Una pared basta para que
+                  la memoria persista donde el Estado quiere borradura.
+                </p>
+              </div>
             </div>
+          </Reveal>
 
-            <div className="voces-col">
-              <Reveal delay={0.08}>
-                <div className="voces-masonry-item">
-                  <div className="card">
-                    <div className="kicker">Cine · Documental</div>
-                    <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                      1948 · Muhammad Bakri
-                    </h3>
-                    <ImageSlot
-                      alt="Póster oficial del documental '1948' del director Mohammad Bakri. Registro y preservación de la memoria oral palestina."
-                      credit="Material promocional y de archivo indexado en IMDb (1998). Exhibición digital con fines estrictamente académicos, pedagógicos y de crítica cinematográfica bajo el amparo del Derecho de Cita (Fair Use)."
-                      label="Documental 1948 · Muhammad Bakri"
-                      src="/images/voces/documental-1948-bakri.webp"
-                      variant="terra"
-                    />
-                    <p style={{ color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65, marginTop: 14 }}>
-                      Una de las primeras miradas cinematográficas a la Nakba desde adentro.
-                      Bakri construye un contra-archivo audiovisual ante el silencio oficial,
-                      recuperando testimonios directos del desplazamiento.
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-
-              <Reveal delay={0.16}>
-                <div className="voces-masonry-item">
-                  <div className="voces-float-quote">
-                    <p className="voces-float-verse">
-                      "Escribo el nombre de mi tierra en el viento,
-                      pero el viento no sabe que mi tierra tiene nombre."
-                    </p>
-                    <cite className="voces-float-attr">— Mahmoud Darwish</cite>
-                  </div>
-                </div>
-              </Reveal>
+          <Reveal delay={0.08}>
+            <div className="card">
+              <div className="kicker">Cine · Documental</div>
+              <h3 className="voces-card-title">1948 · Muhammad Bakri</h3>
+              <ImageSlot
+                alt="Póster oficial del documental '1948' del director Mohammad Bakri. Registro y preservación de la memoria oral palestina."
+                credit="Material promocional y de archivo indexado en IMDb (1998). Exhibición digital con fines estrictamente académicos, pedagógicos y de crítica cinematográfica bajo el amparo del Derecho de Cita (Fair Use)."
+                label="Documental 1948 · Muhammad Bakri"
+                src="/images/voces/documental-1948-bakri.webp"
+                variant="terra"
+              />
+              <p className="voces-card-body">
+                Una de las primeras miradas cinematográficas a la Nakba desde adentro.
+                Bakri construye un contra-archivo audiovisual ante el silencio oficial,
+                recuperando testimonios directos del desplazamiento.
+              </p>
             </div>
-          </div>
+          </Reveal>
 
-          {/* ======== Desktop layout — flex columns 3-col ======== */}
-          <div className="voces-layout-cols">
-            <div className="voces-col">
-              <Reveal>
-                <div className="voces-masonry-item">
-                  <div className="card card-base p-0 overflow-hidden">
-                    <div className="relative w-full">
-                      <div className="flex gap-4 overflow-x-auto pb-3 hide-scrollbar snap-x snap-mandatory">
-                        {muralImages.map((img, index) => (
-                          <div key={index} className="min-w-[90%] shrink-0 snap-center md:min-w-[80%]">
-                            <ImageSlot
-                              alt={img.alt}
-                              className="group"
-                              credit={img.credit}
-                              height={210}
-                              label={`Mural · Belén · ${index + 1}/${muralImages.length}`}
-                              src={img.src}
-                              variant="olive"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="pb-3 text-center font-mono text-[10px] md:text-[9px] text-fg-mute">
-                      ← Deslizar murales →
-                    </div>
-                    <div style={{ padding: '22px 24px' }}>
-                      <div className="kicker">Murales · Arte Urbano</div>
-                      <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                        La pared como cuaderno
-                      </h3>
-                      <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                        Desde Beirut hasta Ramallah, el mural es el archivo popular
-                        que no necesita permiso ni editor. Una pared basta para que
-                        la memoria persista donde el Estado quiere borradura.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-
-              <Reveal delay={0.08}>
-                <div className="voces-masonry-item">
-                  <div className="card">
-                    <div className="kicker">Pedagogía · Lúdica</div>
-                    <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                      El juego como acto político
-                    </h3>
-                    <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                      Bajo bloqueo, el juego no es frivolidad: es el ejercicio del derecho
-                      a la infancia. La lúdica afirma la humanidad frente al intento
-                      sistemático de deshumanización.
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
+          <Reveal delay={0.16}>
+            <div className="card">
+              <div className="kicker">Pedagogía · Lúdica</div>
+              <h3 className="voces-card-title">El juego como acto político</h3>
+              <p className="voces-card-body">
+                Bajo bloqueo, el juego no es frivolidad: es el ejercicio del derecho
+                a la infancia. La lúdica afirma la humanidad frente al intento
+                sistemático de deshumanización.
+              </p>
             </div>
+          </Reveal>
 
-            <div className="voces-col">
-              <Reveal delay={0.08}>
-                <div className="voces-masonry-item">
-                  <div className="card">
-                    <div className="kicker">Cine · Documental</div>
-                    <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                      1948 · Muhammad Bakri
-                    </h3>
-                    <ImageSlot
-                      alt="Póster oficial del documental '1948' del director Mohammad Bakri. Registro y preservación de la memoria oral palestina."
-                      credit="Material promocional y de archivo indexado en IMDb (1998). Exhibición digital con fines estrictamente académicos, pedagógicos y de crítica cinematográfica bajo el amparo del Derecho de Cita (Fair Use)."
-                      label="Documental 1948 · Muhammad Bakri"
-                      src="/images/voces/documental-1948-bakri.webp"
-                      variant="terra"
-                    />
-                    <p style={{ color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65, marginTop: 14 }}>
-                      Una de las primeras miradas cinematográficas a la Nakba desde adentro.
-                      Bakri construye un contra-archivo audiovisual ante el silencio oficial,
-                      recuperando testimonios directos del desplazamiento.
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
+          <Reveal delay={0.16}>
+            <div className="voces-float-quote">
+              <p className="voces-float-verse">
+                "Escribo el nombre de mi tierra en el viento,
+                pero el viento no sabe que mi tierra tiene nombre."
+              </p>
+              <cite className="voces-float-attr">— Mahmoud Darwish</cite>
             </div>
+          </Reveal>
 
-            <div className="voces-col">
-              <Reveal delay={0.16}>
-                <div className="voces-masonry-item">
-                  <div className="card">
-                    <div className="kicker">Tatreez · Bordado Tradicional</div>
-                    <h3 style={{ marginTop: 8, fontSize: 'clamp(20px, 2.2vw, 26px)' }}>
-                      Memoria cosida a mano
-                    </h3>
-                    <p style={{ marginTop: 10, color: 'var(--fg-mute)', fontSize: 14.5, lineHeight: 1.65 }}>
-                      El tatreez —bordado palestino de más de tres mil años— es un sistema
-                      simbólico que identifica la región de origen de cada familia.
-                      Cada patrón es un apellido que el exilio no puede borrar.
-                    </p>
-                    <div style={{
-                      marginTop: 16,
-                      padding: '12px 16px',
-                      border: '1px dashed var(--line)',
-                      borderRadius: 10,
-                      fontFamily: 'var(--mono)',
-                      fontSize: 11,
-                      color: 'var(--terracotta)',
-                      letterSpacing: '.14em',
-                      textTransform: 'uppercase',
-                    }}>
-                      UNESCO · Patrimonio Cultural Inmaterial · 2021
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-
-              <Reveal delay={0.24}>
-                <div className="voces-masonry-item">
-                  <div className="voces-float-quote">
-                    <p className="voces-float-verse">
-                      "Escribo el nombre de mi tierra en el viento,
-                      pero el viento no sabe que mi tierra tiene nombre."
-                    </p>
-                    <cite className="voces-float-attr">— Mahmoud Darwish</cite>
-                  </div>
-                </div>
-              </Reveal>
+          <Reveal delay={0.24}>
+            <div className="card">
+              <div className="kicker">Tatreez · Bordado Tradicional</div>
+              <h3 className="voces-card-title">Memoria cosida a mano</h3>
+              <p className="voces-card-body">
+                El tatreez —bordado palestino de más de tres mil años— es un sistema
+                simbólico que identifica la región de origen de cada familia.
+                Cada patrón es un apellido que el exilio no puede borrar.
+              </p>
+              <div className="voces-unesco-badge">
+                UNESCO · Patrimonio Cultural Inmaterial · 2021
+              </div>
             </div>
-          </div>
-
+          </Reveal>
         </div>
       </div>
     </section>
+
+    <section className="section">
+      <div className="wrap">
+        <Reveal>
+          <div className="hr-rule mb-6">
+            <span>Proyectos estudiantiles · arte y cultura</span>
+          </div>
+        </Reveal>
+        <div className="grid md:grid-cols-3 gap-6">
+          {[1, 4, 5, 19, 20, 24, 15, 22, 23, 17].map((id, i) => {
+            const p = PROJECTS_2025_1.find(pr => pr.id === id);
+            if (!p) return null;
+            return (
+              <Reveal key={p.id} as="article" delay={i * 0.08}>
+                <div className="card">
+                  <div className="kicker">{p.group || p.author}</div>
+                  <h3 className="mt-2 text-[clamp(18px,1.8vw,22px)] font-serif leading-tight">
+                    {p.title}
+                  </h3>
+                  {p.description && (
+                    <p className="mt-2 text-fg-mute text-sm leading-relaxed line-clamp-3">
+                      {p.description}
+                    </p>
+                  )}
+                  <div className="mt-4">
+                    <a
+                      href={p.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn terra"
+                    >
+                      {({ ensayo: 'Leer ensayo', cartografia: 'Explorar mapa', video: 'Ver video', podcast: 'Escuchar', fanzine: 'Ver fanzine', mural: 'Ver mural', collage: 'Ver collage', grabado: 'Ver grabado' } as Record<string, string>)[p.kind] || 'Abrir'} <Icon.External />
+                    </a>
+                  </div>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+    </>
   );
 }
 
@@ -555,21 +296,22 @@ function ArteTab() {
    ============================================================ */
 function PeriodismoTab() {
   return (
+    <>
     <section className="section">
       <div className="wrap">
 
         <Reveal>
           <div className="voces-traverso-band">
             <div className="eyebrow">
-              <span className="dot" style={{ background: 'var(--gold-accent)' }} />
+              <span className="dot bg-[var(--gold-accent)]" />
               Periodismo · Encuadre editorial
             </div>
-            <blockquote className="pull-quote" style={{ marginTop: 22 }}>
+            <blockquote className="pull-quote mt-[22px]">
               "El universalismo ha sido siempre{' '}
-              <span style={{ color: 'var(--gold-accent)' }}>Occidente extendiendo sus valores</span>
+              <span className="text-[var(--gold-accent)]">Occidente extendiendo sus valores</span>
               {' '}como si fueran universales."
             </blockquote>
-            <cite className="quote-attrib" style={{ marginTop: 22, display: 'block' }}>
+            <cite className="quote-attrib mt-[22px] block">
               — Enzo Traverso
             </cite>
           </div>
@@ -579,7 +321,7 @@ function PeriodismoTab() {
           <div className="voces-editorial">
             <div className="voces-editorial-lead">
               <span className="voces-drop-cap">E</span>
-              <p style={{ fontSize: 17, lineHeight: 1.78, color: 'var(--fg)' }}>
+              <p className="text-[17px] leading-[1.78] text-fg">
                 l relato hegemónico sobre el conflicto palestino ha sido construido con herramientas
                 precisas: la <strong>dicotomía civilización vs. barbarie</strong>, el lenguaje de
                 "guerra" donde hay ocupación, la equivalencia falsa entre colonizador y colonizado.
@@ -588,32 +330,32 @@ function PeriodismoTab() {
             </div>
             <div className="voces-editorial-cols">
               <div>
-                <h4 style={{ fontFamily: 'var(--serif)', fontSize: 21, letterSpacing: '-.015em', marginBottom: 14 }}>
+                <h4 className="voces-editorial-h4">
                   La dicotomía civilización&thinsp;/&thinsp;barbarie
                 </h4>
-                <p style={{ color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.72 }}>
+                <p className="voces-editorial-p">
                   Desde Fanon hasta Traverso, el pensamiento anticolonial ha identificado
                   esta dicotomía como el mecanismo central de justificación del despojo.
                   El "civilizado" tiene derecho a todo; el "bárbaro" carece de derechos
                   que respetar.
                 </p>
-                <p style={{ color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.72, marginTop: 16 }}>
+                <p className="voces-editorial-p mt-4">
                   En el caso palestino, el encuadre opera con precisión técnica: los medios
                   dominantes hablan de "operaciones quirúrgicas" para los bombardeos
                   y "terrorismo" para cualquier forma de resistencia.
                 </p>
               </div>
               <div>
-                <h4 style={{ fontFamily: 'var(--serif)', fontSize: 21, letterSpacing: '-.015em', marginBottom: 14 }}>
+                <h4 className="voces-editorial-h4">
                   El fraude Joan Peters
                 </h4>
-                <p style={{ color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.72 }}>
+                <p className="voces-editorial-p">
                   El libro <em>From Time Immemorial</em> (1984) argumentaba que Palestina
                   estaba "vacía" antes de la inmigración judía. Celebrado ampliamente
                   en Occidente —hasta que Finkelstein y otros historiadores demostraron
                   que era una fabricación sistemática de fuentes y estadísticas.
                 </p>
-                <p style={{ color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.72, marginTop: 16 }}>
+                <p className="voces-editorial-p mt-4">
                   Los desmentidos nunca alcanzaron la difusión de las mentiras originales.
                   Así funciona el sesgo mediático estructural.
                 </p>
@@ -625,26 +367,19 @@ function PeriodismoTab() {
         <Reveal delay={0.16}>
           <div className="voces-dark-block">
             <div className="voces-db-inner">
-              <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--terracotta)' }}>
+              <div className="font-mono text-[11px] tracking-[.2em] uppercase text-accent">
                 Concepto · Memoria en disputa
               </div>
-              <h3 style={{
-                fontFamily: 'var(--serif)',
-                fontSize: 'clamp(34px, 5.5vw, 62px)',
-                marginTop: 12,
-                letterSpacing: '-.025em',
-                lineHeight: 1.04,
-                color: '#fff',
-              }}>
+              <h3 className="voces-dark-heading">
                 Memoridicio
               </h3>
-              <p style={{ fontSize: 16, lineHeight: 1.76, color: 'rgba(255,255,255,.8)', marginTop: 26 }}>
-                El <strong style={{ color: '#fff' }}>memoridicio</strong> nombra el proceso sistemático de
+              <p className="voces-dark-p mt-[26px]">
+                El <strong className="text-white">memoridicio</strong> nombra el proceso sistemático de
                 borrado de la memoria histórica de un pueblo: destrucción de archivos,
                 renombramiento de ciudades, negación de la cultura y la lengua,
                 eliminación de documentos civiles.
               </p>
-              <p style={{ fontSize: 16, lineHeight: 1.76, color: 'rgba(255,255,255,.8)', marginTop: 16 }}>
+              <p className="voces-dark-p mt-4">
                 En el caso palestino opera en múltiples registros simultáneos:
                 demolición de cementerios, prohibición de la enseñanza del árabe,
                 exclusión sistemática de las narrativas palestinas en los currículos
@@ -657,17 +392,17 @@ function PeriodismoTab() {
                   { v: '15k+', k: 'Documentos destruidos' },
                 ].map(s => (
                   <div key={s.k}>
-                    <div style={{ fontFamily: 'var(--serif)', fontSize: 42, color: 'var(--terracotta)', lineHeight: 1 }}>{s.v}</div>
-                     <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,.50)', marginTop: 8 }}>{s.k}</div>
+                    <div className="voces-dark-stat-value">{s.v}</div>
+                     <div className="voces-dark-stat-label">{s.k}</div>
                   </div>
                 ))}
               </div>
             </div>
             <div className="voces-db-footer">
-               <div style={{ fontFamily: 'var(--mono)', fontSize: 10.5, color: 'rgba(255,255,255,.50)', letterSpacing: '.14em', textTransform: 'uppercase', whiteSpace: 'normal' }}>
+               <div className="voces-dark-footer-label">
                 Contra el memoridicio
               </div>
-              <div style={{ borderLeft: '2px solid var(--terracotta)', paddingLeft: 20, fontStyle: 'italic', color: 'rgba(255,255,255,.72)', fontSize: 15, lineHeight: 1.68 }}>
+              <div className="voces-dark-footer-quote">
                 La historia oral —testimonios grabados, memorias transcritas, relatos
                 transmitidos de generación en generación— es el contra-archivo que el
                 poder no puede destruir porque vive en cuerpos, no en edificios.
@@ -678,6 +413,48 @@ function PeriodismoTab() {
 
       </div>
     </section>
+
+    <section className="section">
+      <div className="wrap">
+        <Reveal>
+          <div className="hr-rule mb-6">
+            <span>Proyectos estudiantiles · periodismo y narrativas</span>
+          </div>
+        </Reveal>
+        <div className="grid md:grid-cols-3 gap-6">
+          {[16].map((id, i) => {
+            const p = PROJECTS_2025_1.find(pr => pr.id === id);
+            if (!p) return null;
+            return (
+              <Reveal key={p.id} as="article" delay={i * 0.08}>
+                <div className="card">
+                  <div className="kicker">{p.group || p.author}</div>
+                  <h3 className="mt-2 text-[clamp(18px,1.8vw,22px)] font-serif leading-tight">
+                    {p.title}
+                  </h3>
+                  {p.description && (
+                    <p className="mt-2 text-fg-mute text-sm leading-relaxed line-clamp-3">
+                      {p.description}
+                    </p>
+                  )}
+                  <div className="mt-4">
+                    <a
+                      href={p.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn terra"
+                    >
+                      {({ ensayo: 'Leer ensayo', cartografia: 'Explorar mapa', video: 'Ver video', podcast: 'Escuchar', fanzine: 'Ver fanzine', mural: 'Ver mural', collage: 'Ver collage', grabado: 'Ver grabado' } as Record<string, string>)[p.kind] || 'Abrir'} <Icon.External />
+                    </a>
+                  </div>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+    </>
   );
 }
 
@@ -691,8 +468,8 @@ function SolidaridadTab() {
 
         <Reveal>
           <div className="voces-tutu">
-            <div className="eyebrow" style={{ color: 'rgba(241,237,224,.65)' }}>
-              <span className="dot" style={{ background: 'var(--gold-accent)' }} />
+            <div className="eyebrow text-[rgba(241,237,224,.65)]">
+              <span className="dot bg-[var(--gold-accent)]" />
               Apertura · Neutralidad imposible
             </div>
             <blockquote className="voces-tutu-verse">
@@ -710,24 +487,18 @@ function SolidaridadTab() {
           <Reveal>
             <div className="card">
               <div className="kicker">Sur Global · Genealogías compartidas</div>
-              <h3 style={{ marginTop: 10, fontSize: 'clamp(20px, 2.5vw, 28px)' }}>
+              <h3 className="voces-card-lg-h3">
                 Parentescos de lucha
               </h3>
-              <p style={{ marginTop: 14, color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.7 }}>
+              <p className="voces-card-lg-p">
                 La causa palestina es el nodo más visible de una red de resistencias
                 coloniales en el Sur Global. La solidaridad tercermundista, el movimiento
                 de no-alineados y las brigadas internacionales construyeron vínculos
                 orgánicos entre Palestina, Cuba, Vietnam y Colombia.
               </p>
-              <div style={{ marginTop: 20, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <div className="flex flex-wrap gap-2 mt-5">
                 {['Tercermundismo', 'No-Alineados', 'Brigadas', 'Diáspora'].map(tag => (
-                  <span key={tag} style={{
-                    padding: '6px 12px', borderRadius: 999,
-                    border: '1px solid var(--olive)',
-                    fontFamily: 'var(--mono)', fontSize: 10.5,
-                    letterSpacing: '.12em', textTransform: 'uppercase',
-                    color: 'var(--olive)',
-                  }}>{tag}</span>
+                  <span key={tag} className="px-3 py-[6px] rounded-full border border-primary font-mono text-[10.5px] tracking-[.12em] uppercase text-primary">{tag}</span>
                 ))}
               </div>
             </div>
@@ -736,21 +507,16 @@ function SolidaridadTab() {
           <Reveal delay={0.08}>
             <div className="card">
               <div className="kicker">Judaísmo Antisionista</div>
-              <h3 style={{ marginTop: 10, fontSize: 'clamp(20px, 2.5vw, 28px)' }}>
+              <h3 className="voces-card-lg-h3">
                 Jewish Voice for Peace
               </h3>
-              <p style={{ marginTop: 14, color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.7 }}>
+              <p className="voces-card-lg-p">
                 Sionismo y judaísmo no son sinónimos. Jewish Voice for Peace y otros
                 movimientos antisionistas recuerdan que la crítica al Estado de Israel
                 no es antisemitismo —es una posición ética enraizada en tradiciones
                 propias de justicia.
               </p>
-              <div style={{
-                marginTop: 18, padding: '14px 16px',
-                background: 'var(--olive-soft)', borderRadius: 10,
-                fontFamily: 'var(--mono)', fontSize: 11,
-                color: 'var(--olive)', letterSpacing: '.12em', textTransform: 'uppercase',
-              }}>
+              <div className="mt-[18px] p-[14px_16px] bg-[var(--olive-soft)] rounded-[10px] font-mono text-[11px] text-primary tracking-[.12em] uppercase">
                 "Not in our name" · Coalición antisionista judía
               </div>
             </div>
@@ -759,10 +525,10 @@ function SolidaridadTab() {
           <Reveal delay={0.08}>
             <div className="card">
               <div className="kicker">Universidad Nacional · Colombia</div>
-              <h3 style={{ marginTop: 10, fontSize: 'clamp(20px, 2.5vw, 28px)' }}>
+              <h3 className="voces-card-lg-h3">
                 La cátedra como acto político
               </h3>
-              <p style={{ marginTop: 14, color: 'var(--fg-mute)', fontSize: 15, lineHeight: 1.7 }}>
+              <p className="voces-card-lg-p">
                 La Universidad Nacional de Colombia abrió este espacio porque entiende
                 que la neutralidad académica frente al genocidio es complicidad
                 disfrazada de objetividad. Investigar es ya tomar posición.
@@ -773,16 +539,16 @@ function SolidaridadTab() {
           <Reveal delay={0.16}>
             <div className="card">
               <div className="kicker">Red de solidaridad · datos</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 16 }}>
+              <div className="grid grid-cols-2 gap-4 mt-4">
                 {[
-                  { v: '50+',  k: 'Universidades en red' },
-                  { v: 'VIII', k: 'Cohortes documentadas' },
-                  { v: '9',    k: 'Facultades convocantes' },
+                  { v: '+78',  k: 'Años de despojo' },
+                  { v: '26',   k: 'Proyectos estudiantiles' },
                   { v: '2024', k: 'Año del fallo CIJ' },
+                  { v: '19',   k: 'Años de bloqueo' },
                 ].map(s => (
-                  <div key={s.k} style={{ paddingTop: 12, borderTop: '1px solid var(--line-soft)' }}>
-                    <div style={{ fontFamily: 'var(--serif)', fontSize: 36, letterSpacing: '-.02em', color: 'var(--terracotta)', lineHeight: 1 }}>{s.v}</div>
-                    <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '.15em', textTransform: 'uppercase', color: 'var(--fg-mute)', marginTop: 6 }}>{s.k}</div>
+                  <div key={s.k} className="pt-3 border-t border-[var(--line-soft)]">
+                    <div className="voces-stat-value">{s.v}</div>
+                    <div className="voces-stat-label">{s.k}</div>
                   </div>
                 ))}
               </div>
@@ -831,7 +597,7 @@ function SolidaridadTab() {
             </div>
             <div className="voces-cij-footer">
               <span className="voces-cij-mono">19 · VII · 2024 · Opinión Consultiva</span>
-              <span className="voces-cij-mono" style={{ opacity: .55 }}>Res. A/ES-10/L.31/Rev.1</span>
+              <span className="voces-cij-mono opacity-55">Res. A/ES-10/L.31/Rev.1</span>
             </div>
           </div>
         </Reveal>
@@ -851,8 +617,8 @@ export function Voces() {
     { id: 'arte',        label: 'Arte y Cultura' },
     { id: 'periodismo',  label: 'Periodismo y Narrativas' },
     { id: 'solidaridad', label: 'Solidaridad y Sur Global' },
-    { id: 'podcast',     label: 'Podcast · Voces Palestina' },
-    { id: 'videos',      label: 'Video · Serie documental' },
+    { id: 'podcast',     label: 'Podcast · Producción estudiantil' },
+    { id: 'videos',      label: 'Video · Producción estudiantil' },
   ];
 
   return (
@@ -865,9 +631,9 @@ export function Voces() {
                 <div className="eyebrow"><span className="dot" />Página 05 · Voces</div>
               </Reveal>
               <Reveal delay={0.08}>
-                <h1 style={{ marginTop: 18 }}>
+                <h1 className="mt-[18px]">
                   Voces<br />
-                  <em style={{ fontStyle: 'italic', color: 'var(--terracotta)' }}>de la</em><br />
+                  <em className="italic text-accent">de la</em><br />
                   Resistencia
                 </h1>
               </Reveal>
@@ -906,27 +672,39 @@ export function Voces() {
   );
 }
 
+function getYouTubeEmbedId(url: string): string | null {
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+function getSpotifyEmbedUrl(url: string): string | null {
+  if (!url.includes('open.spotify.com/')) return null;
+  return url.replace('open.spotify.com/', 'open.spotify.com/embed/');
+}
+
 /* ============================================================
-   TAB 5 — Video · Serie documental
+   TAB 5 — Video · Producción estudiantil
    ============================================================ */
 function VideoTab() {
   const [active, setActive] = useState(0);
-  const videos = PROJECTS_2025_1.filter(p => p.kind === 'video' && p.id >= 24 && p.id <= 27).sort((a, b) => a.id - b.id);
+  const videos = PROJECTS_2025_1.filter(p => p.kind === 'video').sort((a, b) => a.id - b.id);
   const v = videos[active];
 
   if (!v) return null;
+
+  const embedId = v.url ? getYouTubeEmbedId(v.url) : null;
 
   return (
     <section className="section">
       <div className="wrap">
         <Reveal>
           <div className="voces-open-quote">
-            <div className="eyebrow"><span className="dot" />Video · Serie documental</div>
+            <div className="eyebrow"><span className="dot" />Video · Producción estudiantil</div>
             <blockquote className="voces-bq">
-              &ldquo;Voces de Palestina desde la Universidad&rdquo;
+              &ldquo;Proyectos de video · Grupos 2025-I&rdquo;
             </blockquote>
             <cite className="voces-bq-attr">
-              — Serie estudiantil · 2025-I
+              — Grupos 1, 2, 17, 21, 23
             </cite>
           </div>
         </Reveal>
@@ -965,16 +743,23 @@ function VideoTab() {
                   {v.description}
                 </p>
               )}
-              <div className="flex gap-3 mt-5 flex-wrap">
-                <a
-                  href={v.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn terra"
-                >
-                  Ver video <Icon.External />
-                </a>
-              </div>
+
+              {embedId && (
+                <div className="mt-5">
+                  <div className="aspect-video rounded-xl overflow-hidden bg-black">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${embedId}?autoplay=1`}
+                      width="100%"
+                      height="100%"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      className="border-0"
+                      title={v.title}
+                      allowFullScreen
+                    />
+                  </div>
+
+                </div>
+              )}
 
               {v.members && v.members.length > 0 && (
                 <details className="mt-6 pt-5 border-t border-[var(--line)]">
@@ -997,119 +782,104 @@ function VideoTab() {
 }
 
 /* ============================================================
-   TAB 4 — Podcast Voces Palestina desde la Universidad
+   TAB 4 — Podcast · Producción estudiantil
    ============================================================ */
 function PodcastTab() {
-  const [active, setActive] = useState(0);
-  const ep = PODCAST_SERIES.episodes[active];
+  const podcasts = PROJECTS_2025_1.filter(p => p.kind === 'podcast');
 
   return (
     <section className="section">
       <div className="wrap">
         <Reveal>
           <div className="voces-open-quote">
-            <div className="eyebrow"><span className="dot" />Podcast · Serie completa</div>
+            <div className="eyebrow"><span className="dot" />Podcast · Producción estudiantil</div>
             <blockquote className="voces-bq">
-              &ldquo;{PODCAST_SERIES.title}&rdquo;
+              &ldquo;Proyectos de podcast · Grupos 2025-I&rdquo;
             </blockquote>
             <cite className="voces-bq-attr">
-              — {PODCAST_SERIES.author} · 2025-I
+              — Grupos 7, 8, 13, 18, 25, 26
             </cite>
           </div>
         </Reveal>
 
         <Reveal delay={0.08}>
-          <div className="hr-rule mb-6">
-            <span>Episodios</span>
+          <div className="hr-rule mb-8">
+            <span>{podcasts.length} podcasts · Producción estudiantil</span>
           </div>
-          <div className="flex flex-wrap gap-2 mb-8">
-            {PODCAST_SERIES.episodes.map((e, i) => (
-              <button
-                key={i}
-                className={'chip ' + (active === i ? 'is-on' : '')}
-                onClick={() => setActive(i)}
-              >
-                Ep. {e.n} · {e.title}
-              </button>
-            ))}
-          </div>
-        </Reveal>
+          <div className="grid md:grid-cols-3 gap-6">
+            {podcasts.map((p, i) => (
+              <Reveal key={p.id} delay={i * 0.08} as="article">
+                <div className="card">
+                  <div className="kicker">{p.group || p.author}</div>
+                  <h3 className="mt-2 text-[clamp(18px,1.8vw,22px)] font-serif leading-tight">
+                    {p.title}
+                  </h3>
+                  {p.description && (
+                    <p className="mt-2 text-fg-mute text-sm leading-relaxed line-clamp-3">
+                      {p.description}
+                    </p>
+                  )}
 
-        <motion.div
-          key={active}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
-        >
-          <Reveal>
-            <div className="card">
-              <div className="kicker">Episodio {ep.n}</div>
-              <h3 className="mt-2 text-[clamp(22px,3vw,34px)] font-serif leading-tight">
-                {ep.title}
-              </h3>
-              {ep.description && (
-                <p className="mt-3 text-fg-mute text-base leading-relaxed">
-                  {ep.description}
-                </p>
-              )}
-              <div className="flex gap-3 mt-5 flex-wrap">
-                <a
-                  href={ep.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn terra"
-                >
-                  Escuchar en YouTube <Icon.External />
-                </a>
-              </div>
-
-              <div className="mt-6 pt-5 border-t border-[var(--line)]">
-                <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute mb-3">
-                  Fuentes del episodio
-                </div>
-                <div className="space-y-2">
-                  {ep.sources.map((s, i) => (
-                    <div key={i} className="flex items-start gap-2 text-sm">
-                      <span className="text-accent mt-1 shrink-0">&#x2022;</span>
-                      <div>
-                        <span className="font-medium">{s.author}</span>
-                        {s.url ? (
-                          <>
-                            , <a href={s.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 decoration-dotted decoration-[var(--fg-mute)] hover:text-accent transition-colors">
-                              <em>{s.work}</em>
-                            </a>
-                          </>
-                        ) : (
-                          <>, <em>{s.work}</em></>
-                        )}
-                      </div>
+                  {p.url && getSpotifyEmbedUrl(p.url) && (
+                    <div className="mt-4 h-[152px]">
+                      <iframe
+                        src={getSpotifyEmbedUrl(p.url)!}
+                        width="100%"
+                        height="100%"
+                        allow="encrypted-media; clipboard-write"
+                        className="border-0 rounded-xl"
+                        title={p.title}
+                      />
                     </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        </motion.div>
+                  )}
 
-        <Reveal delay={0.16}>
-          <div className="mt-12 pt-10 border-t border-[var(--line)]">
-            <div className="hr-rule mb-8">
-              <span>Otros podcasts del semestre</span>
-            </div>
-            <div className="grid md:grid-cols-3 gap-6">
-              {PROJECTS_2025_1.filter(p => p.kind === 'podcast' && p.id >= 33).map((p, i) => (
-                <Reveal key={p.id} delay={i * 0.08} as="article">
-                  <div className="card">
-                    <div className="kicker">{p.group || p.author}</div>
-                    <h3 className="mt-2 text-[clamp(18px,1.8vw,22px)] font-serif leading-tight">
-                      {p.title}
-                    </h3>
-                    {p.description && (
-                      <p className="mt-2 text-fg-mute text-sm leading-relaxed line-clamp-3">
-                        {p.description}
-                      </p>
-                    )}
-                    <div className="mt-4">
+                  {p.id === 13 && PODCAST_SERIES.episodes.length > 0 && (
+                    <details className="mt-4 pt-3 border-t border-[var(--line)]">
+                      <summary className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute cursor-pointer">
+                        {PODCAST_SERIES.episodes.length} episodios
+                      </summary>
+                      <div className="mt-3 space-y-2">
+                        {PODCAST_SERIES.episodes.map((e, j) => (
+                          <a
+                            key={j}
+                            href={e.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-sm text-fg-mute hover:text-fg transition-colors no-underline"
+                          >
+                            <span className="font-mono text-[10px] text-accent shrink-0">EP.{e.n}</span>
+                            <span className="flex-1">{e.title}</span>
+                            <span className="w-3.5 h-3.5 shrink-0 flex items-center"><Icon.External /></span>
+                          </a>
+                        ))}
+                      </div>
+                    </details>
+                  )}
+
+                  {p.id === 26 && p.links && p.links.length > 0 && (
+                    <details className="mt-4 pt-3 border-t border-[var(--line)]">
+                      <summary className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute cursor-pointer">
+                        {p.links.length} episodios
+                      </summary>
+                      <div className="mt-3 space-y-2">
+                        {p.links.map((l, j) => (
+                          <a
+                            key={j}
+                            href={l.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-sm text-fg-mute hover:text-fg transition-colors no-underline"
+                          >
+                            <span className="flex-1">{l.label}</span>
+                            <span className="w-3.5 h-3.5 shrink-0 flex items-center"><Icon.External /></span>
+                          </a>
+                        ))}
+                      </div>
+                    </details>
+                  )}
+
+                  <div className="mt-4">
+                    {p.url ? (
                       <a
                         href={p.url}
                         target="_blank"
@@ -1118,11 +888,13 @@ function PodcastTab() {
                       >
                         Escuchar <Icon.External />
                       </a>
-                    </div>
+                    ) : p.links && p.links.length > 0 ? null : (
+                      <button className="btn" disabled>Próximamente</button>
+                    )}
                   </div>
-                </Reveal>
-              ))}
-            </div>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </Reveal>
       </div>

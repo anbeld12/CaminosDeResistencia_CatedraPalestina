@@ -11,7 +11,7 @@ export const PROJECTS_2025_1: Project[] = [
     tags: ['video', 'stencil', 'memoria', 'arte urbano'],
     thumbnail: '/images/archive/2025-I/thumbs/01_Video_Grupo01_CementerioMemorias.webp',
     aiThumbnail: true,
-    url: 'https://drive.google.com/file/d/1i89rowRx3sorJGobSVsOsA6K03qQsc-J/view',
+    url: 'https://youtu.be/P784X8x5Hls',
     group: 'Grupo 1',
     members: [
       'Jesús David Fuentes Agudelo',

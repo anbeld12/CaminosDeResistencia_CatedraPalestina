@@ -85,12 +85,6 @@ export interface OngPartner {
   url?: string;
 }
 
-export interface FieldStep {
-  n: string;
-  t: string;
-  d: string;
-}
-
 export interface ExternalOrganization {
   id: string;
   name: string;

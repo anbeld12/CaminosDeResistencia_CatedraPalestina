@@ -11,9 +11,16 @@ export function History() {
   const railRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [open, setOpen] = useState(-1);
+  const [isWide, setIsWide] = useState(window.innerWidth >= 768);
 
   useEffect(() => {
-    if (window.innerWidth < 820) return;
+    const onResize = () => setIsWide(window.innerWidth >= 768);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  useEffect(() => {
+    if (!isWide) return;
     const el = railRef.current;
     if (!el) return;
     const onScroll = () => {
@@ -24,10 +31,10 @@ export function History() {
     el.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     return () => el.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [isWide]);
 
   const scroll = (dir: number) => {
-    if (window.innerWidth < 820) return;
+    if (!isWide) return;
     railRef.current?.scrollBy({ left: dir * 384, behavior: 'smooth' });
   };
 
@@ -197,19 +204,19 @@ export function History() {
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                id: 28,
+                id: 3,
                 title: 'Línea de Tiempo: Territorio Palestino',
                 body: 'Línea de tiempo física de 3 pliegos que recorre la historia del territorio palestino desde las civilizaciones cananeas (3500 a.C.) hasta la época contemporánea. Ahora disponible como visor interactivo en esta misma página.',
                 group: 'Grupo 3',
               },
               {
-                id: 38,
+                id: 14,
                 title: 'Galería multimedia en tres formatos',
                 body: 'Tres estaciones —Gaza, Jerusalén Este y Cisjordania— con fotografías, narrativas de vida y poemas de autoría palestina que documentan el genocidio en tiempo y espacio.',
                 group: 'Grupo 14',
               },
               {
-                id: 29,
+                id: 13,
                 title: 'Podcast Voces Palestina',
                 body: 'Ep. 1: Introducción histórica y Ep. 2: Vida cotidiana bajo ocupación. Serie completa de 4 episodios del Grupo 13.',
                 group: 'Grupo 13',
@@ -225,7 +232,7 @@ export function History() {
                     </h3>
                     <p className="mt-2 text-fg-mute text-sm leading-relaxed">{body}</p>
                     <div className="mt-4">
-                      {id === 28 ? (
+                      {id === 3 ? (
                         <a href="#timeline-g3" className="btn terra">
                           Ver recurso <Icon.Arrow />
                         </a>
@@ -261,7 +268,7 @@ export function History() {
                 una continuidad de una novedad — y abre la pregunta verdadera: <em>¿quién?</em>
               </p>
             </div>
-            <button className="btn terra whitespace-nowrap">
+            <button className="btn terra whitespace-nowrap" disabled>
               Descargar PDF · 24 pp
             </button>
           </Reveal>

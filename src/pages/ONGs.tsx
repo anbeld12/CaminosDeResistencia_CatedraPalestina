@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
+import { ImageGallery } from '../components/ImageGallery';
 import { ExternalOrgs } from '../components/ExternalOrgs';
+import { Icon } from '../lib/icons';
 import type { ImageVariant } from '../lib/types';
-import { ONG_CARDS, ONG_PARTNERS, FIELD_STEPS } from '../data/ongs';
+import { ONG_CARDS, ONG_PARTNERS } from '../data/ongs';
+import { PROJECTS_2025_1 } from '../data/projects-2025-1';
 
 type Tab = 'vida' | 'partners' | 'field';
 
@@ -143,6 +146,43 @@ export function ONGs() {
                 </Reveal>
               ))}
             </div>
+
+            <Reveal>
+              <div className="hr-rule mb-6 mt-12">
+                <span>Proyectos estudiantiles · salud y derechos humanos</span>
+              </div>
+            </Reveal>
+            <div className="grid md:grid-cols-3 gap-6">
+              {[4, 8, 20, 25].map((id, i) => {
+                const p = PROJECTS_2025_1.find(pr => pr.id === id);
+                if (!p) return null;
+                return (
+                  <Reveal key={p.id} as="article" delay={i * 0.08}>
+                    <div className="card">
+                      <div className="kicker">{p.group || p.author}</div>
+                      <h3 className="mt-2 text-[clamp(18px,1.8vw,22px)] font-serif leading-tight">
+                        {p.title}
+                      </h3>
+                      {p.description && (
+                        <p className="mt-2 text-fg-mute text-sm leading-relaxed line-clamp-3">
+                          {p.description}
+                        </p>
+                      )}
+                      <div className="mt-4">
+                        <a
+                          href={p.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn terra"
+                        >
+                          {({ ensayo: 'Leer ensayo', cartografia: 'Explorar mapa', video: 'Ver video', podcast: 'Escuchar podcast', fanzine: 'Ver fanzine', mural: 'Ver mural', collage: 'Ver collage', grabado: 'Ver grabado' } as Record<string, string>)[p.kind] || 'Abrir'} <Icon.External />
+                        </a>
+                      </div>
+                    </div>
+                  </Reveal>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}
@@ -206,16 +246,15 @@ export function ONGs() {
                 </div>
               </div>
               <div className="w-full overflow-hidden">
-                <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 pb-4 -mb-4">
-                  {brigadaImages.map((img, i) => (
-                    <div key={i} className="min-w-[85%] md:min-w-[70%] snap-center shrink-0">
-                      <ImageSlot height={360} src={img.src} alt={img.alt} credit={img.credit} label={`Brigada ${i + 1} · oct. 2025`} variant="olive" className="group" />
-                    </div>
-                  ))}
-                </div>
-                <div className="text-center font-mono text-[11px] md:text-[10px] text-fg-mute pointer-events-none select-none mt-3 tracking-wider">
-                  ← Deslizar para ver galería →
-                </div>
+                <ImageGallery hint="← Deslizar para ver galería →">
+                  <div className="flex gap-4">
+                    {brigadaImages.map((img, i) => (
+                      <div key={i} className="min-w-[85%] md:min-w-[70%] snap-center shrink-0">
+                        <ImageSlot height={360} src={img.src} alt={img.alt} credit={img.credit} label={`Brigada ${i + 1} · oct. 2025`} variant="olive" className="group" />
+                      </div>
+                    ))}
+                  </div>
+                </ImageGallery>
               </div>
             </Reveal>
 
@@ -227,14 +266,14 @@ export function ONGs() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                 {joinOrganizations.map((org, idx) => (
-                  <Reveal as="article" key={idx} delay={idx * 0.08} className="p-6 bg-stone-50 border border-stone-200 rounded-xl hover:shadow-md transition-shadow">
-                    <h4 className="text-lg font-bold text-emerald-900 mb-2">{org.name}</h4>
-                    <p className="text-sm text-stone-700 mb-4 leading-relaxed">{org.description}</p>
+                  <Reveal as="article" key={idx} delay={idx * 0.08} className="p-6 bg-[var(--bg-warm)] border border-[var(--line)] rounded-[18px] hover:shadow-md transition-shadow">
+                    <h4 className="text-lg font-bold text-fg mb-2">{org.name}</h4>
+                    <p className="text-sm text-fg-mute mb-4 leading-relaxed">{org.description}</p>
                     <a
                       href={org.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center text-xs font-semibold text-emerald-700 hover:text-emerald-950 uppercase tracking-wider"
+                      className="inline-flex items-center text-xs font-semibold text-accent hover:text-fg uppercase tracking-wider"
                     >
                       Sitio Oficial ↗
                     </a>
@@ -243,15 +282,7 @@ export function ONGs() {
               </div>
             </Reveal>
 
-            <div className="grid-3">
-              {FIELD_STEPS.map((s, i) => (
-                <Reveal key={s.n} delay={i * 0.08} className="px-4 md:px-6 py-6 md:py-7 border-t border-[var(--line)] relative">
-                  <div className="font-mono text-accent text-xs md:text-[11px] tracking-[0.15em]">/ {s.n}</div>
-                  <h3 className="mt-3">{s.t}</h3>
-                  <p className="mt-2.5 text-fg-mute text-base md:text-[14.5px] leading-relaxed">{s.d}</p>
-                </Reveal>
-              ))}
-            </div>
+
           </div>
         </section>
       )}

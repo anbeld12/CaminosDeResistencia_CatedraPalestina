@@ -78,7 +78,7 @@ function EstudianteCard({ p, delay }: { p: Project; delay: number }) {
    ============================================================ */
 const GENDER_DATA = {
   mentalHealth: [
-    'El 97 % de los niños de Gaza ha experimentado síntomas de estrés agudo (UNICEF, 2024).',
+    'Aproximadamente el 96 % de la niñez en Gaza presenta síntomas severos de crisis psicosocial (Alliance CPHA, 2026), y UNICEF estima que casi la totalidad de los 1,2 millones de niños del territorio requiere intervención urgente en salud mental (UNICEF, 2024).',
     'La fragmentación familiar —causada por desplazamiento y checkpoints— recae principalmente sobre las mujeres como cuidadoras primarias.',
     'La demolición de hogares destruye simultáneamente los centros emocionales del tejido familiar: la cocina, el jardín, el cuarto de los hijos.',
     'El duelo sin cuerpo —la imposibilidad de enterrar y llorar a los muertos— genera traumas de duelo complejo documentados por Médicos Sin Fronteras.',
@@ -291,7 +291,7 @@ export function Genero() {
             </div>
           </Reveal>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {PROJECTS_2025_1.filter(p => [10, 11, 12].includes(p.id)).map((p, i) => (
+            {PROJECTS_2025_1.filter(p => [10, 5, 12].includes(p.id)).map((p, i) => (
               <EstudianteCard key={p.id} p={p} delay={i * 0.08} />
             ))}
           </div>
@@ -320,7 +320,7 @@ export function Genero() {
                   El análisis de género no es auxiliar al conflicto —<em>es constitutivo de él.</em>
                 </p>
               </div>
-              <button className="btn terra whitespace-nowrap">
+              <button className="btn terra whitespace-nowrap" disabled>
                 Descargar ficha · PDF
               </button>
             </div>

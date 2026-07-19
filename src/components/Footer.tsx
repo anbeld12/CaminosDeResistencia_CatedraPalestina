@@ -39,7 +39,7 @@ export function Footer({ setPage }: FooterProps) {
         </div>
 
         <div className="bot">
-          <div>© 2026 Cátedra Caminos de Resistencia · Colectividad Estudiantil Autónoma</div>
+          <div>© {new Date().getFullYear()} Cátedra Caminos de Resistencia · Colectividad Estudiantil Autónoma</div>
           <div>Desarrollado por Ángel David Beltrán García — Ingeniería de Sistemas</div>
         </div>
 

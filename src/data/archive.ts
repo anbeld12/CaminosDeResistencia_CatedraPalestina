@@ -1,6 +1,8 @@
 import type { Book, KindFilter, Project } from '../lib/types';
 import { PROJECTS_2025_1, KIND_GLYPH_2025_1 } from './projects-2025-1';
 
+/* Aggregation point: import PROJECTS from future semesters here */
+/* e.g. import { PROJECTS_2025_2 } from './projects-2025-2' */
 export const PROJECTS = PROJECTS_2025_1;
 
 const ALL_KINDS: Project['kind'][] = ['ensayo', 'cartografia', 'video', 'podcast', 'fanzine', 'mural', 'collage', 'grabado'];

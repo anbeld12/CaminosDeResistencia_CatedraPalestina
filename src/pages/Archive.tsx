@@ -25,6 +25,7 @@ const KIND_CHIP_CLASS: Record<string, string> = {
 function formatAuthorName(fullName: string): string {
   const parts = fullName.trim().split(/\s+/);
   if (parts.length <= 1) return fullName;
+  /* TODO: handle compound surnames (e.g. "García Márquez") */
   const surname = parts[parts.length - 1];
   const initials = parts.slice(0, -1).map(p => p.charAt(0).toUpperCase() + '.').join(' ');
   return `${surname}, ${initials}`;

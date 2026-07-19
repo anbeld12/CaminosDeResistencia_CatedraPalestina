@@ -6,6 +6,7 @@ import { ImageSlot } from '../components/ImageSlot';
 import { Icon } from '../lib/icons';
 import type { PageId, Project } from '../lib/types';
 import { PROJECTS_2025_1 } from '../data/projects-2025-1';
+import { POETRY_PLAYLIST } from '../data/playlist';
 
 /* ============ YOUTUBE IFrame API TYPES ============ */
 declare global {
@@ -81,6 +82,7 @@ export function Home({ setPage }: HomeProps) {
           </Reveal>
 
           <Reveal className="text-left md:text-right order-2 md:col-start-2 md:row-start-1 md:max-w-[320px]">
+            {/* Editorial page numbering — magazine-style; other pages follow same convention */}
             <div className="font-mono text-xs md:text-[11px] text-fg-mute tracking-[0.18em] uppercase mb-2.5">
               001 / Inicio
             </div>
@@ -113,16 +115,17 @@ export function Home({ setPage }: HomeProps) {
           {/* ── Stats ── */}
           <Reveal className="hero-foot order-6 md:col-span-2" delay={0.3}>
             <div className="stat">
-              <span className="num">VIII</span>
-              <span className="lbl">Cohortes · documentadas</span>
+              <span className="num">26</span>
+              <span className="lbl">Proyectos · realizados</span>
             </div>
             <div className="stat">
-              <span className="num">9</span>
-              <span className="lbl">Facultades · convocantes</span>
-            </div>
-            <div className="stat">
-              <span className="num text-accent">+76</span>
+              {/* HARDCODE 2026 — actualizar anualmente */}
+              <span className="num text-accent">+78</span>
               <span className="lbl">Años · de despojo</span>
+            </div>
+            <div className="stat">
+              <span className="num">IV</span>
+              <span className="lbl">Ediciones · de la cátedra</span>
             </div>
             <div className="stat">
               <span className="num">∞</span>
@@ -156,6 +159,7 @@ export function Home({ setPage }: HomeProps) {
 
             <Reveal delay={0.2}>
               <div className="quote-aside">
+{/* HARDCODE 2026 — actualizar anualmente (1974 + 52 = 2026) */}
                 Cincuenta y dos años después, la rama de olivo sigue pendiente del aire. Esta cátedra
                 recoge el gesto: <strong>nombrar lo que ocurre, sostener la memoria, sembrar futuro.</strong>
                 <br /><br />
@@ -346,7 +350,7 @@ export function Home({ setPage }: HomeProps) {
             </div>
           </Reveal>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[28, 14, 25, 27, 39, 12].map((id, i) => {
+            {[3, 14, 25, 17, 23, 12].map((id, i) => {
               const p = PROJECTS_2025_1.find(pr => pr.id === id);
               if (!p) return null;
               return (
@@ -553,79 +557,6 @@ function SimboCard({ n, term, meaning, body, glyph, accent }: SimboCardProps) {
   );
 }
 
-type TrackSource = 'youtube' | 'spotify' | 'drive';
-
-interface PlaylistTrack {
-  id: number;
-  title: string;
-  author: string;
-  source: TrackSource;
-  embedUrl: string;
-  externalUrl?: string;
-}
-
-const POETRY_PLAYLIST: PlaylistTrack[] = [
-  {
-    id: 1,
-    title: 'Rita (Rita y el fusil)',
-    author: 'Mahmoud Darwish / Marcel Khalifé / Canción',
-    source: 'youtube',
-    embedUrl: 'https://www.youtube.com/embed/UEeU-tx0SBU',
-  },
-  {
-    id: 2,
-    title: 'Ep. 1: Introducción histórica',
-    author: 'Grupo 13 — Palestina: Voces desde la Universidad',
-    source: 'youtube',
-    embedUrl: 'https://www.youtube.com/embed/Rl18T5aIyLE',
-  },
-  {
-    id: 3,
-    title: 'Ep. 2: Vida cotidiana bajo ocupación',
-    author: 'Grupo 13 — Palestina: Voces desde la Universidad',
-    source: 'youtube',
-    embedUrl: 'https://www.youtube.com/embed/IB5vIW02ekQ',
-  },
-  {
-    id: 4,
-    title: 'Ep. 3: Resistencias culturales',
-    author: 'Grupo 13 — Palestina: Voces desde la Universidad',
-    source: 'youtube',
-    embedUrl: 'https://www.youtube.com/embed/a-hMD48e4v0',
-  },
-  {
-    id: 5,
-    title: 'Ep. 4: Voces desde América Latina',
-    author: 'Grupo 13 — Palestina: Voces desde la Universidad',
-    source: 'youtube',
-    embedUrl: 'https://www.youtube.com/embed/pdMtQT9jor0',
-  },
-  {
-    id: 6,
-    title: 'Voces de Palestina: La historia que Resiste',
-    author: 'Grupo 18 — Serie Spotify',
-    source: 'spotify',
-    embedUrl: 'https://open.spotify.com/embed/show/0EQh2wLAmHgrDAkIJ6eh04',
-    externalUrl: 'https://open.spotify.com/show/0EQh2wLAmHgrDAkIJ6eh04',
-  },
-  {
-    id: 7,
-    title: 'Palestina: La belleza entre el horror, la muerte y el genocidio',
-    author: 'Grupo 7 — Spotify',
-    source: 'spotify',
-    embedUrl: 'https://open.spotify.com/embed/episode/4Eac0NXU35xFdWetO2Ujkc',
-    externalUrl: 'https://open.spotify.com/episode/4Eac0NXU35xFdWetO2Ujkc',
-  },
-  {
-    id: 8,
-    title: 'Voces que resisten: entrevista sobre DDHH en Palestina',
-    author: 'Grupo 25 — Google Drive',
-    source: 'drive',
-    embedUrl: 'https://drive.google.com/file/d/11Wf6BMyZcz6syffsQrfeILMSCpJWaHN5/preview',
-    externalUrl: 'https://drive.google.com/file/d/11Wf6BMyZcz6syffsQrfeILMSCpJWaHN5/view',
-  },
-];
-
 const BAR_COUNT = 24;
 const WIGGLE_PATTERNS = ['w1', 'w2', 'w3', 'w4'];
 
@@ -646,6 +577,7 @@ function AudioPlayer() {
   const isYouTube = activeTrack.source === 'youtube';
 
   useEffect(() => {
+    /* Auto-play starts muted — intentional pattern (like social media feeds) */
     if (isInView && isYouTube) setIsPlaying(true);
   }, [isInView, isYouTube]);
 
@@ -694,27 +626,24 @@ function AudioPlayer() {
 
   useEffect(() => {
     if (!playerRef.current || !playerReady || !isYouTube) return;
-    if (isPlaying) playerRef.current.playVideo();
-    else playerRef.current.pauseVideo();
+    try { (isPlaying ? playerRef.current.playVideo : playerRef.current.pauseVideo)(); } catch {}
   }, [isPlaying, playerReady, isYouTube]);
 
   useEffect(() => {
     if (!playerRef.current || !playerReady || !isYouTube) return;
-    if (isMuted) playerRef.current.mute();
-    else playerRef.current.unMute();
+    try { (isMuted ? playerRef.current.mute : playerRef.current.unMute)(); } catch {}
   }, [isMuted, playerReady, isYouTube]);
 
   useEffect(() => {
     if (!playerRef.current || !playerReady || !isYouTube) return;
     const id = activeTrack.embedUrl.split('/').pop()!;
-    if (isPlaying) playerRef.current.loadVideoById(id);
-    else playerRef.current.cueVideoById(id);
-  }, [activeTrackId, playerReady, isPlaying, isYouTube]);
+    (isPlaying ? playerRef.current.loadVideoById(id) : playerRef.current.cueVideoById(id));
+  }, [activeTrackId, playerReady, isYouTube]);
 
   useEffect(() => {
     if (!playerRef.current || !playerReady) return;
     if (!isYouTube) {
-      playerRef.current.pauseVideo();
+      try { playerRef.current.pauseVideo(); } catch {}
       setIsPlaying(false);
     }
   }, [activeTrackId, playerReady, isYouTube]);
