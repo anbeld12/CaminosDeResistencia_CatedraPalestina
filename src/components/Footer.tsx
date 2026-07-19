@@ -1,10 +1,7 @@
-import { PAGES, type PageId } from '../lib/types';
+import { Link } from 'react-router-dom';
+import { PAGES } from '../lib/types';
 
-interface FooterProps {
-  setPage: (p: PageId) => void;
-}
-
-export function Footer({ setPage }: FooterProps) {
+export function Footer() {
   return (
     <footer className="footer">
       <div className="wrap">
@@ -17,13 +14,9 @@ export function Footer({ setPage }: FooterProps) {
           <div>
             <h4>Navegación Rápida</h4>
             {PAGES.map(p => (
-              <a
-                key={p.id}
-                href="#"
-                onClick={(e) => { e.preventDefault(); setPage(p.id); window.scrollTo(0, 0); }}
-              >
+              <Link key={p.id} to={p.path}>
                 {p.label}
-              </a>
+              </Link>
             ))}
           </div>
 

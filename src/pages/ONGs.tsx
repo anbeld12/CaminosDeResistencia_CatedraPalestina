@@ -1,12 +1,16 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import { Reveal } from '../components/Reveal';
+import { Icon } from '../lib/icons';
 import { ImageSlot } from '../components/ImageSlot';
 import { ImageGallery } from '../components/ImageGallery';
-import { ExternalOrgs } from '../components/ExternalOrgs';
-import { Icon } from '../lib/icons';
-import type { ImageVariant } from '../lib/types';
-import { ONG_CARDS, ONG_PARTNERS } from '../data/ongs';
 import { PROJECTS_2025_1 } from '../data/projects-2025-1';
+import { ONG_CARDS, ONG_PARTNERS } from '../data/ongs';
+import { ExternalOrgs } from '../components/ExternalOrgs';
+import type { ImageVariant } from '../lib/types';
+import { OG_IMAGE } from '../lib/seo';
+import { websiteSchema } from '../lib/seo-schema';
 
 type Tab = 'vida' | 'partners' | 'field';
 
@@ -72,6 +76,22 @@ export function ONGs() {
 
   return (
     <>
+      <Helmet>
+        <title>ONGs · Cátedra Caminos de Resistencia</title>
+        <meta name="description" content="Savia y Sumud: ONG Palestina, ayuda humanitaria Gaza y organizaciones de derechos humanos. Logística de la vida, aliadas y trabajo de campo desde la Cátedra Caminos de Resistencia." />
+        <meta property="og:title" content="ONGs · Cátedra Caminos de Resistencia" />
+        <meta property="og:description" content="Savia y Sumud: ONG Palestina, ayuda humanitaria Gaza y organizaciones de derechos humanos. Logística humanitaria, aliadas y brigadas de trabajo en Palestina." />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="es_CO" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="ONGs · Cátedra Caminos de Resistencia" />
+        <meta name="twitter:description" content="Savia y Sumud: ONG Palestina, ayuda humanitaria Gaza y organizaciones de derechos humanos. MAP, Al-Haq, PCRF, MSF." />
+        <link rel="canonical" href="https://caminosderesistencia.co/ongs" />
+        <script type="application/ld+json">
+          {JSON.stringify(websiteSchema())}
+        </script>
+      </Helmet>
       <header className="page-head">
         <div className="wrap">
           <div className="row">
@@ -114,6 +134,7 @@ export function ONGs() {
       {tab === 'vida' && (
         <section className="section pt-6">
           <div className="wrap">
+            <Reveal><h2 className="sr-only">Logística de la vida · organizaciones activas</h2></Reveal>
             <div className="cards">
               {ONG_CARDS.map((c, i) => (
                 <Reveal as="article" key={i} delay={Math.min(i + 1, 3) * 0.08} className={'card group ' + c.size}>
@@ -183,6 +204,14 @@ export function ONGs() {
                 );
               })}
             </div>
+
+            <Reveal>
+              <div className="mt-10 text-center">
+                <Link to="/archivo" className="btn terra">
+                  Proyectos estudiantiles sobre el terreno <Icon.Arrow />
+                </Link>
+              </div>
+            </Reveal>
           </div>
         </section>
       )}
@@ -217,6 +246,14 @@ export function ONGs() {
             </div>
 
             <ExternalOrgs />
+
+            <Reveal>
+              <div className="mt-12 text-center">
+                <Link to="/genero" className="btn">
+                  Género y derechos humanos <Icon.Arrow />
+                </Link>
+              </div>
+            </Reveal>
           </div>
         </section>
       )}
@@ -267,7 +304,7 @@ export function ONGs() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                 {joinOrganizations.map((org, idx) => (
                   <Reveal as="article" key={idx} delay={idx * 0.08} className="p-6 bg-[var(--bg-warm)] border border-[var(--line)] rounded-[18px] hover:shadow-md transition-shadow">
-                    <h4 className="text-lg font-bold text-fg mb-2">{org.name}</h4>
+                    <h3 className="text-lg font-bold text-fg mb-2">{org.name}</h3>
                     <p className="text-sm text-fg-mute mb-4 leading-relaxed">{org.description}</p>
                     <a
                       href={org.link}

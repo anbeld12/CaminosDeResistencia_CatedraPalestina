@@ -1,3 +1,5 @@
+import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
 import { ImageBook } from '../components/ImageBook';
@@ -5,6 +7,8 @@ import { PROJECTS_2025_1 } from '../data/projects-2025-1';
 import { FANZINE_G12 } from '../data/fanzine-g12';
 import { Icon } from '../lib/icons';
 import type { Project } from '../lib/types';
+import { OG_IMAGE } from '../lib/seo';
+import { articleSchema } from '../lib/seo-schema';
 
 /* ============================================================
    QuotesMarquee — impactful quote block
@@ -138,9 +142,9 @@ function PalestinaDeTodas() {
           {/* Salud Mental y Cuidado */}
           <Reveal>
             <div className="pdt-card-modern">
-              <div className="kicker mb-4">
+              <h3 className="kicker mb-4">
                 / Salud mental y cuidado
-              </div>
+              </h3>
               <ImageSlot
                 height={180}
                 src="/images/archive/2025-I/thumbs/10_Collage_Grupo10_MujerPalestina.webp"
@@ -164,9 +168,9 @@ function PalestinaDeTodas() {
           {/* Violencia Sistémica */}
           <Reveal delay={0.08}>
             <div className="pdt-card-modern pdt-warning-card">
-              <div className="kicker text-accent mb-1">
+              <h3 className="kicker text-accent mb-1">
                 / Violencia sistémica
-              </div>
+              </h3>
               <div className="pdt-alert-bar">
                 <span className="pdt-alert-dot" aria-hidden="true" />
                 Contenido documentado · tratado con la solemnidad que merece
@@ -208,6 +212,12 @@ function PalestinaDeTodas() {
             </div>
           </Reveal>
 
+          <Reveal delay={0.2}>
+            <Link to="/voces" className="btn mt-2">
+              Periodismo y voces desde Gaza <Icon.Arrow />
+            </Link>
+          </Reveal>
+
           <Reveal delay={0.24}>
             <div className="flex flex-col gap-4">
               <ImageBook
@@ -223,6 +233,9 @@ function PalestinaDeTodas() {
               >
                 Abrir fanzine <Icon.External />
               </a>
+              <Link to="/archivo" className="btn self-start">
+                Fanzine G12 completo <Icon.Arrow />
+              </Link>
             </div>
           </Reveal>
 
@@ -252,6 +265,25 @@ function PalestinaDeTodas() {
 export function Genero() {
   return (
     <>
+      <Helmet>
+        <title>Género · Cátedra Caminos de Resistencia</title>
+        <meta name="description" content="Palestina de Todas: feminismo palestino, salud mental infantil en Gaza, violencia sistémica y resistencia de las mujeres palestinas bajo ocupación israelí. 96% de la niñez en Gaza en crisis psicosocial." />
+        <meta property="og:title" content="Género · Cátedra Caminos de Resistencia" />
+        <meta property="og:description" content="Palestina de Todas: feminismo palestino, salud mental infantil Gaza, violencia sistémica y liderazgo de las mujeres palestinas bajo ocupación." />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="es_CO" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Género · Cátedra Caminos de Resistencia" />
+        <meta name="twitter:description" content="Palestina de Todas: feminismo palestino, salud mental infantil Gaza y liderazgo de las mujeres palestinas." />
+        <link rel="canonical" href="https://caminosderesistencia.co/genero" />
+        <script type="application/ld+json">
+          {JSON.stringify(articleSchema(
+            'Palestina de todas · Género y resistencia',
+            'Feminismo palestino, salud mental infantil en Gaza, violencia sistémica y liderazgo de las mujeres palestinas bajo ocupación israelí.'
+          ))}
+        </script>
+      </Helmet>
       {/* ── CABECERA ───────────────────────────────────────────── */}
       <header className="page-head">
         <div className="wrap">
@@ -299,9 +331,9 @@ export function Genero() {
       <section className="section !pt-0">
         <div className="wrap">
           <Reveal>
-            <div className="hr-rule mb-10">
+            <h2 className="hr-rule mb-10">
               <span>Voces desde el aula · proyectos 2025-I</span>
-            </div>
+            </h2>
           </Reveal>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {PROJECTS_2025_1.filter(p => [10, 5, 12].includes(p.id)).map((p, i) => (

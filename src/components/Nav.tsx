@@ -1,50 +1,48 @@
 import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useScrollY } from '../lib/hooks';
 import { Icon } from '../lib/icons';
-import { PAGES, type PageId, type Theme } from '../lib/types';
+import { PAGES, PATH_TO_PAGE, type Theme } from '../lib/types';
 
 interface NavProps {
-  page: PageId;
-  setPage: (p: PageId) => void;
   theme: Theme;
   toggleTheme: () => void;
 }
 
-export function Nav({ page, setPage, theme, toggleTheme }: NavProps) {
+export function Nav({ theme, toggleTheme }: NavProps) {
   const y = useScrollY();
   const scrolled = y > 24;
   const [menuOpen, setMenuOpen] = useState(false);
+  const { pathname } = useLocation();
+  const activePage = PATH_TO_PAGE[pathname] ?? 'home';
 
-  useEffect(() => { setMenuOpen(false); }, [page]);
+  useEffect(() => { setMenuOpen(false); }, [pathname]);
 
   return (
     <>
       <div className={'nav-shell ' + (scrolled ? 'is-scrolled' : '')}>
         <nav className="nav" aria-label="Principal">
-          <a
-            className="brand"
-            href="#"
-            onClick={(e) => { e.preventDefault(); setPage('home'); }}
-          >
+          <Link className="brand" to="/">
             <span className="brand-mark">
-              <img src="/navbar-icon.png" alt="" width={28} height={28} />
+              <img src="/navbar-icon.png" alt="Caminos de Resistencia" width={28} height={28} />
             </span>
             <span>
               Caminos de Resistencia
               <small>Plataforma de Memoria · UNAL</small>
             </span>
-          </a>
+          </Link>
 
           <div className="nav-links" role="tablist">
             {PAGES.map(p => (
-              <button
+              <Link
                 key={p.id}
-                className={'nav-link ' + (page === p.id ? 'is-active' : '')}
-                onClick={() => setPage(p.id)}
-                aria-selected={page === p.id}
+                role="tab"
+                to={p.path}
+                className={'nav-link ' + (activePage === p.id ? 'is-active' : '')}
+                aria-selected={activePage === p.id}
               >
                 {p.label}
-              </button>
+              </Link>
             ))}
           </div>
 
@@ -52,10 +50,10 @@ export function Nav({ page, setPage, theme, toggleTheme }: NavProps) {
             <button className="icon-btn" onClick={toggleTheme} title="Alternar tema">
               {theme === 'dark' ? <Icon.Sun /> : <Icon.Moon />}
             </button>
-            <button className="nav-cta" onClick={() => setPage('archive')}>
+            <Link to="/archivo" className="nav-cta">
               <span className="cta-text">Explorar el Archivo</span>
               <Icon.Arrow />
-            </button>
+            </Link>
             <button
               className="icon-btn nav-burger"
               onClick={() => setMenuOpen(m => !m)}
@@ -69,19 +67,15 @@ export function Nav({ page, setPage, theme, toggleTheme }: NavProps) {
 
       <div className={'mobile-sheet ' + (menuOpen ? 'is-open' : '')}>
         {PAGES.map((p, i) => (
-          <a
-            key={p.id}
-            href="#"
-            onClick={(e) => { e.preventDefault(); setPage(p.id); }}
-          >
+          <Link key={p.id} to={p.path}>
             <span>{p.label}</span>
             <small>0{i + 1}</small>
-          </a>
+          </Link>
         ))}
         <div className="mt-6 flex gap-3">
-          <button className="btn terra" onClick={() => setPage('archive')}>
-            Explorar el Archivo
-          </button>
+          <Link to="/archivo" className="btn terra">
+            Explorar el Archivo <Icon.Arrow />
+          </Link>
           <button className="icon-btn" onClick={toggleTheme}>
             {theme === 'dark' ? <Icon.Sun /> : <Icon.Moon />}
           </button>

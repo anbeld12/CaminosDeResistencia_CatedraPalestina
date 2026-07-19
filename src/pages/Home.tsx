@@ -1,12 +1,16 @@
 import type { ReactNode } from 'react';
 import { useState, useRef, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
 import { Icon } from '../lib/icons';
-import type { PageId, Project } from '../lib/types';
+import type { Project } from '../lib/types';
 import { PROJECTS_2025_1 } from '../data/projects-2025-1';
 import { POETRY_PLAYLIST } from '../data/playlist';
+import { OG_IMAGE } from '../lib/seo';
+import { orgSchema, websiteSchema } from '../lib/seo-schema';
 
 /* ============ YOUTUBE IFrame API TYPES ============ */
 declare global {
@@ -51,15 +55,27 @@ interface YTPlayer {
   destroy(): void;
 }
 
-interface HomeProps {
-  setPage: (p: PageId) => void;
-}
-
-export function Home({ setPage }: HomeProps) {
+export function Home() {
   const [openProj, setOpenProj] = useState<Project | null>(null);
 
   return (
     <>
+      <Helmet>
+        <title>Cátedra Caminos de Resistencia · UNAL</title>
+        <meta name="description" content="Cátedra Caminos de Resistencia · UNAL: plataforma de memoria y solidaridad académica Palestina Colombia. Espacio sentipensante de educación pública sobre Palestina desde Colombia. Repositorio de la Facultad de Derecho y Ciencias Políticas." />
+        <meta property="og:title" content="Cátedra Caminos de Resistencia · UNAL" />
+        <meta property="og:description" content="Cátedra Caminos de Resistencia · UNAL: plataforma de memoria y solidaridad académica Palestina Colombia. Espacio sentipensante de educación pública sobre Palestina." />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="es_CO" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Cátedra Caminos de Resistencia · UNAL" />
+        <meta name="twitter:description" content="Cátedra Caminos de Resistencia · UNAL: plataforma de memoria y solidaridad académica Palestina Colombia." />
+        <link rel="canonical" href="https://caminosderesistencia.co" />
+        <script type="application/ld+json">
+          {JSON.stringify([orgSchema(), websiteSchema()])}
+        </script>
+      </Helmet>
       {/* ============ HERO ============ */}
       <section className="hero">
         <div className="hero-bg" aria-hidden="true" />
@@ -178,7 +194,7 @@ export function Home({ setPage }: HomeProps) {
           <div className="mission">
             <div>
               <Reveal>
-                <div className="eyebrow"><span className="dot" /><span>Misión</span></div>
+                <h2 className="eyebrow"><span className="dot" /><span>Misión</span></h2>
               </Reveal>
               <Reveal delay={0.1}>
                 <div className="mt-7 font-mono text-[13px] md:text-xs text-fg-mute">/ 02 — qué hacemos</div>
@@ -212,9 +228,9 @@ export function Home({ setPage }: HomeProps) {
       <section className="section bg-[var(--bg-warm)]">
         <div className="wrap">
           <Reveal>
-            <div className="eyebrow mb-10">
+            <h2 className="eyebrow mb-10">
               <span className="dot" /><span>Programa · cuatro estaciones</span>
-            </div>
+            </h2>
           </Reveal>
 
           <div className="sticky-story">
@@ -346,9 +362,9 @@ export function Home({ setPage }: HomeProps) {
       <section className="section pt-0 pb-20">
         <div className="wrap">
           <Reveal>
-            <div className="hr-rule mb-10">
+            <h2 className="hr-rule mb-10">
               <span>Cosecha 2025-I · proyectos destacados</span>
-            </div>
+            </h2>
           </Reveal>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[3, 14, 25, 17, 23, 12].map((id, i) => {
@@ -363,9 +379,9 @@ export function Home({ setPage }: HomeProps) {
                       {p.title}
                     </h3>
                     <div className="mt-4">
-                      <button className="btn terra" onClick={(e) => { e.stopPropagation(); setPage('archive'); }}>
+                      <Link to="/archivo" className="btn terra" onClick={(e) => e.stopPropagation()}>
                         Ver en Archivo <Icon.Arrow />
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </Reveal>
@@ -389,12 +405,12 @@ export function Home({ setPage }: HomeProps) {
               </p>
             </div>
             <div className="flex gap-2.5 flex-wrap">
-              <button className="btn terra" onClick={() => setPage('archive')}>
+              <Link to="/archivo" className="btn terra">
                 Explorar el archivo <Icon.Arrow />
-              </button>
-              <button className="btn" onClick={() => setPage('history')}>
+              </Link>
+              <Link to="/historia" className="btn">
                 Conocer la historia
-              </button>
+              </Link>
             </div>
           </Reveal>
         </div>
@@ -456,9 +472,9 @@ export function Home({ setPage }: HomeProps) {
                 ) : (
                   <button className="btn" disabled>Próximamente</button>
                 )}
-                <button className="btn" onClick={() => { setOpenProj(null); setPage('archive'); }}>
+                <Link to="/archivo" className="btn" onClick={() => setOpenProj(null)}>
                   Ver en Archivo <Icon.Arrow />
-                </button>
+                </Link>
               </div>
             </motion.div>
           </motion.div>

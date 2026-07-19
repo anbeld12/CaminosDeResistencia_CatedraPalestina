@@ -1,9 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Reveal } from '../components/Reveal';
 import { Icon } from '../lib/icons';
 import { BIBLIOGRAPHY, KIND_FILTERS, KIND_GLYPH, PROJECTS } from '../data/archive';
 import type { Project } from '../lib/types';
+import { OG_IMAGE } from '../lib/seo';
+import { collectionPageSchema, bookSchema } from '../lib/seo-schema';
 
 /* ============================================================
    Kind chip color map
@@ -132,6 +136,25 @@ export function Archive() {
 
   return (
     <>
+      <Helmet>
+        <title>Archivo · Cátedra Caminos de Resistencia</title>
+        <meta name="description" content="Cosecha de Saberes: bibliografía sobre Palestina, proyectos académicos Palestina y ensayos curados por la Cátedra Caminos de Resistencia. Proyectos estudiantiles desde la UNAL." />
+        <meta property="og:title" content="Archivo · Cátedra Caminos de Resistencia" />
+        <meta property="og:description" content="Cosecha de Saberes: bibliografía sobre Palestina, proyectos académicos Palestina y ensayos. Archivo vivo de la Cátedra Caminos de Resistencia UNAL." />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="es_CO" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Archivo · Cátedra Caminos de Resistencia" />
+        <meta name="twitter:description" content="Cosecha de Saberes: bibliografía sobre Palestina y proyectos académicos Palestina. Archivo vivo de la Cátedra Caminos de Resistencia UNAL." />
+        <link rel="canonical" href="https://caminosderesistencia.co/archivo" />
+        <script type="application/ld+json">
+          {JSON.stringify([
+            collectionPageSchema('Bibliografía sobre Palestina y proyectos académicos de la Cátedra Caminos de Resistencia.'),
+            ...BIBLIOGRAPHY.map(b => bookSchema(b.author, b.work, b.year)),
+          ])}
+        </script>
+      </Helmet>
       <header className="page-head">
         <div className="wrap">
           <div className="row">
@@ -179,6 +202,7 @@ export function Archive() {
       {tab === 'projects' && (
         <section className="section pt-0">
           <div className="wrap">
+            <h2 className="sr-only">Proyectos académicos</h2>
             <Reveal className="archive-toolbar flex-col items-stretch gap-[22px]">
               <div className="archive-search is-prominent">
                 <Icon.Search />
@@ -248,6 +272,14 @@ export function Archive() {
                 ))}
               </div>
             )}
+
+            <Reveal>
+              <div className="mt-10 text-center">
+                <Link to="/genero" className="btn terra">
+                  Proyectos con enfoque de género <Icon.Arrow />
+                </Link>
+              </div>
+            </Reveal>
           </div>
         </section>
       )}
@@ -256,9 +288,9 @@ export function Archive() {
         <section className="section pt-0">
           <div className="wrap">
             <Reveal>
-              <div className="hr-rule mb-5">
+              <h2 className="hr-rule mb-5">
                 <span>Bibliografía base · curada por el equipo docente</span>
-              </div>
+              </h2>
             </Reveal>
             <Reveal delay={0.1}>
               <div className="biblio">
@@ -278,6 +310,13 @@ export function Archive() {
               </div>
             </Reveal>
 
+            <Reveal delay={0.1}>
+              <div className="mt-10 text-center">
+                <Link to="/voces" className="btn">
+                  Autores recomendados en cultura y medios <Icon.Arrow />
+                </Link>
+              </div>
+            </Reveal>
           </div>
         </section>
       )}

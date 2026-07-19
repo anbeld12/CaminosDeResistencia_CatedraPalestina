@@ -1,10 +1,14 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
 import { ImageGallery } from '../components/ImageGallery';
 import { Icon } from '../lib/icons';
 import { PODCAST_SERIES, PROJECTS_2025_1 } from '../data/projects-2025-1';
+import { OG_IMAGE } from '../lib/seo';
+import { articleSchema } from '../lib/seo-schema';
 
 /* ============================================================
    Darwish interactive poem card
@@ -113,7 +117,7 @@ function ArteTab() {
 
         <Reveal>
           <div className="voces-open-quote">
-            <div className="eyebrow"><span className="dot" />Apertura · Arte y resistencia</div>
+            <h2 className="eyebrow"><span className="dot" />Apertura · Arte y resistencia</h2>
             <blockquote className="voces-bq">
               "La fórmula de la indignación siempre debe acompañarse
               con los{' '}
@@ -184,6 +188,9 @@ function ArteTab() {
                   que no necesita permiso ni editor. Una pared basta para que
                   la memoria persista donde el Estado quiere borradura.
                 </p>
+                <Link to="/historia" className="btn terra mt-3">
+                  Contexto histórico del muro <Icon.Arrow />
+                </Link>
               </div>
             </div>
           </Reveal>
@@ -302,10 +309,10 @@ function PeriodismoTab() {
 
         <Reveal>
           <div className="voces-traverso-band">
-            <div className="eyebrow">
+            <h2 className="eyebrow">
               <span className="dot bg-[var(--gold-accent)]" />
               Periodismo · Encuadre editorial
-            </div>
+            </h2>
             <blockquote className="pull-quote mt-[22px]">
               "El universalismo ha sido siempre{' '}
               <span className="text-[var(--gold-accent)]">Occidente extendiendo sus valores</span>
@@ -330,9 +337,9 @@ function PeriodismoTab() {
             </div>
             <div className="voces-editorial-cols">
               <div>
-                <h4 className="voces-editorial-h4">
+                <h3 className="voces-editorial-h4">
                   La dicotomía civilización&thinsp;/&thinsp;barbarie
-                </h4>
+                </h3>
                 <p className="voces-editorial-p">
                   Desde Fanon hasta Traverso, el pensamiento anticolonial ha identificado
                   esta dicotomía como el mecanismo central de justificación del despojo.
@@ -346,9 +353,9 @@ function PeriodismoTab() {
                 </p>
               </div>
               <div>
-                <h4 className="voces-editorial-h4">
+                <h3 className="voces-editorial-h4">
                   El fraude Joan Peters
-                </h4>
+                </h3>
                 <p className="voces-editorial-p">
                   El libro <em>From Time Immemorial</em> (1984) argumentaba que Palestina
                   estaba "vacía" antes de la inmigración judía. Celebrado ampliamente
@@ -468,10 +475,10 @@ function SolidaridadTab() {
 
         <Reveal>
           <div className="voces-tutu">
-            <div className="eyebrow text-[rgba(241,237,224,.65)]">
+            <h2 className="eyebrow text-[rgba(241,237,224,.65)]">
               <span className="dot bg-[var(--gold-accent)]" />
               Apertura · Neutralidad imposible
-            </div>
+            </h2>
             <blockquote className="voces-tutu-verse">
               "Si eliges ser neutral en situaciones de injusticia,
               <em> has elegido el lado del opresor.</em>"
@@ -602,6 +609,14 @@ function SolidaridadTab() {
           </div>
         </Reveal>
 
+        <Reveal delay={0.24}>
+          <div className="mt-10 text-center">
+            <Link to="/historia" className="btn">
+              Línea histórica del conflicto <Icon.Arrow />
+            </Link>
+          </div>
+        </Reveal>
+
       </div>
     </section>
   );
@@ -623,6 +638,25 @@ export function Voces() {
 
   return (
     <>
+      <Helmet>
+        <title>Voces · Cátedra Caminos de Resistencia</title>
+        <meta name="description" content="Voces de la Resistencia: Mahmoud Darwish poemas, arte mural palestino, Handala de Naji al-Ali, muro de Belén grafiti, periodismo en Gaza y fallo CIJ Palestina 2024. Memoria viva desde la Cátedra Caminos de Resistencia." />
+        <meta property="og:title" content="Voces · Cátedra Caminos de Resistencia" />
+        <meta property="og:description" content="Voces de la Resistencia: Mahmoud Darwish poemas, arte mural con Handala Naji al-Ali, muro de Belén grafiti, periodismo en Gaza y fallo CIJ Palestina 2024." />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="es_CO" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Voces · Cátedra Caminos de Resistencia" />
+        <meta name="twitter:description" content="Voces de la Resistencia: Mahmoud Darwish poemas, arte mural palestino, Handala Naji al-Ali y muro de Belén grafiti." />
+        <link rel="canonical" href="https://caminosderesistencia.co/voces" />
+        <script type="application/ld+json">
+          {JSON.stringify(articleSchema(
+            'Voces de la Resistencia · Cultura, periodismo y solidaridad',
+            'Mahmoud Darwish poemas, arte mural palestino, Handala, periodismo en Gaza y fallo CIJ Palestina 2024.'
+          ))}
+        </script>
+      </Helmet>
       <header className="page-head">
         <div className="wrap">
           <div className="row">
@@ -699,7 +733,7 @@ function VideoTab() {
       <div className="wrap">
         <Reveal>
           <div className="voces-open-quote">
-            <div className="eyebrow"><span className="dot" />Video · Producción estudiantil</div>
+            <h2 className="eyebrow"><span className="dot" />Video · Producción estudiantil</h2>
             <blockquote className="voces-bq">
               &ldquo;Proyectos de video · Grupos 2025-I&rdquo;
             </blockquote>
@@ -792,7 +826,7 @@ function PodcastTab() {
       <div className="wrap">
         <Reveal>
           <div className="voces-open-quote">
-            <div className="eyebrow"><span className="dot" />Podcast · Producción estudiantil</div>
+            <h2 className="eyebrow"><span className="dot" />Podcast · Producción estudiantil</h2>
             <blockquote className="voces-bq">
               &ldquo;Proyectos de podcast · Grupos 2025-I&rdquo;
             </blockquote>

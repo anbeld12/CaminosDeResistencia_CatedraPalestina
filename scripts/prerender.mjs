@@ -1,0 +1,99 @@
+import puppeteer from 'puppeteer';
+import { spawn, execSync } from 'child_process';
+import { mkdirSync, writeFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, '..');
+const DIST = join(ROOT, 'dist');
+const PORT = 4199;
+
+const ROUTES = [
+  { path: '/',         file: 'index.html' },
+  { path: '/historia', file: 'historia/index.html' },
+  { path: '/ongs',     file: 'ongs/index.html' },
+  { path: '/genero',   file: 'genero/index.html' },
+  { path: '/voces',    file: 'voces/index.html' },
+  { path: '/archivo',  file: 'archivo/index.html' },
+];
+
+function killPort(port) {
+  try {
+    const result = execSync(`netstat -ano | findstr :${port}`, { encoding: 'utf-8', timeout: 3000 });
+    for (const line of result.split('\n').filter(Boolean)) {
+      const match = line.trim().match(/(\d+)\s*$/);
+      if (match) {
+        try { execSync(`taskkill /F /PID ${match[1]}`, { stdio: 'ignore', timeout: 2000 }); } catch {}
+      }
+    }
+  } catch {}
+}
+
+async function waitForServer(url, timeout = 15000) {
+  const start = Date.now();
+  while (Date.now() - start < timeout) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) return;
+    } catch {}
+    await new Promise(r => setTimeout(r, 500));
+  }
+  throw new Error(`Server did not start within ${timeout}ms`);
+}
+
+async function prerender() {
+  killPort(PORT);
+
+  const server = spawn('npx vite preview --port ' + PORT, [], {
+    cwd: ROOT,
+    stdio: 'pipe',
+    shell: 'cmd.exe',
+  });
+
+  server.stdout.on('data', d => process.stdout.write(d));
+  server.stderr.on('data', d => process.stderr.write(d));
+
+  const cleanup = () => {
+    try { server.kill(); } catch {}
+    killPort(PORT);
+  };
+  process.on('exit', cleanup);
+
+  const BASE = `http://localhost:${PORT}`;
+  await waitForServer(BASE);
+
+  const browser = await puppeteer.launch({ headless: true });
+  let ok = 0;
+  let fail = 0;
+
+  for (const route of ROUTES) {
+    const page = await browser.newPage();
+    try {
+      await page.goto(BASE + route.path, { waitUntil: 'networkidle0', timeout: 30000 });
+      await page.waitForSelector('title', { timeout: 10000 });
+      await new Promise(r => setTimeout(r, 500));
+      const html = await page.content();
+      const filePath = join(DIST, route.file);
+      mkdirSync(dirname(filePath), { recursive: true });
+      writeFileSync(filePath, html, 'utf-8');
+      if (html.includes('data-rh="true"')) {
+        ok++;
+        console.log(`\u2713  ${route.path} \u2192 ${route.file} [data-rh OK]`);
+      } else {
+        fail++;
+        console.warn(`\u26A0  ${route.path} \u2192 ${route.file} [sin data-rh]`);
+      }
+    } catch (err) {
+      fail++;
+      console.error(`\u2717  ${route.path} failed:`, err.message);
+    }
+    await page.close();
+  }
+
+  await browser.close();
+  cleanup();
+  console.log(`\n\u2705 Prerendering complete \u2014 ${ok} ok, ${fail} failed`);
+}
+
+prerender();

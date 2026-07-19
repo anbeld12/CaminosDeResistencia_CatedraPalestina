@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
+import { BrowserRouter, Routes, Route, useLocation, Outlet } from 'react-router-dom';
 import { Nav } from './components/Nav';
 import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
@@ -7,16 +9,31 @@ import { History } from './pages/History';
 import { Archive } from './pages/Archive';
 import { Voces } from './pages/Voces';
 import { Genero } from './pages/Genero';
-import type { PageId, Theme } from './lib/types';
+import { NotFound } from './pages/NotFound';
+import type { Theme } from './lib/types';
 
-const VALID_PAGES: PageId[] = ['home', 'history', 'ongs', 'genero', 'voces', 'archive'];
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
+
+interface AppLayoutProps {
+  theme: Theme;
+  toggleTheme: () => void;
+}
+
+function AppLayout({ theme, toggleTheme }: AppLayoutProps) {
+  return (
+    <>
+      <Nav theme={theme} toggleTheme={toggleTheme} />
+      <main><Outlet /></main>
+      <Footer />
+    </>
+  );
+}
 
 export function App() {
-  const [page, setPage] = useState<PageId>(() => {
-    const saved = localStorage.getItem('cdr-page') as PageId | null;
-    return (saved && VALID_PAGES.includes(saved)) ? saved : 'home';
-  });
-
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('cdr-theme') as Theme | null;
     if (saved === 'dark' || saved === 'light') return saved;
@@ -33,27 +50,24 @@ export function App() {
     document.body.classList.add('grain');
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('cdr-page', page);
-    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
-  }, [page]);
-
   const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark');
 
-  const PageComp: Record<PageId, React.ReactNode> = {
-    home:    <Home setPage={setPage} />,
-    history: <History />,
-    ongs:    <ONGs />,
-    genero:  <Genero />,
-    voces:   <Voces />,
-    archive: <Archive />,
-  };
-
   return (
-    <>
-      <Nav page={page} setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
-      <main data-screen-label={`Page ${page}`}>{PageComp[page]}</main>
-      <Footer setPage={setPage} />
-    </>
+    <HelmetProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Routes>
+          <Route element={<AppLayout theme={theme} toggleTheme={toggleTheme} />}>
+            <Route index element={<Home />} />
+            <Route path="historia" element={<History />} />
+            <Route path="ongs" element={<ONGs />} />
+            <Route path="genero" element={<Genero />} />
+            <Route path="voces" element={<Voces />} />
+            <Route path="archivo" element={<Archive />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }

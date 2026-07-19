@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import { Reveal } from '../components/Reveal';
 import { MythCards } from '../components/MythCards';
 import { Icon } from '../lib/icons';
@@ -6,6 +8,8 @@ import { ImageBook } from '../components/ImageBook';
 import { TIMELINE, GLOSSARY } from '../data/history';
 import { TIMELINE_G3 } from '../data/timeline-g3';
 import { PROJECTS_2025_1 } from '../data/projects-2025-1';
+import { OG_IMAGE } from '../lib/seo';
+import { articleSchema, eventSchema } from '../lib/seo-schema';
 
 export function History() {
   const railRef = useRef<HTMLDivElement>(null);
@@ -40,6 +44,31 @@ export function History() {
 
   return (
     <>
+      <Helmet>
+        <title>Historia · Cátedra Caminos de Resistencia</title>
+        <meta name="description" content="Línea histórica de Palestina desde 1917: Nakba 1948, Declaración Balfour y mitos del conflicto palestino-israelí. Cronología, glosario crítico y cartografía de la Cátedra Caminos de Resistencia." />
+        <meta property="og:title" content="Historia · Cátedra Caminos de Resistencia" />
+        <meta property="og:description" content="Línea histórica de Palestina desde 1917: Nakba 1948, Declaración Balfour, mitos del conflicto palestino-israelí. Raíces milenarias que sostienen la memoria. Cátedra Caminos de Resistencia." />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:type" content="article" />
+        <meta property="og:locale" content="es_CO" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Historia · Cátedra Caminos de Resistencia" />
+        <meta name="twitter:description" content="Línea histórica de Palestina: Nakba 1948, Declaración Balfour, mitos del conflicto palestino-israelí. Cronología y cartografía crítica." />
+        <link rel="canonical" href="https://caminosderesistencia.co/historia" />
+        <script type="application/ld+json">
+          {JSON.stringify([
+            articleSchema(
+              'Raíces milenarias · Historia de Palestina',
+              'Línea histórica de Palestina desde 1917: Nakba 1948, Declaración Balfour y mitos del conflicto palestino-israelí.',
+              '2025'
+            ),
+            ...TIMELINE.filter(t => t.major).map(t =>
+              eventSchema(t.title, t.year, t.body)
+            ),
+          ])}
+        </script>
+      </Helmet>
       <header className="page-head">
         <div className="wrap">
           <div className="row">
@@ -155,6 +184,14 @@ export function History() {
             </Reveal>
           </div>
           <MythCards />
+
+          <Reveal delay={0.2}>
+            <div className="mt-12 text-center">
+              <Link to="/voces" className="btn">
+                Arte y cultura como resistencia <span className="inline-block ml-1">→</span>
+              </Link>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -190,6 +227,14 @@ export function History() {
               ))}
             </div>
           </Reveal>
+
+          <Reveal delay={0.2}>
+            <div className="mt-12 text-center">
+              <Link to="/ongs" className="btn terra">
+                Organizaciones que trabajan en Palestina <span className="inline-block ml-1">→</span>
+              </Link>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -197,9 +242,9 @@ export function History() {
       <section className="section">
         <div className="wrap">
           <Reveal>
-            <div className="hr-rule mb-10">
+            <h2 className="hr-rule mb-10">
               <span>Recursos elaborados por estudiantes 2025-I</span>
-            </div>
+            </h2>
           </Reveal>
           <div className="grid md:grid-cols-3 gap-6">
             {[
