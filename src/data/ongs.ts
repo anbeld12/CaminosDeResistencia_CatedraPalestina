@@ -18,7 +18,7 @@ export const ONG_CARDS: OngCard[] = [
     tag: '/ Salud mental',
     title: 'Curar entre ruinas',
     body: 'Hospitales destruidos donde médicas y residentes siguen atendiendo: el oficio sostenido como forma de resistencia. La OMS contabiliza más de 36 instalaciones sanitarias inutilizadas — pero el turno continúa.',
-    stats: [{ v: '36+', k: 'hospitales afectados' }, { v: '1 / 5', k: 'psiquiatras / 100k hab.' }],
+    stats: [{ v: '36+', k: 'hospitales afectados' }, { v: '~0.7', k: 'psiquiatras / 100k hab.' }],
     blockade: false,
     img: 'terra',
     label: 'Manos suturando bajo luz de lámpara de bolsillo',
@@ -45,12 +45,12 @@ export const ONG_CARDS: OngCard[] = [
 ];
 
 export const ONG_PARTNERS: OngPartner[] = [
-  { name: 'Medical Aid for Palestinians', city: 'Londres', since: '1984', focus: 'Salud comunitaria' },
-  { name: 'Al-Haq', city: 'Ramallah', since: '1979', focus: 'Derecho internacional' },
-  { name: "B'Tselem", city: 'Jerusalén', since: '1989', focus: 'Documentación' },
-  { name: 'PCRF', city: 'Kuwait — Global', since: '1991', focus: 'Niñez y reconstrucción' },
-  { name: 'Visualizing Palestine', city: 'Beirut', since: '2012', focus: 'Cartografía de datos' },
-  { name: 'Cátedra Edward Said — UNAL', city: 'Bogotá', since: '2024', focus: 'Articulación académica' },
+  { name: 'Medical Aid for Palestinians', city: 'Londres', since: '1982', focus: 'Salud comunitaria', url: 'https://www.map.org.uk/' },
+  { name: 'Al-Haq', city: 'Ramallah', since: '1979', focus: 'Derecho internacional', url: 'https://www.alhaq.org/' },
+  { name: "B'Tselem", city: 'Jerusalén', since: '1989', focus: 'Documentación', url: 'https://www.btselem.org/' },
+  { name: 'PCRF', city: 'EE. UU. / Global', since: '1991', focus: 'Niñez y reconstrucción', url: 'https://www.pcrf.net/' },
+  { name: 'Visualizing Palestine', city: 'Beirut', since: '2012', focus: 'Cartografía de datos', url: 'https://visualizingpalestine.org/' },
+  { name: 'Médicos Sin Fronteras (MSF)', city: 'Ginebra — Global', since: '1971', focus: 'Emergencia médica', url: 'https://www.msf.es/territorio/palestina' },
 ];
 
 export const FIELD_STEPS: FieldStep[] = [

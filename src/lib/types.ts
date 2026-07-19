@@ -27,9 +27,18 @@ export interface Project {
   year: string;
   n: string;
   tags: string[];
+  description?: string;
+  url?: string;
+  urlAlt?: string;
+  links?: { label: string; url: string }[];
+  linkLabel?: string;
+  thumbnail?: string;
+  aiThumbnail?: boolean;
+  members?: string[];
+  group?: string;
 }
 
-export type ProjectKind = 'ensayo' | 'cartografia' | 'video' | 'podcast';
+export type ProjectKind = 'ensayo' | 'cartografia' | 'video' | 'podcast' | 'fanzine' | 'mural' | 'collage' | 'grabado';
 
 export interface Book {
   author: string;
@@ -73,12 +82,21 @@ export interface OngPartner {
   city: string;
   since: string;
   focus: string;
+  url?: string;
 }
 
 export interface FieldStep {
   n: string;
   t: string;
   d: string;
+}
+
+export interface ExternalOrganization {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  url: string;
 }
 
 export interface KindFilter {
@@ -92,4 +110,24 @@ export interface Myth {
   myth: string;
   reality: string;
   sources: string[];
+}
+
+export interface Source {
+  author: string;
+  work: string;
+  url?: string;
+}
+
+export interface PodcastEpisode {
+  n: number;
+  title: string;
+  url: string;
+  description?: string;
+  sources: Source[];
+}
+
+export interface PodcastSeries {
+  title: string;
+  author: string;
+  episodes: PodcastEpisode[];
 }

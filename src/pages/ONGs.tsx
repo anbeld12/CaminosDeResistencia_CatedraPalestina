@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
+import { ExternalOrgs } from '../components/ExternalOrgs';
 import type { ImageVariant } from '../lib/types';
 import { ONG_CARDS, ONG_PARTNERS, FIELD_STEPS } from '../data/ongs';
 
@@ -156,17 +157,26 @@ export function ONGs() {
             </Reveal>
             <div className="border-t border-[var(--line)]">
               {ONG_PARTNERS.map((p, i) => (
-                <Reveal key={i} className="partner-row">
-                  <div className="font-mono text-accent text-xs md:text-[11px] tracking-[0.15em]">0{i + 1}</div>
-                  <div>
-                    <div className="font-serif text-[20px] md:text-[26px] tracking-[-0.015em] leading-tight">{p.name}</div>
-                  </div>
-                  <div className="partner-city font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute">{p.city}</div>
-                  <div className="partner-focus text-sm text-fg-mute">{p.focus}</div>
-                  <div className="partner-since font-mono text-[11px] text-fg-mute tracking-[0.15em] text-right">est. {p.since}</div>
+                <Reveal key={i}>
+                  <a
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="partner-row no-underline text-inherit hover:text-inherit"
+                  >
+                    <div className="font-mono text-accent text-xs md:text-[11px] tracking-[0.15em]">0{i + 1}</div>
+                    <div>
+                      <div className="font-serif text-[20px] md:text-[26px] tracking-[-0.015em] leading-tight">{p.name}</div>
+                    </div>
+                    <div className="partner-city font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute">{p.city}</div>
+                    <div className="partner-focus text-sm text-fg-mute">{p.focus}</div>
+                    <div className="partner-since font-mono text-[11px] text-fg-mute tracking-[0.15em] text-right">est. {p.since}</div>
+                  </a>
                 </Reveal>
               ))}
             </div>
+
+            <ExternalOrgs />
           </div>
         </section>
       )}

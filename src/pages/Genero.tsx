@@ -1,5 +1,8 @@
 import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
+import { PROJECTS_2025_1 } from '../data/projects-2025-1';
+import { Icon } from '../lib/icons';
+import type { Project } from '../lib/types';
 
 /* ============================================================
    QuotesMarquee — impactful quote block
@@ -34,6 +37,37 @@ function QuotesMarquee({
         </Reveal>
       </div>
     </section>
+  );
+}
+
+/* ============================================================
+   EstudianteCard — used in producción estudiantil section
+   ============================================================ */
+function EstudianteCard({ p, delay }: { p: Project; delay: number }) {
+  return (
+    <Reveal as="article" delay={delay}>
+      <div className="pdt-card-modern flex flex-col h-full">
+        <div className="kicker mb-3">{p.group || p.author}</div>
+        <h3 className="font-serif text-[clamp(18px,2vw,24px)] leading-tight">
+          {p.title}
+        </h3>
+        {p.description && (
+          <p className="mt-2 text-fg-mute text-sm leading-relaxed line-clamp-3">
+            {p.description}
+          </p>
+        )}
+        <div className="mt-auto pt-4">
+          <a
+            href={p.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn terra"
+          >
+            Abrir documento <Icon.External />
+          </a>
+        </div>
+      </div>
+    </Reveal>
   );
 }
 
@@ -221,6 +255,22 @@ export function Genero() {
       <section className="section !pt-0">
         <div className="wrap">
           <PalestinaDeTodas />
+        </div>
+      </section>
+
+      {/* ── PRODUCCIÓN ESTUDIANTIL ────────────────────────────── */}
+      <section className="section !pt-0">
+        <div className="wrap">
+          <Reveal>
+            <div className="hr-rule mb-10">
+              <span>Voces desde el aula · proyectos 2025-I</span>
+            </div>
+          </Reveal>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {PROJECTS_2025_1.filter(p => [10, 11, 12].includes(p.id)).map((p, i) => (
+              <EstudianteCard key={p.id} p={p} delay={i * 0.08} />
+            ))}
+          </div>
         </div>
       </section>
 

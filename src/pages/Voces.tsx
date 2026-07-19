@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
 import { Icon } from '../lib/icons';
+import { PODCAST_SERIES, PROJECTS_2025_1 } from '../data/projects-2025-1';
 
 /* ============================================================
    Darwish interactive poem card
@@ -843,12 +845,14 @@ function SolidaridadTab() {
    Main Voces page
    ============================================================ */
 export function Voces() {
-  const [tab, setTab] = useState<'arte' | 'periodismo' | 'solidaridad'>('arte');
+  const [tab, setTab] = useState<'arte' | 'periodismo' | 'solidaridad' | 'podcast' | 'videos'>('arte');
 
-  const tabs: { id: 'arte' | 'periodismo' | 'solidaridad'; label: string }[] = [
+  const tabs: { id: 'arte' | 'periodismo' | 'solidaridad' | 'podcast' | 'videos'; label: string }[] = [
     { id: 'arte',        label: 'Arte y Cultura' },
     { id: 'periodismo',  label: 'Periodismo y Narrativas' },
     { id: 'solidaridad', label: 'Solidaridad y Sur Global' },
+    { id: 'podcast',     label: 'Podcast · Voces Palestina' },
+    { id: 'videos',      label: 'Video · Serie documental' },
   ];
 
   return (
@@ -870,8 +874,8 @@ export function Voces() {
             </div>
             <Reveal delay={0.16}>
               <p className="lede">
-                <strong>Arte, periodismo y solidaridad</strong> como formas de
-                resistencia al borramiento. Tres miradas que sostienen la memoria
+                <strong>Arte, periodismo, solidaridad, podcast y video</strong> como formas de
+                resistencia al borramiento. Cinco miradas que sostienen la memoria
                 viva cuando los archivos callan.
               </p>
             </Reveal>
@@ -896,6 +900,232 @@ export function Voces() {
       {tab === 'arte'        && <ArteTab />}
       {tab === 'periodismo'  && <PeriodismoTab />}
       {tab === 'solidaridad' && <SolidaridadTab />}
+      {tab === 'podcast'     && <PodcastTab />}
+      {tab === 'videos'      && <VideoTab />}
     </>
+  );
+}
+
+/* ============================================================
+   TAB 5 — Video · Serie documental
+   ============================================================ */
+function VideoTab() {
+  const [active, setActive] = useState(0);
+  const videos = PROJECTS_2025_1.filter(p => p.kind === 'video' && p.id >= 24 && p.id <= 27).sort((a, b) => a.id - b.id);
+  const v = videos[active];
+
+  if (!v) return null;
+
+  return (
+    <section className="section">
+      <div className="wrap">
+        <Reveal>
+          <div className="voces-open-quote">
+            <div className="eyebrow"><span className="dot" />Video · Serie documental</div>
+            <blockquote className="voces-bq">
+              &ldquo;Voces de Palestina desde la Universidad&rdquo;
+            </blockquote>
+            <cite className="voces-bq-attr">
+              — Serie estudiantil · 2025-I
+            </cite>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.08}>
+          <div className="hr-rule mb-6">
+            <span>Capítulos</span>
+          </div>
+          <div className="flex flex-wrap gap-2 mb-8">
+            {videos.map((vid, i) => (
+              <button
+                key={vid.id}
+                className={'chip ' + (active === i ? 'is-on' : '')}
+                onClick={() => setActive(i)}
+              >
+                Cap. {i + 1} · {vid.group || vid.author}
+              </button>
+            ))}
+          </div>
+        </Reveal>
+
+        <motion.div
+          key={active}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+        >
+          <Reveal>
+            <div className="card">
+              <div className="kicker">{v.group || v.author} · {v.kind}</div>
+              <h3 className="mt-2 text-[clamp(22px,3vw,34px)] font-serif leading-tight">
+                {v.title}
+              </h3>
+              {v.description && (
+                <p className="mt-3 text-fg-mute text-base leading-relaxed">
+                  {v.description}
+                </p>
+              )}
+              <div className="flex gap-3 mt-5 flex-wrap">
+                <a
+                  href={v.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn terra"
+                >
+                  Ver video <Icon.External />
+                </a>
+              </div>
+
+              {v.members && v.members.length > 0 && (
+                <details className="mt-6 pt-5 border-t border-[var(--line)]">
+                  <summary className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute cursor-pointer">
+                    Integrantes · {v.members.length}
+                  </summary>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-sm text-fg-mute">
+                    {v.members.map((m, i) => (
+                      <span key={i}>{m}{i < v.members!.length - 1 ? '·' : ''}</span>
+                    ))}
+                  </div>
+                </details>
+              )}
+            </div>
+          </Reveal>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   TAB 4 — Podcast Voces Palestina desde la Universidad
+   ============================================================ */
+function PodcastTab() {
+  const [active, setActive] = useState(0);
+  const ep = PODCAST_SERIES.episodes[active];
+
+  return (
+    <section className="section">
+      <div className="wrap">
+        <Reveal>
+          <div className="voces-open-quote">
+            <div className="eyebrow"><span className="dot" />Podcast · Serie completa</div>
+            <blockquote className="voces-bq">
+              &ldquo;{PODCAST_SERIES.title}&rdquo;
+            </blockquote>
+            <cite className="voces-bq-attr">
+              — {PODCAST_SERIES.author} · 2025-I
+            </cite>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.08}>
+          <div className="hr-rule mb-6">
+            <span>Episodios</span>
+          </div>
+          <div className="flex flex-wrap gap-2 mb-8">
+            {PODCAST_SERIES.episodes.map((e, i) => (
+              <button
+                key={i}
+                className={'chip ' + (active === i ? 'is-on' : '')}
+                onClick={() => setActive(i)}
+              >
+                Ep. {e.n} · {e.title}
+              </button>
+            ))}
+          </div>
+        </Reveal>
+
+        <motion.div
+          key={active}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+        >
+          <Reveal>
+            <div className="card">
+              <div className="kicker">Episodio {ep.n}</div>
+              <h3 className="mt-2 text-[clamp(22px,3vw,34px)] font-serif leading-tight">
+                {ep.title}
+              </h3>
+              {ep.description && (
+                <p className="mt-3 text-fg-mute text-base leading-relaxed">
+                  {ep.description}
+                </p>
+              )}
+              <div className="flex gap-3 mt-5 flex-wrap">
+                <a
+                  href={ep.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn terra"
+                >
+                  Escuchar en YouTube <Icon.External />
+                </a>
+              </div>
+
+              <div className="mt-6 pt-5 border-t border-[var(--line)]">
+                <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute mb-3">
+                  Fuentes del episodio
+                </div>
+                <div className="space-y-2">
+                  {ep.sources.map((s, i) => (
+                    <div key={i} className="flex items-start gap-2 text-sm">
+                      <span className="text-accent mt-1 shrink-0">&#x2022;</span>
+                      <div>
+                        <span className="font-medium">{s.author}</span>
+                        {s.url ? (
+                          <>
+                            , <a href={s.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 decoration-dotted decoration-[var(--fg-mute)] hover:text-accent transition-colors">
+                              <em>{s.work}</em>
+                            </a>
+                          </>
+                        ) : (
+                          <>, <em>{s.work}</em></>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </motion.div>
+
+        <Reveal delay={0.16}>
+          <div className="mt-12 pt-10 border-t border-[var(--line)]">
+            <div className="hr-rule mb-8">
+              <span>Otros podcasts del semestre</span>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              {PROJECTS_2025_1.filter(p => p.kind === 'podcast' && p.id >= 33).map((p, i) => (
+                <Reveal key={p.id} delay={i * 0.08} as="article">
+                  <div className="card">
+                    <div className="kicker">{p.group || p.author}</div>
+                    <h3 className="mt-2 text-[clamp(18px,1.8vw,22px)] font-serif leading-tight">
+                      {p.title}
+                    </h3>
+                    {p.description && (
+                      <p className="mt-2 text-fg-mute text-sm leading-relaxed line-clamp-3">
+                        {p.description}
+                      </p>
+                    )}
+                    <div className="mt-4">
+                      <a
+                        href={p.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn terra"
+                      >
+                        Escuchar <Icon.External />
+                      </a>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
   );
 }

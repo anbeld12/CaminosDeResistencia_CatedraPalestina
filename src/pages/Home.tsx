@@ -1,9 +1,11 @@
 import type { ReactNode } from 'react';
 import { useState, useRef, useEffect } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { Reveal } from '../components/Reveal';
+import { ImageSlot } from '../components/ImageSlot';
 import { Icon } from '../lib/icons';
-import type { PageId } from '../lib/types';
+import type { PageId, Project } from '../lib/types';
+import { PROJECTS_2025_1 } from '../data/projects-2025-1';
 
 /* ============ YOUTUBE IFrame API TYPES ============ */
 declare global {
@@ -53,6 +55,8 @@ interface HomeProps {
 }
 
 export function Home({ setPage }: HomeProps) {
+  const [openProj, setOpenProj] = useState<Project | null>(null);
+
   return (
     <>
       {/* ============ HERO ============ */}
@@ -210,8 +214,17 @@ export function Home({ setPage }: HomeProps) {
 
           <div className="sticky-story">
             <Reveal className="stick">
-              <div className="story-slot">
-                <div className="cap">Raíz de olivo emergiendo entre una geografía cartográfica · alto contraste</div>
+              <div className="story-slot !p-0 !h-auto">
+                <ImageSlot
+                  src="/images/home/ancient-olive-al-badawi.webp"
+                  alt="Salah Ali junto al colosal tronco del olivo al-Badawi en al-Walaja, uno de los árboles más antiguos del mundo."
+                  credit="Fotografía documental por Jason Ruffin para Atlas Obscura. Exhibición con fines estrictamente pedagógicos, de memoria y de investigación académica en el entorno universitario (Uso Justo)."
+                  label="Salah Ali y el olivo al-Badawi · al-Walaja"
+                  variant="terra"
+                  objectPosition="60% 50%"
+                  height={450}
+                  className="w-full group"
+                />
               </div>
             </Reveal>
 
@@ -324,6 +337,39 @@ export function Home({ setPage }: HomeProps) {
         </div>
       </section>
 
+      {/* ============ COSECHA 2025-I ============ */}
+      <section className="section pt-0 pb-20">
+        <div className="wrap">
+          <Reveal>
+            <div className="hr-rule mb-10">
+              <span>Cosecha 2025-I · proyectos destacados</span>
+            </div>
+          </Reveal>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[28, 14, 25, 27, 39, 12].map((id, i) => {
+              const p = PROJECTS_2025_1.find(pr => pr.id === id);
+              if (!p) return null;
+              return (
+                <Reveal key={p.id} as="article" delay={i * 0.06}>
+                  <div className="card cursor-pointer" onClick={() => setOpenProj(p)}>
+                    <div className="kicker">{p.group || p.author}</div>
+                    <div className="mt-1 font-mono text-[10px] tracking-[0.1em] text-fg-mute">{KIND_GLYPH_LOCAL[p.kind] || p.kind}</div>
+                    <h3 className="mt-2 text-[clamp(16px,1.6vw,20px)] font-serif leading-tight">
+                      {p.title}
+                    </h3>
+                    <div className="mt-4">
+                      <button className="btn terra" onClick={(e) => { e.stopPropagation(); setPage('archive'); }}>
+                        Ver en Archivo <Icon.Arrow />
+                      </button>
+                    </div>
+                  </div>
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* ============ CTA STRIP ============ */}
       <section className="section pt-10 pb-20">
         <div className="wrap">
@@ -348,9 +394,85 @@ export function Home({ setPage }: HomeProps) {
           </Reveal>
         </div>
       </section>
+
+      <AnimatePresence>
+        {openProj && (
+          <motion.div
+            className="modal-veil"
+            onClick={() => setOpenProj(null)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <motion.div
+              className="modal"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, y: 30, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 30, scale: 0.96 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+            >
+              <button className="close" onClick={() => setOpenProj(null)}><Icon.Close /></button>
+              <div className={'proj-thumb kind-' + openProj.kind} style={{ height: 220, marginBottom: 28 }}>
+                <div className="kind-num">N° {openProj.n}</div>
+                <div className="kind-glyph">{KIND_GLYPH_LOCAL[openProj.kind] || openProj.kind.toUpperCase()}</div>
+              </div>
+              <div className="kicker">{openProj.kind} · {openProj.year}</div>
+              <h2 className="mt-3 text-[clamp(26px,7vw,44px)] leading-tight">{openProj.title}</h2>
+              <div className="text-fg-mute mt-2.5 text-base md:text-sm">{openProj.author}</div>
+
+              {openProj.group && (
+                <div className="mt-3 font-mono text-xs tracking-[0.12em] uppercase text-accent">{openProj.group}</div>
+              )}
+
+              <p className="mt-5 md:mt-6 text-fg-mute text-base leading-relaxed">
+                {openProj.description
+                  ? openProj.description
+                  : 'Proyecto desarrollado en el marco del módulo final de la cátedra. La versión completa puede consultarse en los archivos de la Cátedra Caminos de Resistencia.'}
+              </p>
+
+              {openProj.members && openProj.members.length > 0 && (
+                <div className="mt-5">
+                  <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute mb-2">Integrantes</div>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-fg-mute">
+                    {openProj.members.map((m, i) => (
+                      <span key={i}>{m}{i < openProj.members!.length - 1 ? ' · ' : ''}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex gap-2.5 mt-7 flex-wrap">
+                {openProj.url ? (
+                  <a href={openProj.url} target="_blank" rel="noopener noreferrer" className="btn terra">
+                    {({ ensayo: 'Leer ensayo', cartografia: 'Explorar mapa', video: 'Ver video', podcast: 'Escuchar podcast', fanzine: 'Ver fanzine', mural: 'Ver mural', collage: 'Ver collage', grabado: 'Ver grabado' } as Record<string, string>)[openProj.kind] || 'Abrir documento'} <Icon.External />
+                  </a>
+                ) : (
+                  <button className="btn" disabled>Próximamente</button>
+                )}
+                <button className="btn" onClick={() => { setOpenProj(null); setPage('archive'); }}>
+                  Ver en Archivo <Icon.Arrow />
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
+
+const KIND_GLYPH_LOCAL: Record<string, string> = {
+  ensayo: 'Ensayo',
+  cartografia: 'Cartografía',
+  video: 'Video',
+  podcast: 'Podcast',
+  fanzine: 'Fanzine',
+  mural: 'Mural',
+  collage: 'Collage',
+  grabado: 'Grabado',
+};
 
 const MISSION_POINTS = [
   { n: '01', title: 'Investigar', body: 'con rigor histórico el caso palestino desde las orillas del sur global, sin neutralidades cómplices ni eufemismos académicos.' },
@@ -431,36 +553,76 @@ function SimboCard({ n, term, meaning, body, glyph, accent }: SimboCardProps) {
   );
 }
 
-const POETRY_PLAYLIST = [
+type TrackSource = 'youtube' | 'spotify' | 'drive';
+
+interface PlaylistTrack {
+  id: number;
+  title: string;
+  author: string;
+  source: TrackSource;
+  embedUrl: string;
+  externalUrl?: string;
+}
+
+const POETRY_PLAYLIST: PlaylistTrack[] = [
   {
     id: 1,
-    title: 'Mi Ciudad Está Triste',
-    author: 'Fairuz / Canción de resistencia',
-    embedUrl: 'https://www.youtube.com/embed/99fdlKZNGRU',
-  },
-  {
-    id: 2,
-    title: 'Carnet de Identidad',
-    author: 'Mahmoud Darwish / Poema',
-    embedUrl: 'https://www.youtube.com/embed/_ZMkpeDl624',
-  },
-  {
-    id: 3,
     title: 'Rita (Rita y el fusil)',
     author: 'Mahmoud Darwish / Marcel Khalifé / Canción',
+    source: 'youtube',
     embedUrl: 'https://www.youtube.com/embed/UEeU-tx0SBU',
   },
   {
+    id: 2,
+    title: 'Ep. 1: Introducción histórica',
+    author: 'Grupo 13 — Palestina: Voces desde la Universidad',
+    source: 'youtube',
+    embedUrl: 'https://www.youtube.com/embed/Rl18T5aIyLE',
+  },
+  {
+    id: 3,
+    title: 'Ep. 2: Vida cotidiana bajo ocupación',
+    author: 'Grupo 13 — Palestina: Voces desde la Universidad',
+    source: 'youtube',
+    embedUrl: 'https://www.youtube.com/embed/IB5vIW02ekQ',
+  },
+  {
     id: 4,
-    title: 'Intervención Divina',
-    author: 'Elia Suleiman / Película',
-    embedUrl: 'https://www.youtube.com/embed/eYDAjwymkIg',
+    title: 'Ep. 3: Resistencias culturales',
+    author: 'Grupo 13 — Palestina: Voces desde la Universidad',
+    source: 'youtube',
+    embedUrl: 'https://www.youtube.com/embed/a-hMD48e4v0',
   },
   {
     id: 5,
-    title: 'Min Irhabi? (¿Quién es el terrorista?)',
-    author: 'DAM / Canción',
-    embedUrl: 'https://www.youtube.com/embed/fR1jCY-i5fc',
+    title: 'Ep. 4: Voces desde América Latina',
+    author: 'Grupo 13 — Palestina: Voces desde la Universidad',
+    source: 'youtube',
+    embedUrl: 'https://www.youtube.com/embed/pdMtQT9jor0',
+  },
+  {
+    id: 6,
+    title: 'Voces de Palestina: La historia que Resiste',
+    author: 'Grupo 18 — Serie Spotify',
+    source: 'spotify',
+    embedUrl: 'https://open.spotify.com/embed/show/0EQh2wLAmHgrDAkIJ6eh04',
+    externalUrl: 'https://open.spotify.com/show/0EQh2wLAmHgrDAkIJ6eh04',
+  },
+  {
+    id: 7,
+    title: 'Palestina: La belleza entre el horror, la muerte y el genocidio',
+    author: 'Grupo 7 — Spotify',
+    source: 'spotify',
+    embedUrl: 'https://open.spotify.com/embed/episode/4Eac0NXU35xFdWetO2Ujkc',
+    externalUrl: 'https://open.spotify.com/episode/4Eac0NXU35xFdWetO2Ujkc',
+  },
+  {
+    id: 8,
+    title: 'Voces que resisten: entrevista sobre DDHH en Palestina',
+    author: 'Grupo 25 — Google Drive',
+    source: 'drive',
+    embedUrl: 'https://drive.google.com/file/d/11Wf6BMyZcz6syffsQrfeILMSCpJWaHN5/preview',
+    externalUrl: 'https://drive.google.com/file/d/11Wf6BMyZcz6syffsQrfeILMSCpJWaHN5/view',
   },
 ];
 
@@ -473,7 +635,7 @@ function AudioPlayer() {
   const [activeTrackId, setActiveTrackId] = useState(1);
   const [showVideo, setShowVideo] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
 
   const playerRef = useRef<YTPlayer | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -481,10 +643,11 @@ function AudioPlayer() {
   const [playerReady, setPlayerReady] = useState(false);
 
   const activeTrack = POETRY_PLAYLIST.find((t) => t.id === activeTrackId) ?? POETRY_PLAYLIST[0];
+  const isYouTube = activeTrack.source === 'youtube';
 
   useEffect(() => {
-    if (isInView) setIsPlaying(true);
-  }, [isInView]);
+    if (isInView && isYouTube) setIsPlaying(true);
+  }, [isInView, isYouTube]);
 
   /* ============ YOUTUBE API ============ */
   useEffect(() => {
@@ -499,12 +662,14 @@ function AudioPlayer() {
 
   useEffect(() => {
     if (!apiReady || !containerRef.current || playerRef.current) return;
-    const vid = POETRY_PLAYLIST[0].embedUrl.split('/').pop()!;
+    const firstYT = POETRY_PLAYLIST.find(t => t.source === 'youtube');
+    if (!firstYT) return;
+    const vid = firstYT.embedUrl.split('/').pop()!;
     playerRef.current = new window.YT!.Player(containerRef.current, {
       videoId: vid,
       playerVars: {
-        autoplay: 0,
-        mute: 0,
+        autoplay: 1,
+        mute: 1,
         enablejsapi: 1,
         controls: 1,
         modestbranding: 1,
@@ -528,62 +693,72 @@ function AudioPlayer() {
   }, [apiReady]);
 
   useEffect(() => {
-    if (!playerRef.current || !playerReady) return;
+    if (!playerRef.current || !playerReady || !isYouTube) return;
     if (isPlaying) playerRef.current.playVideo();
     else playerRef.current.pauseVideo();
-  }, [isPlaying, playerReady]);
+  }, [isPlaying, playerReady, isYouTube]);
 
   useEffect(() => {
-    if (!playerRef.current || !playerReady) return;
+    if (!playerRef.current || !playerReady || !isYouTube) return;
     if (isMuted) playerRef.current.mute();
     else playerRef.current.unMute();
-  }, [isMuted, playerReady]);
+  }, [isMuted, playerReady, isYouTube]);
 
   useEffect(() => {
-    if (!playerRef.current || !playerReady) return;
+    if (!playerRef.current || !playerReady || !isYouTube) return;
     const id = activeTrack.embedUrl.split('/').pop()!;
     if (isPlaying) playerRef.current.loadVideoById(id);
     else playerRef.current.cueVideoById(id);
-  }, [activeTrackId, playerReady]);
+  }, [activeTrackId, playerReady, isPlaying, isYouTube]);
+
+  useEffect(() => {
+    if (!playerRef.current || !playerReady) return;
+    if (!isYouTube) {
+      playerRef.current.pauseVideo();
+      setIsPlaying(false);
+    }
+  }, [activeTrackId, playerReady, isYouTube]);
 
   const barPatterns = useRef(
     Array.from({ length: BAR_COUNT }, (_, i) => WIGGLE_PATTERNS[i % WIGGLE_PATTERNS.length])
   );
 
-  const barsActive = isPlaying && isInView;
+  const barsActive = isPlaying && isInView && isYouTube;
 
   return (
     <div className="audio-player" ref={sectionRef}>
       {/* ======== HEAD ======== */}
       <div className="audio-player-head">
-        <div className="md-dot" style={barsActive ? undefined : { animationPlayState: 'paused' }} />
+        <div className="md-dot" style={isYouTube && barsActive ? undefined : { animationPlayState: 'paused' }} />
         <div className="title-block">
           <div className="now-label">
-            {barsActive ? (isMuted ? 'Reproduciendo · silenciado' : 'Reproduciendo') : isPlaying ? 'Cargando' : 'Pausado'}
+            {isYouTube
+              ? (barsActive ? (isMuted ? 'Reproduciendo · silenciado' : 'Reproduciendo') : isPlaying ? 'Cargando' : 'Pausado')
+              : 'Listo para reproducir'}
           </div>
-          <div className="track-title">
-            {activeTrack.title}
-          </div>
+          <div className="track-title">{activeTrack.title}</div>
           <div className="track-author">{activeTrack.author}</div>
         </div>
-        <div className="audio-controls">
-          <button
-            type="button"
-            className={`audio-ctrl-btn ${isMuted ? 'is-muted' : ''}`}
-            onClick={() => setIsMuted((m) => !m)}
-            aria-label={isMuted ? 'Activar sonido' : 'Silenciar'}
-          >
-            {isMuted ? <Icon.VolumeX /> : <Icon.Volume />}
-          </button>
-          <button
-            type="button"
-            className="audio-ctrl-btn"
-            onClick={() => setIsPlaying((p) => !p)}
-            aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
-          >
-            {isPlaying ? <Icon.Pause /> : <Icon.Play />}
-          </button>
-        </div>
+        {isYouTube && (
+          <div className="audio-controls">
+            <button
+              type="button"
+              className={`audio-ctrl-btn ${isMuted ? 'is-muted' : ''}`}
+              onClick={() => setIsMuted((m) => !m)}
+              aria-label={isMuted ? 'Activar sonido' : 'Silenciar'}
+            >
+              {isMuted ? <Icon.VolumeX /> : <Icon.Volume />}
+            </button>
+            <button
+              type="button"
+              className="audio-ctrl-btn"
+              onClick={() => setIsPlaying((p) => !p)}
+              aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
+            >
+              {isPlaying ? <Icon.Pause /> : <Icon.Play />}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* ======== FREQ BARS ======== */}
@@ -610,7 +785,7 @@ function AudioPlayer() {
           <div className="w-4 h-4 shrink-0 flex items-center">
             <Icon.Music />
           </div>
-          Ver interpretación visual
+          {isYouTube ? 'Ver interpretación visual' : activeTrack.source === 'spotify' ? 'Escuchar en Spotify' : 'Abrir reproductor'}
         </span>
         <span className={`chevron ${showVideo ? 'is-up' : ''}`}>
           <div className="w-4 h-4 shrink-0 flex items-center">
@@ -620,9 +795,48 @@ function AudioPlayer() {
       </button>
 
       <div className={`audio-video-wrapper ${showVideo ? 'is-open' : ''}`}>
-        <div className="aspect-video rounded-xl overflow-hidden">
-          <div ref={containerRef} className="w-full h-full" />
-        </div>
+        {isYouTube ? (
+          <div className="aspect-video rounded-xl overflow-hidden">
+            <div ref={containerRef} className="w-full h-full" />
+          </div>
+        ) : activeTrack.source === 'spotify' ? (
+          <div className="rounded-xl overflow-hidden" style={{ height: 352 }}>
+            <iframe
+              src={activeTrack.embedUrl}
+              width="100%"
+              height="100%"
+              allow="encrypted-media; clipboard-write"
+              className="border-0"
+              title={activeTrack.title}
+            />
+          </div>
+        ) : (
+          <div className="rounded-xl overflow-hidden" style={{ height: 480 }}>
+            <iframe
+              src={activeTrack.embedUrl}
+              width="100%"
+              height="100%"
+              allow="autoplay"
+              className="border-0"
+              title={activeTrack.title}
+            />
+          </div>
+        )}
+        {activeTrack.source !== 'youtube' && activeTrack.externalUrl && (
+          <div className="mt-3 flex justify-center">
+            <a
+              href={activeTrack.externalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-ghost-light"
+            >
+              Abrir en {activeTrack.source === 'spotify' ? 'Spotify' : 'Google Drive'}
+              <span className="w-3.5 h-3.5 shrink-0 flex items-center">
+                <Icon.External />
+              </span>
+            </a>
+          </div>
+        )}
       </div>
 
       {/* ======== PLAYLIST ======== */}
@@ -637,11 +851,13 @@ function AudioPlayer() {
                 onClick={() => {
                   setActiveTrackId(track.id);
                   setShowVideo(false);
-                  setIsPlaying(true);
+                  if (track.source === 'youtube') setIsPlaying(true);
                 }}
               >
                 <span className="pl-index">
-                  {isActive ? <Icon.Play /> : String(track.id).padStart(2, '0')}
+                  {isActive ? (
+                    track.source === 'youtube' ? <Icon.Play /> : <Icon.External />
+                  ) : String(track.id).padStart(2, '0')}
                 </span>
                 <div>
                   <span className="pl-name">{track.title}</span>

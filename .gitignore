@@ -26,3 +26,6 @@ dist-ssr
 # OpenCode reports
 *-report.md
 *.original
+
+# 2025-1 assets — raw student files hosted externally (YouTube, Drive)
+/2025-1/

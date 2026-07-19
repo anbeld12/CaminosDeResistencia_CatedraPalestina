@@ -1,0 +1,37 @@
+[
+  {
+    "id": "msf",
+    "name": "Médicos Sin Fronteras (MSF)",
+    "category": "Médica / Humanitaria",
+    "description": "Asistencia médica y quirúrgica de emergencia en Gaza y Cisjordania.",
+    "url": "https://www.msf.es/territorio/palestina"
+  },
+  {
+    "id": "map",
+    "name": "Medical Aid for Palestinians (MAP)",
+    "category": "Médica / Humanitaria",
+    "description": "ONG dedicada a defender el derecho a la salud de los palestinos bajo ocupación.",
+    "url": "https://www.map.org.uk/"
+  },
+  {
+    "id": "pcrf",
+    "name": "Palestine Children's Relief Fund (PCRF)",
+    "category": "Infancia / Salud",
+    "description": "Proporciona ayuda humanitaria y médica directa a la infancia palestina.",
+    "url": "https://www.pcrf.net/"
+  },
+  {
+    "id": "alhaq",
+    "name": "Al-Haq",
+    "category": "Derechos Humanos",
+    "description": "Organización palestina que documenta violaciones de DDHH en los territorios ocupados.",
+    "url": "https://www.alhaq.org/"
+  },
+  {
+    "id": "btselem",
+    "name": "B'Tselem",
+    "category": "Derechos Humanos",
+    "description": "Centro de Información Israelí que documenta exhaustivamente la ocupación militar.",
+    "url": "https://www.btselem.org/"
+  }
+]

@@ -4,6 +4,7 @@ import { MythCards } from '../components/MythCards';
 import { Icon } from '../lib/icons';
 import { ImageSlot } from '../components/ImageSlot';
 import { TIMELINE, GLOSSARY } from '../data/history';
+import { PROJECTS_2025_1 } from '../data/projects-2025-1';
 
 export function History() {
   const railRef = useRef<HTMLDivElement>(null);
@@ -174,6 +175,62 @@ export function History() {
               ))}
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      {/* ============ RECURSOS ESTUDIANTILES ============ */}
+      <section className="section">
+        <div className="wrap">
+          <Reveal>
+            <div className="hr-rule mb-10">
+              <span>Recursos elaborados por estudiantes 2025-I</span>
+            </div>
+          </Reveal>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                id: 28,
+                title: 'Línea de Tiempo: Territorio Palestino',
+                body: 'Línea de tiempo física de 3 pliegos que recorre la historia del territorio palestino desde las civilizaciones cananeas (3500 a.C.) hasta la época contemporánea. Incluye un código QR con versión interactiva.',
+                group: 'Grupo 3',
+              },
+              {
+                id: 38,
+                title: 'Galería multimedia en tres formatos',
+                body: 'Tres estaciones —Gaza, Jerusalén Este y Cisjordania— con fotografías, narrativas de vida y poemas de autoría palestina que documentan el genocidio en tiempo y espacio.',
+                group: 'Grupo 14',
+              },
+              {
+                id: 29,
+                title: 'Podcast Voces Palestina',
+                body: 'Ep. 1: Introducción histórica y Ep. 2: Vida cotidiana bajo ocupación. Serie completa de 4 episodios del Grupo 13.',
+                group: 'Grupo 13',
+              },
+            ].map(({ id, title, body, group }, i) => {
+              const proj = PROJECTS_2025_1.find(p => p.id === id);
+              return (
+                <Reveal key={id} as="article" delay={i * 0.08}>
+                  <div className="card">
+                    <div className="kicker">{group}</div>
+                    <h3 className="mt-2 text-[clamp(18px,1.8vw,22px)] font-serif leading-tight">
+                      {title}
+                    </h3>
+                    <p className="mt-2 text-fg-mute text-sm leading-relaxed">{body}</p>
+                    <div className="mt-4">
+                      <a
+                        href={proj?.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn terra"
+                      >
+                        Ver recurso <Icon.External />
+                      </a>
+                    </div>
+                  </div>
+                </Reveal>
+              );
+            })}
+          </div>
         </div>
       </section>
 
