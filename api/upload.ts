@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { v2 as cloudinary } from 'cloudinary';
-import { getAuthenticatedUser, requireEnv } from './_shared';
+import { getAuthenticatedUser, requireEnv } from './_shared.js';
 
 cloudinary.config({
   cloud_name: requireEnv('CLOUDINARY_CLOUD_NAME'),
