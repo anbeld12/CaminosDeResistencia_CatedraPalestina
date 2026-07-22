@@ -330,6 +330,9 @@
   .hero-title { font-style: italic; }
   .hero-title .neutral { font-style: normal; font-weight: 800; }
   .hero-title em { font-style: italic; color: var(--terracotta); }
+  .hero-fade {
+    animation: heroFadeIn 0.8s cubic-bezier(.25,.1,.25,1) 0.1s both;
+  }
 
   .hero-foot {
     display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 28px;
@@ -3265,6 +3268,7 @@ html[data-theme="dark"] .voces-cij-footer {
   .card.s4 { grid-column: span 6; }
 }
 
+@keyframes heroFadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes pulse {
   0%, 100% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--terracotta) 30%, transparent); }

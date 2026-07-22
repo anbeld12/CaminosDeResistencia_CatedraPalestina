@@ -113,15 +113,10 @@ export function Home() {
           </Reveal>
 
           {/* ── Hero title ── */}
-          <motion.h1
-            className="hero-title order-3 md:col-span-2 md:mt-10"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
-          >
+          <h1 className="hero-title hero-fade order-3 md:col-span-2 md:mt-10">
             <span className="neutral">Caminos</span><br />
             <em>de</em> Resistencia
-          </motion.h1>
+          </h1>
 
           {/* ── Dense text: repositioned below title on mobile ── */}
           <Reveal className="order-4 md:col-start-1 md:row-start-2" delay={0.1}>

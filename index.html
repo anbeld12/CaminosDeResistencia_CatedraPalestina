@@ -69,6 +69,7 @@
       .hero-bg{position:absolute;inset:0;z-index:-1;background:radial-gradient(80% 60% at 80% 20%,color-mix(in srgb,var(--terracotta) 18%,transparent),transparent 60%),radial-gradient(60% 50% at 10% 90%,color-mix(in srgb,var(--olive) 30%,transparent),transparent 60%),var(--bg)}
       .hero-title{font-style:italic}
       .hero-title em{font-style:italic;color:var(--terracotta)}
+      .hero-fade{animation:heroFadeIn .8s cubic-bezier(.25,.1,.25,1) .1s both}
       .hero-foot{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:28px;margin-top:clamp(32px,6vh,56px);padding-top:24px;border-top:1px solid var(--line)}
       .hero-foot .stat .num{font-family:var(--serif);font-size:36px;line-height:1;letter-spacing:-.02em;display:block}
       .hero-foot .stat .lbl{display:block;margin-top:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-mute)}
@@ -99,6 +100,7 @@
         .page-head h1{font-size:clamp(40px,13vw,64px)}
         .hero-foot .stat .num{font-size:26px}
       }
+      @keyframes heroFadeIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
     </style>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" href="/favicon.ico" sizes="any" />
