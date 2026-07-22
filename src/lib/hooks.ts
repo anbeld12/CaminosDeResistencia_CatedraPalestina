@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react';
 
 let lockCount = 0;
-let prevOverflow = '';
 
 export function useLockBodyScroll(shouldLock: boolean) {
   useEffect(() => {
     if (shouldLock) {
       if (lockCount === 0) {
-        prevOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
       }
       lockCount++;
       return () => {
         lockCount--;
         if (lockCount === 0) {
-          document.body.style.overflow = prevOverflow;
+          document.body.style.overflow = '';
         }
       };
     }

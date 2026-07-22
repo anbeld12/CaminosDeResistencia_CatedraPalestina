@@ -57,6 +57,15 @@ export function App() {
     document.body.classList.add('grain');
   }, []);
 
+  useEffect(() => {
+    document.documentElement.dataset.mounted = 'true';
+    const tid = setTimeout(() => {
+      const sh = document.getElementById('static-hero');
+      if (sh) sh.remove();
+    }, 400);
+    return () => clearTimeout(tid);
+  }, []);
+
   const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark');
 
   return (

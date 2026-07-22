@@ -59,7 +59,7 @@ interface YTPlayer {
 }
 
 export function Home() {
-  const { projects } = useProjects();
+  const { projects } = useProjects({ defer: true });
   const [openProj, setOpenProj] = useState<Project | null>(null);
   useLockBodyScroll(!!openProj);
   const modalRef = useFocusTrap(!!openProj, () => setOpenProj(null));
@@ -100,39 +100,34 @@ export function Home() {
         </div>
 
         <div className="wrap w-full grid grid-cols-1 gap-x-8 items-end md:grid-cols-[1fr_320px]">
-          {/* ── Crown: eyebrow + section indicator ── */}
-          <Reveal className="order-1 md:col-start-1 md:row-start-1">
+          <div className="order-1 md:col-start-1 md:row-start-1">
             <div className="eyebrow"><span className="dot" /><span>Plataforma de Memoria y Solidaridad Académica · UNAL</span></div>
-          </Reveal>
+          </div>
 
-          <Reveal className="text-left md:text-right order-2 md:col-start-2 md:row-start-1 md:max-w-[320px]">
-            {/* Editorial page numbering — magazine-style; other pages follow same convention */}
+          <div className="text-left md:text-right order-2 md:col-start-2 md:row-start-1 md:max-w-[320px]">
             <div className="font-mono text-xs md:text-[11px] text-fg-mute tracking-[0.18em] uppercase mb-2.5">
               001 / Inicio
             </div>
-          </Reveal>
+          </div>
 
-          {/* ── Hero title ── */}
-          <h1 className="hero-title hero-fade order-3 md:col-span-2 md:mt-10">
+          <h1 className="hero-title order-3 md:col-span-2 md:mt-10">
             <span className="neutral">Caminos</span><br />
             <em>de</em> Resistencia
           </h1>
 
-          {/* ── Dense text: repositioned below title on mobile ── */}
-          <Reveal className="order-4 md:col-start-1 md:row-start-2" delay={0.1}>
+          <div className="order-4 md:col-start-1 md:row-start-2">
             <div className="font-mono text-[13px] md:text-xs text-fg-mute tracking-[0.1em] leading-relaxed">
               Repositorio permanente · Facultad de Derecho y Ciencias Políticas
             </div>
-          </Reveal>
+          </div>
 
-          <Reveal className="text-left md:text-right order-5 md:col-start-2 md:row-start-2 md:max-w-[320px]" delay={0.2}>
+          <div className="text-left md:text-right order-5 md:col-start-2 md:row-start-2 md:max-w-[320px]">
             <div className="text-base md:text-sm text-fg-mute leading-relaxed">
               Un espacio sentipensante de educación pública desde Colombia, en solidaridad con Palestina.
             </div>
-          </Reveal>
+          </div>
 
-          {/* ── Stats ── */}
-          <Reveal className="hero-foot order-6 md:col-span-2" delay={0.3}>
+          <div className="hero-foot order-6 md:col-span-2">
             <div className="stat">
               <span className="num">{projects.length}</span>
               <span className="lbl">Proyectos · realizados</span>
@@ -149,7 +144,7 @@ export function Home() {
               <span className="num">∞</span>
               <span className="lbl">Sumud · firmeza</span>
             </div>
-          </Reveal>
+          </div>
         </div>
       </section>
 

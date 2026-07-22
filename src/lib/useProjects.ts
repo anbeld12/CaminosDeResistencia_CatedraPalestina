@@ -49,10 +49,18 @@ interface UseProjectsResult {
   refetch: () => void;
 }
 
-export function useProjects(): UseProjectsResult {
+function idle(fn: () => void) {
+  if ('requestIdleCallback' in window) {
+    (window as any).requestIdleCallback(fn, { timeout: 4000 });
+  } else {
+    setTimeout(fn, 1500);
+  }
+}
+
+export function useProjects({ defer }: { defer?: boolean } = {}): UseProjectsResult {
   const [initial] = useState(() => loadCache());
   const [projects, setProjects] = useState<Project[]>(() => initial ?? []);
-  const [loading, setLoading] = useState(() => !initial);
+  const [loading, setLoading] = useState(() => defer ? false : !initial);
   const [error, setError] = useState<string | null>(null);
   const fetchCount = useRef(0);
 
@@ -61,7 +69,6 @@ export function useProjects(): UseProjectsResult {
       const cached = loadCache();
       if (cached) {
         setProjects(cached);
-        setLoading(false);
         return;
       }
     }
@@ -92,7 +99,13 @@ export function useProjects(): UseProjectsResult {
     setLoading(false);
   }, []);
 
-  useEffect(() => { fetch(); }, [fetch]);
+  useEffect(() => {
+    if (defer) {
+      idle(() => fetch());
+    } else {
+      fetch();
+    }
+  }, [fetch, defer]);
 
   return { projects, loading, error, refetch: () => fetch(true) };
 }
