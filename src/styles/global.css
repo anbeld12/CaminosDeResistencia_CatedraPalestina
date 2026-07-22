@@ -465,7 +465,7 @@
   .subtab:hover { color: var(--fg); }
   .subtab.is-active { background: var(--carbon); color: var(--text-on-carbon); }
   html.dark .subtab.is-active,
-  html[data-theme="dark"] .subtab.is-active { background: #f1ede4; color: #0b0c0a; }
+  html[data-theme="dark"] .subtab.is-active { background: var(--fg); color: var(--bg); }
 
   .cards { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
   .card {
@@ -942,7 +942,7 @@
   .btn.terra:hover { background: #a02930; border-color: transparent; color: #fff; }
 
   html.dark .btn.terra:hover,
-  html[data-theme="dark"] .btn.terra:hover { background: #8B1D22; border-color: transparent; }
+  html[data-theme="dark"] .btn.terra:hover { background: color-mix(in srgb, var(--terracotta) 70%, #000); border-color: transparent; }
 
   .kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--terracotta); }
 
@@ -1723,7 +1723,7 @@
     transition: background 0.2s ease;
   }
   .upload-preview-btn:hover {
-    background: #a02930;
+    background: color-mix(in srgb, var(--terracotta) 75%, #000);
   }
   .upload-preview-btn.is-ghost {
     background: rgba(255,255,255,0.15);
