@@ -18,6 +18,20 @@ const ROUTES = [
   { path: '/archivo',  file: 'archivo/index.html' },
 ];
 
+// Only keep modulepreload for essential runtime chunks; remove for code-split pages,
+// supabase, and framer — they load on demand, not at page start.
+const ESSENTIAL_CHUNK_PATTERNS = ['rolldown-runtime', 'preload-helper', 'vendor', 'index'];
+
+function cleanModulePreloads(html) {
+  return html.replace(
+    /<link\s+rel="modulepreload"[^>]*href="([^"]*)"[^>]*>\s*/g,
+    (match, href) => {
+      const isEssential = ESSENTIAL_CHUNK_PATTERNS.some(p => href.includes(p));
+      return isEssential ? match : '';
+    }
+  );
+}
+
 function killPort(port) {
   try {
     const result = execSync(`netstat -ano | findstr :${port}`, { encoding: 'utf-8', timeout: 3000 });
@@ -73,7 +87,8 @@ async function prerender() {
       await page.goto(BASE + route.path, { waitUntil: 'networkidle0', timeout: 30000 });
       await page.waitForSelector('title', { timeout: 10000 });
       await new Promise(r => setTimeout(r, 500));
-      const html = await page.content();
+      const raw = await page.content();
+      const html = cleanModulePreloads(raw);
       const filePath = join(DIST, route.file);
       mkdirSync(dirname(filePath), { recursive: true });
       writeFileSync(filePath, html, 'utf-8');
