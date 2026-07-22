@@ -3,10 +3,10 @@ import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, Routes, Route, useLocation, Outlet } from 'react-router-dom';
 import { Nav } from './components/Nav';
 import { Footer } from './components/Footer';
-import { Home } from './pages/Home';
 import { AuthProvider, ProtectedRoute } from './lib/auth';
 import type { Theme } from './lib/types';
 
+const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
 const ONGs = lazy(() => import('./pages/ONGs').then(m => ({ default: m.ONGs })));
 const History = lazy(() => import('./pages/History').then(m => ({ default: m.History })));
 const Archive = lazy(() => import('./pages/Archive').then(m => ({ default: m.Archive })));

@@ -26,6 +26,7 @@ export function Reveal({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-10% 0px' }}
       transition={{ duration, ease: 'easeOut', delay }}
+      style={{ willChange: 'transform, opacity' }}
       {...rest}
     >
       {children}
