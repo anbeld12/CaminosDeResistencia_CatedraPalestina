@@ -21,14 +21,6 @@ function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
-    const timer = setTimeout(() => {
-      const main = document.getElementById('main-content');
-      if (main) {
-        main.setAttribute('tabindex', '-1');
-        main.focus({ preventScroll: true });
-      }
-    }, 100);
-    return () => clearTimeout(timer);
   }, [pathname]);
   return null;
 }

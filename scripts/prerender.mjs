@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
 import { spawn, execSync } from 'child_process';
-import { mkdirSync, writeFileSync } from 'fs';
+import { mkdirSync, writeFileSync, readFileSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -8,6 +8,22 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 const DIST = join(ROOT, 'dist');
 const PORT = 4199;
+
+function getFontFaces() {
+  const assets = readdirSync(join(DIST, 'assets'));
+  const cssFile = assets.find(f => f.startsWith('index-') && f.endsWith('.css'));
+  if (!cssFile) return '';
+  const css = readFileSync(join(DIST, 'assets', cssFile), 'utf-8');
+  const faces = css.match(/@font-face\s*\{[^}]*\}/gs);
+  return faces ? faces.join('\n') : '';
+}
+
+const FONT_FACES = getFontFaces();
+
+function injectFontFaces(html) {
+  if (!FONT_FACES) return html;
+  return html.replace('</head>', `<style>${FONT_FACES}</style></head>`);
+}
 
 const ROUTES = [
   { path: '/',         file: 'index.html' },
@@ -88,7 +104,7 @@ async function prerender() {
       await page.waitForSelector('title', { timeout: 10000 });
       await new Promise(r => setTimeout(r, 500));
       const raw = await page.content();
-      const html = cleanModulePreloads(raw);
+      const html = injectFontFaces(cleanModulePreloads(raw));
       const filePath = join(DIST, route.file);
       mkdirSync(dirname(filePath), { recursive: true });
       writeFileSync(filePath, html, 'utf-8');

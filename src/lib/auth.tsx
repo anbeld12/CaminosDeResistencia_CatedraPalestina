@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import type { User, Session } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
@@ -28,11 +28,18 @@ async function ensureSupabase(): Promise<SupabaseClient> {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const { pathname } = useLocation();
+  const isAdmin = pathname.startsWith('/admin');
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(isAdmin);
 
   useEffect(() => {
+    if (!isAdmin) {
+      setLoading(false);
+      return;
+    }
+
     let unsub: (() => void) | null = null;
 
     ensureSupabase().then((sb) => {
@@ -51,7 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => { unsub?.(); };
-  }, []);
+  }, [isAdmin]);
 
   const signIn = useCallback(async (email: string, password: string) => {
     const sb = await ensureSupabase();
