@@ -1,18 +1,25 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../lib/auth';
 import { Reveal } from '../../components/Reveal';
-import { Plus } from 'lucide-react';
+import { AdminBar } from './AdminBar';
+import { SemesterModal } from './SemesterModal';
 import type { ProjectRow } from '../../types/database';
 
+interface Semester {
+  id: number;
+  name: string;
+}
+
 export function AdminDashboard() {
-  const { signOut } = useAuth();
   const navigate = useNavigate();
   const [projects, setProjects] = useState<ProjectRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [semesters, setSemesters] = useState<Semester[]>([]);
+  const [filterSemester, setFilterSemester] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<number | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [semesterModalOpen, setSemesterModalOpen] = useState(false);
 
   const loadProjects = useCallback(async () => {
     setLoading(true);
@@ -24,7 +31,25 @@ export function AdminDashboard() {
     setLoading(false);
   }, []);
 
+  const loadSemesters = useCallback(async () => {
+    const token = (await supabase.auth.getSession()).data.session?.access_token;
+    if (!token) return;
+    const res = await fetch('/api/admin/semesters', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setSemesters(data);
+    }
+  }, []);
+
   useEffect(() => { loadProjects(); }, [loadProjects]);
+  useEffect(() => { loadSemesters(); }, [loadSemesters]);
+
+  const filtered = useMemo(
+    () => (filterSemester ? projects.filter((p) => p.year === filterSemester) : projects),
+    [projects, filterSemester],
+  );
 
   const handleDelete = async (id: number, title: string) => {
     if (!window.confirm(`¿Eliminar "${title}"?`)) return;
@@ -52,20 +77,38 @@ export function AdminDashboard() {
     <div className="section">
       <div className="wrap">
         <Reveal>
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <div className="eyebrow">Admin</div>
-              <h1 className="h1 mt-2">Proyectos</h1>
-              <p className="text-fg-mute text-sm mt-1">{projects.length} registros</p>
+          <AdminBar onSemestersClick={() => setSemesterModalOpen(true)} />
+        </Reveal>
+
+        <Reveal delay={0.05}>
+          <div className="mt-6 mb-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="eyebrow">Admin</div>
+                <h1 className="admin-h1 mt-2">Proyectos</h1>
+                <p className="text-fg-mute text-sm mt-1">{filtered.length} registros</p>
+              </div>
             </div>
-            <div className="flex gap-3">
-              <button className="btn terra" onClick={() => navigate('/admin/projects/new')}>
-                <Plus size={16} /> Nuevo proyecto
-              </button>
-              <button className="btn" onClick={signOut}>
-                Cerrar sesión
-              </button>
-            </div>
+
+            {semesters.length > 0 && (
+              <div className="subtabs">
+                <button
+                  onClick={() => setFilterSemester(null)}
+                  className={`subtab ${filterSemester === null ? 'is-active' : ''}`}
+                >
+                  Todos
+                </button>
+                {semesters.map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => setFilterSemester(s.name)}
+                    className={`subtab ${filterSemester === s.name ? 'is-active' : ''}`}
+                  >
+                    {s.name}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </Reveal>
 
@@ -77,10 +120,12 @@ export function AdminDashboard() {
             <div className="text-center py-12 text-fg-mute font-mono text-xs tracking-[0.14em] uppercase">
               Cargando...
             </div>
-          ) : projects.length === 0 ? (
+          ) : filtered.length === 0 ? (
             <div className="text-center py-16">
               <div className="font-serif text-3xl">Sin proyectos</div>
-              <p className="text-fg-mute text-sm mt-2">Crea el primer proyecto desde el botón superior.</p>
+              <p className="text-fg-mute text-sm mt-2">
+                {filterSemester ? 'No hay proyectos en este semestre.' : 'Crea el primer proyecto desde el botón superior.'}
+              </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -91,12 +136,12 @@ export function AdminDashboard() {
                     <th className="text-left py-3 pr-4">Título</th>
                     <th className="text-left py-3 pr-4">Grupo</th>
                     <th className="text-left py-3 pr-4">Tipo</th>
-                    <th className="text-left py-3 pr-4">Período</th>
+                    <th className="text-left py-3 pr-4">Semestre</th>
                     <th className="text-right py-3 pl-4">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {projects.map((p) => (
+                  {filtered.map((p) => (
                     <tr key={p.id} className="border-b border-[var(--line)] hover:bg-[var(--olive-soft)]/30 transition-colors">
                       <td className="py-3 pr-4 font-mono text-xs">{p.n}</td>
                       <td className="py-3 pr-4 font-medium max-w-xs truncate">{p.title}</td>
@@ -130,6 +175,12 @@ export function AdminDashboard() {
           )}
         </Reveal>
       </div>
+
+      <SemesterModal
+        open={semesterModalOpen}
+        onClose={() => setSemesterModalOpen(false)}
+        onChanged={() => { loadSemesters(); loadProjects(); }}
+      />
     </div>
   );
 }

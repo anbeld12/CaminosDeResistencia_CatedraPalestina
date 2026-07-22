@@ -1,8 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { X, ImageIcon } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { Reveal } from '../../components/Reveal';
+import { AdminBar } from './AdminBar';
 import type { ProjectRow } from '../../types/database';
+
+interface Semester {
+  id: number;
+  name: string;
+}
 
 interface FormData {
   title: string;
@@ -60,6 +67,22 @@ export function AdminProjectForm() {
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [semesters, setSemesters] = useState<Semester[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    (async () => {
+      const token = (await supabase.auth.getSession()).data.session?.access_token;
+      if (!token) return;
+      const res = await fetch('/api/admin/semesters', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSemesters(data);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -122,10 +145,7 @@ export function AdminProjectForm() {
     catch { return false; }
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const handleFileUpload = async (file: File) => {
     if (file.size > 5 * 1024 * 1024) {
       setUploadError('La imagen no debe superar 5 MB');
       return;
@@ -158,7 +178,7 @@ export function AdminProjectForm() {
         body: formData,
       });
 
-      if (!cloudRes.ok) throw new Error('Error al subir imagen a Cloudinary');
+      if (!cloudRes.ok) throw new Error('Error al subir imagen');
       const cloudData = await cloudRes.json();
 
       setForm((prev) => ({ ...prev, thumbnail: cloudData.secure_url }));
@@ -167,6 +187,24 @@ export function AdminProjectForm() {
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    handleFileUpload(file);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return;
+    handleFileUpload(file);
+  };
+
+  const handleRemoveImage = () => {
+    setForm((prev) => ({ ...prev, thumbnail: '' }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -232,132 +270,210 @@ export function AdminProjectForm() {
 
   return (
     <div className="section">
-      <div className="wrap max-w-2xl">
+      <div className="wrap max-w-3xl">
         <Reveal>
           <div className="eyebrow">Admin</div>
-          <h1 className="h1 mt-2">{isEdit ? 'Editar proyecto' : 'Nuevo proyecto'}</h1>
+          <h1 className="admin-h1 mt-2">{isEdit ? 'Editar proyecto' : 'Nuevo proyecto'}</h1>
+        </Reveal>
+
+        <Reveal delay={0.05}>
+          <div className="mt-6">
+            <AdminBar />
+          </div>
         </Reveal>
 
         <Reveal delay={0.1}>
-          <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <FormField label="Título" name="title" required>
-                <input name="title" value={form.title} onChange={handleChange} required className="input" />
-              </FormField>
-              <FormField label="N° proyecto" name="n" required>
-                <input name="n" value={form.n} onChange={handleChange} required className="input" placeholder="01" />
-              </FormField>
-            </div>
+          <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+            {/* ======== Información básica ======== */}
+            <fieldset className="admin-card">
+              <legend className="admin-card-title">Información básica</legend>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="title" className="admin-field-label">Título *</label>
+                    <input id="title" name="title" value={form.title} onChange={handleChange} required className="admin-input" />
+                  </div>
+                  <div>
+                    <label htmlFor="n" className="admin-field-label">N° proyecto *</label>
+                    <input id="n" name="n" value={form.n} onChange={handleChange} required className="admin-input" placeholder="01" />
+                  </div>
+                </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <FormField label="Autor / Grupo" name="author">
-                <input name="author" value={form.author} onChange={handleChange} className="input" placeholder="Grupo 1" />
-              </FormField>
-              <FormField label="Nombre del grupo" name="groupName">
-                <input name="groupName" value={form.groupName} onChange={handleChange} className="input" placeholder="Grupo 1" />
-              </FormField>
-            </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="author" className="admin-field-label">Autor / Grupo</label>
+                    <input id="author" name="author" value={form.author} onChange={handleChange} className="admin-input" placeholder="Grupo 1" />
+                  </div>
+                  <div>
+                    <label htmlFor="groupName" className="admin-field-label">Nombre del grupo</label>
+                    <input id="groupName" name="groupName" value={form.groupName} onChange={handleChange} className="admin-input" placeholder="Grupo 1" />
+                  </div>
+                </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <FormField label="Tipo" name="kind">
-                <select name="kind" value={form.kind} onChange={handleChange} className="input">
-                  {KIND_OPTIONS.map((o) => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
-                  ))}
-                </select>
-              </FormField>
-              <FormField label="Período" name="year" required>
-                <input name="year" value={form.year} onChange={handleChange} required className="input" placeholder="2025-I" />
-              </FormField>
-            </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="kind" className="admin-field-label">Tipo</label>
+                    <select id="kind" name="kind" value={form.kind} onChange={handleChange} className="admin-input">
+                      {KIND_OPTIONS.map((o) => (
+                        <option key={o.value} value={o.value}>{o.label}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="year" className="admin-field-label">Semestre *</label>
+                    <select id="year" name="year" value={form.year} onChange={handleChange} required className="admin-input">
+                      <option value="">Seleccionar semestre</option>
+                      {semesters.map((s) => (
+                        <option key={s.id} value={s.name}>{s.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <FormField label="URL del proyecto" name="url">
-                <input name="url" value={form.url} onChange={handleChange} className="input" />
-              </FormField>
-              <FormField label="URL alternativa" name="urlAlt">
-                <input name="urlAlt" value={form.urlAlt} onChange={handleChange} className="input" />
-              </FormField>
-            </div>
+                <div>
+                  <label htmlFor="tags" className="admin-field-label">Etiquetas</label>
+                  <input id="tags" name="tags" value={form.tags} onChange={handleChange} className="admin-input" placeholder="video, memoria, arte" />
+                </div>
 
-            <FormField label="Etiquetas (separadas por coma)" name="tags">
-              <input name="tags" value={form.tags} onChange={handleChange} className="input" placeholder="video, memoria, arte" />
-            </FormField>
+                <div>
+                  <label htmlFor="description" className="admin-field-label">Descripción</label>
+                  <textarea id="description" name="description" value={form.description} onChange={handleChange} className="admin-input" rows={4} />
+                </div>
+              </div>
+            </fieldset>
 
-            <FormField label="Descripción" name="description">
-              <textarea name="description" value={form.description} onChange={handleChange} className="input min-h-[100px]" rows={4} />
-            </FormField>
-
-            <FormField label="URL de miniatura (Cloudinary)" name="thumbnail">
-              <div className="space-y-2">
-                <input name="thumbnail" value={form.thumbnail} onChange={handleChange} className="input" placeholder="https://res.cloudinary.com/..." />
-                <div className="flex gap-2 items-center">
+            {/* ======== Multimedia ======== */}
+            <fieldset className="admin-card">
+              <legend className="admin-card-title">Multimedia</legend>
+              <div className="space-y-4">
+                <div>
+                  <label className="admin-field-label">Miniatura</label>
                   <input
+                    ref={fileInputRef}
                     type="file"
                     accept="image/png,image/jpeg,image/webp"
-                    onChange={handleFileUpload}
-                    className="block w-full text-[11px] text-fg-mute file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-mono file:tracking-[0.12em] file:uppercase file:bg-accent file:text-white file:cursor-pointer hover:file:bg-accent/90 transition-colors"
+                    onChange={handleFileSelect}
+                    className="hidden"
                   />
-                  {uploading && <span className="font-mono text-[10px] tracking-[0.12em] text-fg-mute shrink-0">Subiendo...</span>}
-                </div>
-                {uploadError && <div className="text-accent text-[11px]">{uploadError}</div>}
-              </div>
-            </FormField>
 
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input type="checkbox" name="aiThumbnail" checked={form.aiThumbnail} onChange={handleChange} className="w-4 h-4 accent-accent" />
-              <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute">
-                Miniatura generada con IA
-              </span>
-            </label>
-
-            <FormField label="Etiqueta del enlace" name="linkLabel">
-              <input name="linkLabel" value={form.linkLabel} onChange={handleChange} className="input" placeholder="Episodios" />
-            </FormField>
-
-            <div>
-              <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute block mb-2">
-                Enlaces adicionales
-              </div>
-              <div className="space-y-2.5">
-                {form.links.map((link, i) => (
-                  <div key={i} className="flex gap-2 items-start">
-                    <div className="flex-1 grid grid-cols-2 gap-2">
-                      <input
-                        placeholder="Etiqueta"
-                        value={link.label}
-                        onChange={(e) => handleLinkChange(i, 'label', e.target.value)}
-                        className="input"
-                      />
-                      <input
-                        placeholder="URL"
-                        value={link.url}
-                        onChange={(e) => handleLinkChange(i, 'url', e.target.value)}
-                        className="input"
-                      />
+                  {uploading ? (
+                    <div className="upload-zone">
+                      <div className="upload-status">
+                        <div className="upload-spinner" />
+                        Subiendo imagen…
+                      </div>
                     </div>
-                    <button type="button" onClick={() => handleRemoveLink(i)}
-                      className="mt-0.5 font-mono text-[11px] tracking-[0.12em] uppercase text-accent hover:text-accent/70 transition-colors shrink-0">
-                      Eliminar
+                  ) : form.thumbnail ? (
+                    <div className="upload-zone has-image" onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}>
+                      <div className="upload-preview">
+                        <img src={form.thumbnail} alt="Preview" />
+                        <div className="upload-preview-overlay">
+                          <button type="button" className="upload-preview-btn is-ghost" onClick={() => fileInputRef.current?.click()}>
+                            Cambiar
+                          </button>
+                          <button type="button" className="upload-preview-btn" onClick={handleRemoveImage}>
+                            <X size={12} style={{ display: 'inline', marginRight: 4 }} />
+                            Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className="upload-zone"
+                      onClick={() => fileInputRef.current?.click()}
+                      onDrop={handleDrop}
+                      onDragOver={(e) => e.preventDefault()}
+                    >
+                      <div className="upload-zone-icon">
+                        <ImageIcon size={40} />
+                      </div>
+                      <div className="upload-zone-label">Arrastra una imagen o haz clic</div>
+                      <div className="upload-zone-hint">PNG, JPG o WebP · Máx 5 MB</div>
+                    </div>
+                  )}
+
+                  {uploadError && <div className="admin-error mt-2">{uploadError}</div>}
+                </div>
+
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input type="checkbox" name="aiThumbnail" checked={form.aiThumbnail} onChange={handleChange} className="w-4 h-4 accent-accent" />
+                  <span className="admin-field-label" style={{ marginBottom: 0, cursor: 'pointer' }}>
+                    Miniatura generada con IA
+                  </span>
+                </label>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="url" className="admin-field-label">URL del proyecto</label>
+                    <input id="url" name="url" value={form.url} onChange={handleChange} className="admin-input" />
+                  </div>
+                  <div>
+                    <label htmlFor="urlAlt" className="admin-field-label">URL alternativa</label>
+                    <input id="urlAlt" name="urlAlt" value={form.urlAlt} onChange={handleChange} className="admin-input" />
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            {/* ======== Enlaces ======== */}
+            <fieldset className="admin-card">
+              <legend className="admin-card-title">Enlaces</legend>
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="linkLabel" className="admin-field-label">Etiqueta del enlace</label>
+                  <input id="linkLabel" name="linkLabel" value={form.linkLabel} onChange={handleChange} className="admin-input" placeholder="Episodios" />
+                </div>
+
+                <div>
+                  <label className="admin-field-label">Enlaces adicionales</label>
+                  <div className="space-y-2">
+                    {form.links.map((link, i) => (
+                      <div key={i} className="admin-link-row">
+                        <input
+                          placeholder="Etiqueta"
+                          value={link.label}
+                          onChange={(e) => handleLinkChange(i, 'label', e.target.value)}
+                          className="admin-input"
+                          style={{ borderRadius: 6, padding: '8px 10px', fontSize: 13 }}
+                        />
+                        <input
+                          placeholder="URL"
+                          value={link.url}
+                          onChange={(e) => handleLinkChange(i, 'url', e.target.value)}
+                          className="admin-input"
+                          style={{ borderRadius: 6, padding: '8px 10px', fontSize: 13 }}
+                        />
+                        <button type="button" onClick={() => handleRemoveLink(i)}
+                          className="flex items-center justify-center w-8 h-8 rounded-lg border border-[var(--line)] bg-transparent text-fg-mute hover:text-accent hover:border-accent transition-colors shrink-0">
+                          <X size={14} />
+                        </button>
+                      </div>
+                    ))}
+                    <button type="button" onClick={handleAddLink}
+                      className="font-mono text-[11px] tracking-[0.12em] uppercase text-fg-mute hover:text-fg transition-colors">
+                      + Añadir enlace
                     </button>
                   </div>
-                ))}
-                <button type="button" onClick={handleAddLink}
-                  className="font-mono text-[11px] tracking-[0.12em] uppercase text-fg-mute hover:text-fg transition-colors">
-                  + Añadir enlace
-                </button>
+                </div>
               </div>
-            </div>
+            </fieldset>
 
-            <FormField label="Integrantes (uno por línea)" name="members">
-              <textarea name="members" value={form.members} onChange={handleChange} className="input min-h-[120px]" rows={5} placeholder="Nombre Apellido" />
-            </FormField>
+            {/* ======== Equipo ======== */}
+            <fieldset className="admin-card">
+              <legend className="admin-card-title">Equipo</legend>
+              <div>
+                <label htmlFor="members" className="admin-field-label">Integrantes</label>
+                <textarea id="members" name="members" value={form.members} onChange={handleChange} className="admin-input" rows={5} placeholder="Nombre Apellido (uno por línea)" />
+              </div>
+            </fieldset>
 
-            {error && <div className="text-accent text-sm">{error}</div>}
+            {error && <div className="admin-error">{error}</div>}
 
-            <div className="flex gap-4">
-              <button type="submit" disabled={saving} className="btn terra">
-                {saving ? 'Guardando...' : isEdit ? 'Actualizar proyecto' : 'Crear proyecto'}
+            <div className="flex gap-4 pt-2">
+              <button type="submit" disabled={saving}
+                className="btn terra">
+                {saving ? 'Guardando…' : isEdit ? 'Actualizar proyecto' : 'Crear proyecto'}
               </button>
               <button type="button" className="btn" onClick={() => navigate('/admin')}>
                 Cancelar
@@ -366,17 +482,6 @@ export function AdminProjectForm() {
           </form>
         </Reveal>
       </div>
-    </div>
-  );
-}
-
-function FormField({ label, name, required, children }: { label: string; name: string; required?: boolean; children: React.ReactNode }) {
-  return (
-    <div>
-      <label htmlFor={name} className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute block mb-1.5">
-        {label}{required && ' *'}
-      </label>
-      {children}
     </div>
   );
 }

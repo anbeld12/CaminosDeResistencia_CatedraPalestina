@@ -22,7 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Tipo de proyecto inválido' });
   }
   if (!body.year || typeof body.year !== 'string') {
-    return res.status(400).json({ error: 'El año/período es obligatorio' });
+    return res.status(400).json({ error: 'El semestre es obligatorio' });
   }
   if (!body.n || typeof body.n !== 'string') {
     return res.status(400).json({ error: 'El número de proyecto es obligatorio' });
@@ -32,6 +32,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     requireEnv('VITE_SUPABASE_URL'),
     requireEnv('SUPABASE_SERVICE_KEY'),
   );
+
+  const { data: semester, error: semError } = await supabase
+    .from('semesters')
+    .select('id')
+    .eq('name', body.year)
+    .maybeSingle();
+
+  if (semError) {
+    console.error('Semester check error:', semError);
+    return res.status(500).json({ error: 'Error al validar semestre' });
+  }
+  if (!semester) {
+    return res.status(400).json({ error: `El semestre "${body.year}" no existe. Créalo primero desde la gestión de semestres.` });
+  }
 
   const { data, error: insertError } = await supabase
     .from('projects')

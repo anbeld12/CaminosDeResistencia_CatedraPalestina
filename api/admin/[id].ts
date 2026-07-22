@@ -34,6 +34,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Tipo de proyecto inválido' });
     }
 
+    if (body.year !== undefined) {
+      if (typeof body.year !== 'string' || body.year.trim().length === 0) {
+        return res.status(400).json({ error: 'El semestre no puede estar vacío' });
+      }
+      const { data: semester } = await supabase
+        .from('semesters')
+        .select('id')
+        .eq('name', body.year)
+        .maybeSingle();
+      if (!semester) {
+        return res.status(400).json({ error: `El semestre "${body.year}" no existe. Créalo primero desde la gestión de semestres.` });
+      }
+    }
+
     const updates: Record<string, unknown> = {};
     if (body.title !== undefined) updates.title = body.title.trim();
     if (body.kind !== undefined) updates.kind = body.kind;
