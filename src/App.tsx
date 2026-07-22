@@ -42,12 +42,6 @@ function AppLayout({ theme, toggleTheme }: AppLayoutProps) {
   );
 }
 
-function AdminLayout() {
-  return (
-    <main id="main-content"><Outlet /></main>
-  );
-}
-
 export function App() {
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('cdr-theme') as Theme | null;
@@ -86,12 +80,10 @@ export function App() {
           <Suspense fallback={<div style={{ height: '100vh' }} />}>
             <Routes>
               <Route path="/admin/login" element={<AdminLogin />} />
-              <Route element={<AdminLayout />}>
+              <Route element={<AppLayout theme={theme} toggleTheme={toggleTheme} />}>
                 <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
                 <Route path="/admin/projects/new" element={<ProtectedRoute><AdminProjectForm /></ProtectedRoute>} />
                 <Route path="/admin/projects/:id/edit" element={<ProtectedRoute><AdminProjectForm /></ProtectedRoute>} />
-              </Route>
-              <Route element={<AppLayout theme={theme} toggleTheme={toggleTheme} />}>
                 <Route index element={<Home />} />
                 <Route path="historia" element={<History />} />
                 <Route path="ongs" element={<ONGs />} />
