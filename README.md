@@ -18,10 +18,10 @@
 | Estilos | **Tailwind CSS** 3 + CSS vanilla en `src/styles/global.css` |
 | Animación | **Framer Motion** 12 |
 | Iconos | **lucide-react** + SVG propios en `src/lib/icons.tsx` |
-| Base de datos | **Supabase PostgreSQL** (tabla `projects`) |
+| Base de datos | **Supabase PostgreSQL** (tablas `projects`, `semesters`) |
 | Autenticación | **Supabase Auth** (email + password) |
 | Imágenes | **Cloudinary** (CDN con transformaciones) |
-| API Admin | **Vercel Functions** (3 endpoints serverless) |
+| API Admin | **Vercel Functions** (4 endpoints serverless) |
 | Routing | **React Router DOM** 6 |
 | SEO | **react-helmet-async** + Prerender + JSON-LD |
 
@@ -98,12 +98,19 @@ CREATE TABLE projects (
   updated_at   TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 3. Índices
+-- 3. Tabla de semestres
+CREATE TABLE semesters (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 4. Índices
 CREATE INDEX idx_projects_kind ON projects(kind);
 CREATE INDEX idx_projects_year ON projects(year);
 CREATE INDEX idx_projects_tags ON projects USING GIN(tags);
 
--- 4. Trigger para updated_at
+-- 5. Trigger para updated_at
 CREATE OR REPLACE FUNCTION update_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -117,7 +124,7 @@ CREATE TRIGGER trg_projects_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at();
 
--- 5. Row Level Security
+-- 6. Row Level Security
 ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Lectura pública"
@@ -214,8 +221,10 @@ Palestina-frontend/
 │   ├── upload.ts                     # POST: firma Cloudinary signed upload
 │   └── admin/
 │       ├── projects.ts               # POST: crear proyecto
-│       └── [id].ts                   # PUT/DELETE: editar/eliminar proyecto
+│       ├── [id].ts                   # PUT/DELETE: editar/eliminar proyecto
+│       └── semesters.ts              # GET/POST/DELETE: gestionar semestres
 ├── scripts/
+│   ├── migrate-semesters.mjs         # Migrar years existentes a tabla semesters
 │   ├── seed-projects.mjs             # Seed de 26 proyectos en Supabase + Cloudinary
 │   ├── upload-thumbnails.mjs         # Subir thumbnails locales a Cloudinary
 │   ├── fix-descriptions.mjs          # Restaurar descripciones originales
@@ -271,8 +280,10 @@ Palestina-frontend/
 │       ├── NotFound.tsx              # 404
 │       └── admin/
 │           ├── Login.tsx             # Inicio de sesión
-│           ├── Dashboard.tsx         # Lista de proyectos
-│           └── ProjectForm.tsx       # Crear/editar proyecto
+│       ├── AdminBar.tsx          # Barra de navegación admin
+│       ├── Dashboard.tsx         # Lista de proyectos con filtro por semestre
+│       ├── ProjectForm.tsx       # Crear/editar proyecto
+│       └── SemesterModal.tsx     # Modal CRUD de semestres
 ├── public/
 │   ├── images/
 │   │   └── archive/2025-I/
@@ -336,13 +347,25 @@ Crear un proyecto. Requiere JWT en `Authorization: Bearer <token>`.
 }
 ```
 
-**Validación:** `title`, `kind` (en lista válida), `year`, `n` son obligatorios.
+**Validación:** `title`, `kind` (en lista válida), `year` (debe existir en tabla `semesters`), `n` son obligatorios.
 
 ### `PUT /api/admin/[id]`
 Actualizar proyecto. Mismos campos que create, todos opcionales.
+Si se envía `year`, se valida contra `semesters`.
 
 ### `DELETE /api/admin/[id]`
 Eliminar proyecto por ID.
+
+### `GET /api/admin/semesters`
+Lista todos los semestres ordenados desc. Requiere JWT.
+
+### `POST /api/admin/semesters`
+Crear un nuevo semestre. Requiere JWT.
+
+**Body:** `{ "name": "2026-I" }`
+
+### `DELETE /api/admin/semesters?id=N`
+Eliminar semestre por ID. Rechaza si hay proyectos asignados a ese semestre. Requiere JWT.
 
 ### `POST /api/upload`
 Obtener firma para Cloudinary signed upload. Requiere JWT.
@@ -372,12 +395,13 @@ El panel de administración permite gestionar proyectos sin usar código ni SQL.
 
 ### Funcionalidades
 
-- **Listar proyectos**: tabla con N°, título, grupo, tipo, período. Botones editar/eliminar.
-- **Crear proyecto**: formulario completo con todos los campos del proyecto.
+- **Listar proyectos**: tabla con N°, título, grupo, tipo, semestre. Botones editar/eliminar. Filtro por semestre mediante tabs.
+- **Crear proyecto**: formulario completo con todos los campos del proyecto. El semestre se selecciona de una lista poblada desde la base de datos.
 - **Editar proyecto**: mismo formulario, precargado con datos existentes.
 - **Subir miniatura**: selector de archivo que sube directamente a Cloudinary (firma signed) y auto-completa la URL.
 - **Enlaces múltiples**: editor dinámico para agregar/eliminar pares label + URL (útil para series de podcast con múltiples episodios).
-- **Validación**: las URLs deben comenzar con `http://` o `https://`.
+- **Gestionar semestres**: botón "Semestres" en la barra admin → modal para crear/eliminar semestres. No se puede eliminar un semestre con proyectos asignados.
+- **Validación**: las URLs deben comenzar con `http://` o `https://`. El semestre debe existir en la tabla `semesters`.
 
 ### Seguridad
 
@@ -410,18 +434,12 @@ Ejemplo: `projects/2025-I/01-video-cementerio-de-memorias-stencil-y-minidocu`
 
 ## Mantenimiento
 
-### Actualizar semestre
+### Agregar semestre
 
-Editar `src/lib/config.ts`:
-
-```ts
-export const CONFIG = {
-  DESPOJO_ANOS: 78,    // 1948 + este valor = año actual
-  EDICION: 'IV',       // Incrementar cada semestre
-  SEMESTRE: '2025-I',  // Cambiar a '2025-II', '2026-I', etc.
-  COSECHA: '2025-I',   // Mismo valor
-} as const;
-```
+1. Ir a `/admin`
+2. Click **Semestres** en la barra superior
+3. Ingresar nombre (ej: `2026-I`) y click **Crear**
+4. El semestre aparece automáticamente en el filtro de la tabla y en el select del formulario de proyectos
 
 ### Agregar proyectos (vía admin)
 
@@ -464,6 +482,7 @@ Busca archivos en `public/images/archive/{semestre}/thumbs/`, los sube a Cloudin
 | `npm run preview` | Vista previa del build |
 | `npm run prerender` | Generar HTML estático para SEO |
 | `npm run build:seo` | Build + prerender |
+| `node scripts/migrate-semesters.mjs` | Migrar years existentes a la tabla semesters |
 | `node scripts/seed-projects.mjs` | Seed de proyectos en Supabase |
 | `node scripts/upload-thumbnails.mjs` | Subir thumbnails a Cloudinary |
 | `node scripts/fix-descriptions.mjs` | Corregir descripciones en DB |
