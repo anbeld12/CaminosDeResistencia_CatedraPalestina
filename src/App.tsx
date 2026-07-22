@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route, useLocation, Outlet } from 'react-router-
 import { Nav } from './components/Nav';
 import { Footer } from './components/Footer';
 import { AuthProvider, ProtectedRoute } from './lib/auth';
+import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Analytics } from "@vercel/analytics/react";
 import type { Theme } from './lib/types';
 
 const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
@@ -73,6 +75,8 @@ export function App() {
       <BrowserRouter>
         <AuthProvider>
           <ScrollToTop />
+          <SpeedInsights />
+          <Analytics />
           <Suspense fallback={<div style={{ height: '100vh' }} />}>
             <Routes>
               <Route path="/admin/login" element={<AdminLogin />} />
