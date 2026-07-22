@@ -13,6 +13,7 @@ import { useProjects } from '../lib/useProjects';
 import { OG_IMAGE, SITE_URL, SITE_NAME, SITE_LOCALE } from '../lib/seo';
 import { orgSchema, websiteSchema, courseSchema } from '../lib/seo-schema';
 import { CONFIG } from '../lib/config';
+import { useFocusTrap } from '../lib/useFocusTrap';
 
 /* ============ YOUTUBE IFrame API TYPES ============ */
 declare global {
@@ -61,6 +62,7 @@ export function Home() {
   const { projects } = useProjects();
   const [openProj, setOpenProj] = useState<Project | null>(null);
   useLockBodyScroll(!!openProj);
+  const modalRef = useFocusTrap(!!openProj, () => setOpenProj(null));
 
   return (
     <>
@@ -241,6 +243,8 @@ export function Home() {
               <div className="story-slot !p-0 !h-auto">
                 <ImageSlot
                   src="/images/home/ancient-olive-al-badawi.webp"
+                  srcSet="/images/home/ancient-olive-al-badawi-480.webp 480w, /images/home/ancient-olive-al-badawi-768.webp 768w, /images/home/ancient-olive-al-badawi-1200.webp 1200w"
+                  sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px"
                   alt="Salah Ali junto al colosal tronco del olivo al-Badawi en al-Walaja, uno de los árboles más antiguos del mundo."
                   credit="Fotografía documental por Jason Ruffin para Atlas Obscura. Exhibición con fines estrictamente pedagógicos, de memoria y de investigación académica en el entorno universitario (Uso Justo)."
                   label="Salah Ali y el olivo al-Badawi · al-Walaja"
@@ -375,7 +379,7 @@ export function Home() {
               if (!p) return null;
               return (
                 <Reveal key={p.id} as="article" delay={i * 0.06}>
-                  <div className="card cursor-pointer" onClick={() => setOpenProj(p)}>
+                  <div className="card cursor-pointer" onClick={() => setOpenProj(p)} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpenProj(p); } }}>
                     <div className="kicker">{p.group || p.author}</div>
                     <div className="mt-1 font-mono text-[10px] tracking-[0.1em] text-fg-mute">{KIND_GLYPH_LOCAL[p.kind] || p.kind}</div>
                     <h3 className="mt-2 text-[clamp(16px,1.6vw,20px)] font-serif leading-tight">
@@ -431,6 +435,7 @@ export function Home() {
           >
             <motion.div
               className="modal"
+              ref={modalRef}
               onClick={(e) => e.stopPropagation()}
               initial={{ opacity: 0, y: 30, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -597,21 +602,25 @@ function AudioPlayer() {
   const activeTrack = POETRY_PLAYLIST.find((t) => t.id === activeTrackId) ?? POETRY_PLAYLIST[0];
   const isYouTube = activeTrack.source === 'youtube';
 
-  useEffect(() => {
-    /* Auto-play starts muted — intentional pattern (like social media feeds) */
-    if (isInView && isYouTube) setIsPlaying(true);
-  }, [isInView, isYouTube]);
+  /* ============ YOUTUBE API (lazy) ============ */
+  const loadYouTubeAPIRef = useRef<Promise<void> | null>(null);
 
-  /* ============ YOUTUBE API ============ */
-  useEffect(() => {
-    if (window.YT?.Player) { setApiReady(true); return; }
-    (window as any).onYouTubeIframeAPIReady = () => setApiReady(true);
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    const firstScript = document.getElementsByTagName('script')[0];
-    firstScript?.parentNode?.insertBefore(tag, firstScript);
-    return () => { delete (window as any).onYouTubeIframeAPIReady; };
-  }, []);
+  function loadYouTubeAPI(): Promise<void> {
+    if (loadYouTubeAPIRef.current) return loadYouTubeAPIRef.current;
+    if (window.YT?.Player) { setApiReady(true); return Promise.resolve(); }
+
+    loadYouTubeAPIRef.current = new Promise<void>((resolve) => {
+      (window as any).onYouTubeIframeAPIReady = () => {
+        setApiReady(true);
+        resolve();
+      };
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+    });
+
+    return loadYouTubeAPIRef.current;
+  }
 
   useEffect(() => {
     if (!apiReady || !containerRef.current || playerRef.current) return;
@@ -702,7 +711,10 @@ function AudioPlayer() {
             <button
               type="button"
               className="audio-ctrl-btn"
-              onClick={() => setIsPlaying((p) => !p)}
+              onClick={() => {
+                if (isYouTube && !apiReady) { loadYouTubeAPI(); }
+                setIsPlaying((p) => !p);
+              }}
               aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
             >
               {isPlaying ? <Icon.Pause /> : <Icon.Play />}
@@ -728,7 +740,10 @@ function AudioPlayer() {
       <button
         type="button"
         className="audio-accordion-btn"
-        onClick={() => setShowVideo((v) => !v)}
+        onClick={() => {
+          if (isYouTube && !showVideo && !apiReady) { loadYouTubeAPI(); }
+          setShowVideo((v) => !v);
+        }}
         aria-expanded={showVideo}
       >
         <span className="left-side">

@@ -135,6 +135,12 @@ export function SemesterModal({ open, onClose, onChanged }: SemesterModalProps) 
           </div>
         )}
 
+        {!loading && error && semesters.length === 0 && (
+          <div className="text-center py-3 mb-2 text-fg-mute text-sm">
+            Verifica la conexión con el servidor e intenta de nuevo.
+          </div>
+        )}
+
         {loading ? (
           <div className="text-center py-8 text-fg-mute font-mono text-xs tracking-[0.14em] uppercase">
             Cargando…

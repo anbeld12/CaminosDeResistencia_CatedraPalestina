@@ -326,6 +326,9 @@ export function AdminProjectForm() {
                       {semesters.map((s) => (
                         <option key={s.id} value={s.name}>{s.name}</option>
                       ))}
+                      {isEdit && form.year && !semesters.some((s) => s.name === form.year) && (
+                        <option value={form.year}>{form.year}</option>
+                      )}
                     </select>
                   </div>
                 </div>
@@ -347,8 +350,9 @@ export function AdminProjectForm() {
               <legend className="admin-card-title">Multimedia</legend>
               <div className="space-y-4">
                 <div>
-                  <label className="admin-field-label">Miniatura</label>
+                  <label htmlFor="project-thumbnail" className="admin-field-label">Miniatura</label>
                   <input
+                    id="project-thumbnail"
                     ref={fileInputRef}
                     type="file"
                     accept="image/png,image/jpeg,image/webp"
@@ -431,6 +435,7 @@ export function AdminProjectForm() {
                     {form.links.map((link, i) => (
                       <div key={i} className="admin-link-row">
                         <input
+                          aria-label={`Etiqueta del enlace ${i + 1}`}
                           placeholder="Etiqueta"
                           value={link.label}
                           onChange={(e) => handleLinkChange(i, 'label', e.target.value)}
@@ -438,13 +443,14 @@ export function AdminProjectForm() {
                           style={{ borderRadius: 6, padding: '8px 10px', fontSize: 13 }}
                         />
                         <input
+                          aria-label={`URL del enlace ${i + 1}`}
                           placeholder="URL"
                           value={link.url}
                           onChange={(e) => handleLinkChange(i, 'url', e.target.value)}
                           className="admin-input"
                           style={{ borderRadius: 6, padding: '8px 10px', fontSize: 13 }}
                         />
-                        <button type="button" onClick={() => handleRemoveLink(i)}
+                        <button type="button" onClick={() => handleRemoveLink(i)} aria-label={`Eliminar enlace ${i + 1}`}
                           className="flex items-center justify-center w-8 h-8 rounded-lg border border-[var(--line)] bg-transparent text-fg-mute hover:text-accent hover:border-accent transition-colors shrink-0">
                           <X size={14} />
                         </button>

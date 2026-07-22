@@ -24,7 +24,10 @@ export function Nav({ theme, toggleTheme }: NavProps) {
         <nav className="nav" aria-label="Principal">
           <Link className="brand" to="/">
             <span className="brand-mark">
-              <img src="/navbar-icon.png" alt="Caminos de Resistencia" width={28} height={28} />
+              <picture>
+                <source srcSet="/navbar-icon.webp" type="image/webp" />
+                <img src="/navbar-icon.png" alt="Caminos de Resistencia" width={28} height={28} />
+              </picture>
             </span>
             <span>
               Caminos de Resistencia
@@ -47,10 +50,10 @@ export function Nav({ theme, toggleTheme }: NavProps) {
           </div>
 
           <div className="nav-meta">
-            <button className="icon-btn" onClick={toggleTheme} title="Alternar tema">
+            <button className="icon-btn" onClick={toggleTheme} aria-label="Alternar tema">
               {theme === 'dark' ? <Icon.Sun /> : <Icon.Moon />}
             </button>
-            <Link to="/archivo" className="nav-cta">
+            <Link to="/archivo" className="nav-cta" aria-label="Explorar el Archivo">
               <span className="cta-text">Explorar el Archivo</span>
               <Icon.Arrow />
             </Link>
@@ -76,7 +79,7 @@ export function Nav({ theme, toggleTheme }: NavProps) {
           <Link to="/archivo" className="btn terra">
             Explorar el Archivo <Icon.Arrow />
           </Link>
-          <button className="icon-btn" onClick={toggleTheme}>
+          <button className="icon-btn" onClick={toggleTheme} aria-label="Alternar tema">
             {theme === 'dark' ? <Icon.Sun /> : <Icon.Moon />}
           </button>
         </div>

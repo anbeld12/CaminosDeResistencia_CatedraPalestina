@@ -11,6 +11,95 @@
     <meta http-equiv="content-language" content="es-CO" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="canonical" href="https://catedrapalestinacaminosderesistencia.com" />
+    <style>
+      :root {
+        --olive: #2E4731; --olive-deep: #1d2f1f; --olive-soft: rgba(46,71,49,0.08);
+        --terracotta: #8B1D22; --terracotta-soft: rgba(139,29,34,0.08);
+        --carbon: #121212; --smoke: #F5F5F5; --paper: #FAFAF7;
+        --ink: #121212; --ink-mute: #4a4a48;
+        --line: rgba(18,18,18,0.12); --line-soft: rgba(18,18,18,0.06);
+        --gold-accent: #d4a04a; --gold-accent-soft: rgba(212,160,74,0.10);
+        --text-on-terracotta: #fff7f1; --text-on-carbon: #f5f1e6;
+        --footer-text: #d8d3c5; --footer-mute: rgba(255,255,255,0.55);
+        --footer-line: rgba(255,255,255,0.08); --bg: var(--smoke); --bg-warm: var(--paper);
+        --fg: var(--ink); --fg-mute: var(--ink-mute);
+        --serif: "Playfair Display","Times New Roman",serif;
+        --sans: Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;
+        --mono: "JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+        --nav-h: 72px; --pad: clamp(20px,4vw,64px); --max: 1280px;
+      }
+      html[data-theme="dark"],html.dark {
+        --bg: #0b0c0a; --bg-warm: #121310; --fg: #f1ede4; --fg-mute: #c8c4bc;
+        --line: rgba(241,237,228,0.14); --line-soft: rgba(241,237,228,0.07);
+        --olive: #6f9456; --olive-deep: #4d6b3a; --olive-soft: rgba(140,175,130,0.12);
+        --terracotta: #d45a5e; --terracotta-soft: rgba(212,90,94,0.14);
+        --gold-accent: #e8b04a; --text-on-carbon: #0b0c0a;
+      }
+      html,body{margin:0;padding:0}
+      body{font-family:var(--sans);font-size:16px;line-height:1.55;color:var(--fg);background:var(--bg);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
+      h1,h2,h3,h4,.serif{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;text-wrap:balance;margin:0}
+      h1{font-size:clamp(48px,8vw,132px);line-height:.95;letter-spacing:-.035em}
+      h2{font-size:clamp(32px,4.5vw,64px);line-height:1.02;letter-spacing:-.025em}
+      p{margin:0;text-wrap:pretty}
+      .wrap{width:100%;max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+      .section{padding:clamp(80px,12vh,140px) 0;position:relative}
+      .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--fg-mute)}
+      .eyebrow .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--terracotta);margin-right:10px;vertical-align:middle;transform:translateY(-1px)}
+      .nav-shell{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:200;width:calc(100% - 32px);max-width:1180px;transition:top .35s cubic-bezier(.2,.7,.2,1),max-width .35s cubic-bezier(.2,.7,.2,1)}
+      .nav-shell.is-scrolled{top:12px;max-width:1080px}
+      .nav-shell.is-scrolled .nav{padding:8px 12px 8px 18px}
+      .nav{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:12px 14px 12px 22px;border-radius:999px;background:color-mix(in srgb,var(--bg) 65%,transparent);backdrop-filter:blur(18px) saturate(1.3);border:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+      .nav::-webkit-scrollbar{display:none}
+      .brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:17px;font-weight:600;letter-spacing:-.01em;color:var(--fg);text-decoration:none;white-space:nowrap}
+      .brand-mark{width:28px;height:28px;position:relative;flex-shrink:0}
+      .brand-mark img,.brand-mark svg{display:block;width:100%;height:100%}
+      .brand small{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-mute);font-weight:400;display:block;margin-top:-2px}
+      .nav-links{display:flex;align-items:center;gap:2px}
+      .nav-link{position:relative;padding:8px 14px;border-radius:999px;font-size:14px;font-weight:500;color:var(--fg);text-decoration:none;background:transparent;border:none;cursor:pointer;font-family:inherit;transition:color .25s ease;white-space:nowrap}
+      .nav-link:hover{color:var(--terracotta)}
+      .nav-link.is-active{background:var(--olive);color:var(--text-on-carbon)}
+      html[data-theme="dark"] .nav-link.is-active,html.dark .nav-link.is-active{background:#f1ede4;color:#0b0c0a}
+      .nav-cta{display:inline-flex;align-items:center;gap:8px;padding:9px 14px 9px 16px;border-radius:999px;background:var(--terracotta);color:var(--text-on-terracotta);font-size:13px;font-weight:500;border:none;cursor:pointer;font-family:inherit;white-space:nowrap;transition:transform .2s ease,background-color .2s ease;text-decoration:none}
+      .nav-meta{display:flex;align-items:center;gap:6px}
+      .icon-btn{width:38px;height:38px;border-radius:999px;border:1px solid var(--line);background:transparent;display:inline-flex;align-items:center;justify-content:center;color:var(--fg);cursor:pointer;transition:background .2s ease,transform .2s ease,color .2s ease}
+      .icon-btn svg{width:16px;height:16px}
+      .mobile-sheet{position:fixed;inset:0;z-index:199;background:color-mix(in srgb,var(--bg) 95%,transparent);backdrop-filter:blur(20px);display:flex;flex-direction:column;padding:96px 28px 28px;gap:4px;transform:translateY(-100%);opacity:0;transition:transform .4s cubic-bezier(.2,.8,.2,1),opacity .3s ease;pointer-events:none}
+      .mobile-sheet.is-open{transform:translateY(0);opacity:1;pointer-events:auto}
+      .hero{position:relative;min-height:100vh;padding-top:calc(var(--nav-h) + 40px);padding-bottom:80px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;isolation:isolate}
+      .hero-bg{position:absolute;inset:0;z-index:-1;background:radial-gradient(80% 60% at 80% 20%,color-mix(in srgb,var(--terracotta) 18%,transparent),transparent 60%),radial-gradient(60% 50% at 10% 90%,color-mix(in srgb,var(--olive) 30%,transparent),transparent 60%),var(--bg)}
+      .hero-title{font-style:italic}
+      .hero-title em{font-style:italic;color:var(--terracotta)}
+      .hero-foot{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:28px;margin-top:clamp(32px,6vh,56px);padding-top:24px;border-top:1px solid var(--line)}
+      .hero-foot .stat .num{font-family:var(--serif);font-size:36px;line-height:1;letter-spacing:-.02em;display:block}
+      .hero-foot .stat .lbl{display:block;margin-top:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-mute)}
+      .page-head{padding-top:calc(var(--nav-h) + 80px);padding-bottom:56px;position:relative}
+      .page-head .row{display:grid;grid-template-columns:1.2fr 1fr;gap:64px;align-items:end}
+      .page-head h1{font-size:clamp(56px,10vw,132px)}
+      .page-head .lede{font-size:17px;color:var(--fg-mute);max-width:44ch;line-height:1.55}
+      @media(max-width:768px){
+        h1{font-size:clamp(38px,11vw,64px);line-height:1;letter-spacing:-.03em}
+        h2{font-size:clamp(28px,7vw,40px);line-height:1.08}
+        .section{padding:64px 0}
+        .eyebrow{font-size:12px;letter-spacing:.14em}
+        .nav-shell{top:12px;width:calc(100% - 16px)}
+        .nav{padding:10px 10px 10px 16px;gap:12px}
+        .brand{font-size:15px}
+        .brand small{font-size:9px}
+        .icon-btn{width:36px;height:36px}
+        .mobile-sheet{padding:88px 20px 24px}
+        .hero{padding-top:calc(var(--nav-h) + 24px);padding-bottom:56px;min-height:auto}
+        .hero-foot{margin-top:40px;padding-top:20px;gap:18px}
+        .hero-foot .stat .num{font-size:28px}
+        .page-head{padding-top:calc(var(--nav-h) + 40px);padding-bottom:32px}
+        .page-head h1{font-size:clamp(44px,12vw,80px)}
+        .page-head .lede{font-size:15px;max-width:100%}
+      }
+      @media(max-width:480px){
+        h1{font-size:clamp(34px,10.5vw,48px)}
+        .page-head h1{font-size:clamp(40px,13vw,64px)}
+        .hero-foot .stat .num{font-size:26px}
+      }
+    </style>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -29,11 +118,13 @@
     <meta name="twitter:description" content="Plataforma de Memoria y Solidaridad Académica · UNAL + Embajada del Estado de Palestina." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" crossorigin>
+    <link rel="preconnect" href="https://uwrlrprpaycwzepudiug.supabase.co">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" crossorigin fetchpriority="high">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

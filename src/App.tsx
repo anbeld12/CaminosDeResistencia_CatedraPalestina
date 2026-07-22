@@ -1,24 +1,35 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, Routes, Route, useLocation, Outlet } from 'react-router-dom';
 import { Nav } from './components/Nav';
 import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
-import { ONGs } from './pages/ONGs';
-import { History } from './pages/History';
-import { Archive } from './pages/Archive';
-import { Voces } from './pages/Voces';
-import { Genero } from './pages/Genero';
-import { NotFound } from './pages/NotFound';
-import { AdminLogin } from './pages/admin/Login';
-import { AdminDashboard } from './pages/admin/Dashboard';
-import { AdminProjectForm } from './pages/admin/ProjectForm';
 import { AuthProvider, ProtectedRoute } from './lib/auth';
 import type { Theme } from './lib/types';
 
+const ONGs = lazy(() => import('./pages/ONGs').then(m => ({ default: m.ONGs })));
+const History = lazy(() => import('./pages/History').then(m => ({ default: m.History })));
+const Archive = lazy(() => import('./pages/Archive').then(m => ({ default: m.Archive })));
+const Voces = lazy(() => import('./pages/Voces').then(m => ({ default: m.Voces })));
+const Genero = lazy(() => import('./pages/Genero').then(m => ({ default: m.Genero })));
+const NotFound = lazy(() => import('./pages/NotFound').then(m => ({ default: m.NotFound })));
+const AdminLogin = lazy(() => import('./pages/admin/Login').then(m => ({ default: m.AdminLogin })));
+const AdminDashboard = lazy(() => import('./pages/admin/Dashboard').then(m => ({ default: m.AdminDashboard })));
+const AdminProjectForm = lazy(() => import('./pages/admin/ProjectForm').then(m => ({ default: m.AdminProjectForm })));
+
 function ScrollToTop() {
   const { pathname } = useLocation();
-  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const timer = setTimeout(() => {
+      const main = document.getElementById('main-content');
+      if (main) {
+        main.setAttribute('tabindex', '-1');
+        main.focus({ preventScroll: true });
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [pathname]);
   return null;
 }
 
@@ -31,7 +42,7 @@ function AppLayout({ theme, toggleTheme }: AppLayoutProps) {
   return (
     <>
       <Nav theme={theme} toggleTheme={toggleTheme} />
-      <main><Outlet /></main>
+      <main id="main-content"><Outlet /></main>
       <Footer />
     </>
   );
@@ -61,21 +72,23 @@ export function App() {
       <BrowserRouter>
         <AuthProvider>
           <ScrollToTop />
-          <Routes>
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route element={<AppLayout theme={theme} toggleTheme={toggleTheme} />}>
-              <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-              <Route path="/admin/projects/new" element={<ProtectedRoute><AdminProjectForm /></ProtectedRoute>} />
-              <Route path="/admin/projects/:id/edit" element={<ProtectedRoute><AdminProjectForm /></ProtectedRoute>} />
-              <Route index element={<Home />} />
-              <Route path="historia" element={<History />} />
-              <Route path="ongs" element={<ONGs />} />
-              <Route path="genero" element={<Genero />} />
-              <Route path="voces" element={<Voces />} />
-              <Route path="archivo" element={<Archive />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
+          <Suspense fallback={<div style={{ height: '100vh' }} />}>
+            <Routes>
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route element={<AppLayout theme={theme} toggleTheme={toggleTheme} />}>
+                <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+                <Route path="/admin/projects/new" element={<ProtectedRoute><AdminProjectForm /></ProtectedRoute>} />
+                <Route path="/admin/projects/:id/edit" element={<ProtectedRoute><AdminProjectForm /></ProtectedRoute>} />
+                <Route index element={<Home />} />
+                <Route path="historia" element={<History />} />
+                <Route path="ongs" element={<ONGs />} />
+                <Route path="genero" element={<Genero />} />
+                <Route path="voces" element={<Voces />} />
+                <Route path="archivo" element={<Archive />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
+          </Suspense>
         </AuthProvider>
       </BrowserRouter>
     </HelmetProvider>

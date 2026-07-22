@@ -36,10 +36,11 @@ export function AdminLogin() {
         <Reveal delay={0.1}>
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
             <div>
-              <label className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute block mb-1.5">
+              <label htmlFor="login-email" className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute block mb-1.5">
                 Correo electrónico
               </label>
               <input
+                id="login-email"
                 type="email"
                 required
                 value={email}
@@ -48,10 +49,11 @@ export function AdminLogin() {
               />
             </div>
             <div>
-              <label className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute block mb-1.5">
+              <label htmlFor="login-password" className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg-mute block mb-1.5">
                 Contraseña
               </label>
               <input
+                id="login-password"
                 type="password"
                 required
                 value={password}

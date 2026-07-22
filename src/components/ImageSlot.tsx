@@ -7,6 +7,8 @@ interface ImageSlotProps {
   variant?: ImageVariant;
   className?: string;
   src?: string;
+  srcSet?: string;
+  sizes?: string;
   alt?: string;
   credit?: string;
   objectPosition?: string;
@@ -18,7 +20,7 @@ const VARIANT_STRIPES: Record<ImageVariant, string> = {
   carbon: 'repeating-linear-gradient(135deg, var(--line-soft) 0 14px, transparent 14px 28px)',
 };
 
-export function ImageSlot({ height, label, variant = 'olive', className = '', src, alt, credit, objectPosition }: ImageSlotProps) {
+export function ImageSlot({ height, label, variant = 'olive', className = '', src, srcSet, sizes, alt, credit, objectPosition }: ImageSlotProps) {
   const style: CSSProperties = {
     ...(height !== undefined ? { height } : {}),
     background: `${VARIANT_STRIPES[variant]}, var(--bg-warm)`,
@@ -28,7 +30,7 @@ export function ImageSlot({ height, label, variant = 'olive', className = '', sr
     <div className={'image-slot ' + className} style={style}>
       {src ? (
         <>
-          <img src={src} alt={alt ?? label ?? ''} className={'image-slot-img' + (height !== undefined ? '' : ' image-slot-img--auto')} style={{ objectPosition: objectPosition ?? '50% 50%' }} />
+          <img src={src} srcSet={srcSet} sizes={sizes} alt={alt ?? label ?? ''} className={'image-slot-img' + (height !== undefined ? '' : ' image-slot-img--auto')} style={{ objectPosition: objectPosition ?? '50% 50%' }} />
           {credit && (
             <div className="absolute bottom-3 right-3 z-10 flex flex-col items-end">
               <div className="mb-1 w-56 p-2 bg-neutral-900/95 text-neutral-300 text-[9px] font-mono rounded-md border border-white/10 shadow-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-right leading-relaxed">

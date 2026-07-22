@@ -7,6 +7,7 @@ import { Icon } from '../lib/icons';
 import { useLockBodyScroll } from '../lib/hooks';
 import { BIBLIOGRAPHY, KIND_GLYPH, buildKindFilters } from '../data/archive';
 import { useProjects } from '../lib/useProjects';
+import { useFocusTrap } from '../lib/useFocusTrap';
 import type { Project } from '../lib/types';
 import { OG_IMAGE, SITE_URL, SITE_NAME, SITE_LOCALE } from '../lib/seo';
 import { collectionPageSchema, bookSchema, breadcrumbSchema } from '../lib/seo-schema';
@@ -84,14 +85,14 @@ function ProjectCard({ p, onOpen, variant }: ProjectCardProps) {
   const thumbBg = hasThumb ? { backgroundImage: `url(${p.thumbnail})`, backgroundSize: 'cover' as const, backgroundPosition: 'center' as const } : undefined;
   if (variant === 'list') {
     return (
-      <Reveal as="article" className="proj-row" onClick={() => onOpen(p)}>
+      <Reveal as="article" className="proj-row" onClick={() => onOpen(p)} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onOpen(p); } }}>
         <div className={'proj-thumb' + (hasThumb ? '' : ' kind-' + p.kind)} style={thumbBg}>
           <div className="kind-num">N° {p.n}</div>
           {!hasThumb && <div className="kind-glyph">{KIND_GLYPH[p.kind]}</div>}
           {p.aiThumbnail && <div className="absolute top-1.5 left-1.5 z-10 font-mono text-[8px] md:text-[9px] tracking-[0.12em] uppercase bg-black/50 backdrop-blur-sm text-white/80 px-1.5 py-0.5 rounded-sm">AI · ref.</div>}
         </div>
         <div className="proj-body">
-          <h4>{p.title}</h4>
+          <h3>{p.title}</h3>
           <div className="proj-meta">{p.author} · {p.year} · <span className="text-accent">{p.kind.toUpperCase()}</span></div>
         </div>
         <span className={'proj-kind-chip ' + KIND_CHIP_CLASS[p.kind]}>{p.kind.toUpperCase()}</span>
@@ -100,7 +101,7 @@ function ProjectCard({ p, onOpen, variant }: ProjectCardProps) {
     );
   }
   return (
-    <Reveal as="article" className="proj" onClick={() => onOpen(p)}>
+    <Reveal as="article" className="proj" onClick={() => onOpen(p)} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onOpen(p); } }}>
       <div className={'proj-thumb' + (hasThumb ? '' : ' kind-' + p.kind)} style={thumbBg}>
         <div className="kind-num">N° {p.n}</div>
         {!hasThumb && <div className="kind-glyph">{KIND_GLYPH[p.kind]}</div>}
@@ -110,7 +111,7 @@ function ProjectCard({ p, onOpen, variant }: ProjectCardProps) {
         <span className="text-accent">{p.kind.toUpperCase()}</span>
         <span>· {p.year}</span>
       </div>
-      <h4>{p.title}</h4>
+      <h3>{p.title}</h3>
       <div className="author">{p.author}</div>
       <div className="proj-foot">
         <span>{p.tags.join(' · ')}</span>
@@ -131,6 +132,7 @@ export function Archive() {
   const [copied, setCopied] = useState(false);
   const [expandedLinks, setExpandedLinks] = useState(false);
   const [modalImgError, setModalImgError] = useState(false);
+  const modalRef = useFocusTrap(!!openProj, () => setOpenProj(null));
 
   const { projects, loading, error, refetch } = useProjects();
 
@@ -387,6 +389,7 @@ export function Archive() {
           >
             <motion.div
               className="modal"
+              ref={modalRef}
               onClick={(e) => e.stopPropagation()}
               initial={{ opacity: 0, y: 30, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}

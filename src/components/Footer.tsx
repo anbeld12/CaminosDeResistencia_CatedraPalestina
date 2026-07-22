@@ -12,7 +12,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4>Navegación Rápida</h4>
+            <h2>Navegación Rápida</h2>
             {PAGES.map(p => (
               <Link key={p.id} to={p.path}>
                 {p.label}
@@ -21,7 +21,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4>Acompañamiento</h4>
+            <h2>Acompañamiento</h2>
             <ul className="footer-inst">
               <li>Cátedra Caminos De Resistencia</li>
               <li>Iniciativa Y Gestión Colectiva Estudiantil</li>

@@ -10,6 +10,7 @@ import { PODCAST_SERIES } from '../data/podcast-series';
 import { useProjects } from '../lib/useProjects';
 import { OG_IMAGE, SITE_URL, SITE_NAME, SITE_LOCALE } from '../lib/seo';
 import { articleSchema, breadcrumbSchema, videoObjectSchema, podcastEpisodeSchema } from '../lib/seo-schema';
+import { LazyYouTube } from '../components/LazyYouTube';
 import { CONFIG } from '../lib/config';
 
 /* ============================================================
@@ -814,18 +815,7 @@ function VideoTab() {
 
               {embedId && (
                 <div className="mt-5">
-                  <div className="aspect-video rounded-xl overflow-hidden bg-black">
-                    <iframe
-                      src={`https://www.youtube.com/embed/${embedId}?autoplay=1`}
-                      width="100%"
-                      height="100%"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      className="border-0"
-                      title={v.title}
-                      allowFullScreen
-                    />
-                  </div>
-
+                  <LazyYouTube embedId={embedId} title={v.title} />
                 </div>
               )}
 
