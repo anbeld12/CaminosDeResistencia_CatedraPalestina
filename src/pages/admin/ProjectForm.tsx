@@ -73,7 +73,7 @@ export function AdminProjectForm() {
           navigate('/admin');
           return;
         }
-        const data = raw as unknown as ProjectRow;
+        const data = raw as ProjectRow;
         setForm({
           title: data.title,
           kind: data.kind,
@@ -116,7 +116,11 @@ export function AdminProjectForm() {
     setForm((prev) => ({ ...prev, links: prev.links.filter((_, i) => i !== index) }));
   };
 
-  const isValidUrl = (str: string) => !str || str.startsWith('http://') || str.startsWith('https://');
+  const isValidUrl = (str: string) => {
+    if (!str) return true;
+    try { new URL(str); return true; }
+    catch { return false; }
+  };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -188,7 +192,6 @@ export function AdminProjectForm() {
     const token = session?.access_token;
 
     if (!token) {
-      sessionStorage.setItem('cdr-pending-form', JSON.stringify(form));
       navigate('/admin/login', { replace: true });
       return;
     }
@@ -213,7 +216,6 @@ export function AdminProjectForm() {
     });
 
     if (res.status === 401) {
-      sessionStorage.setItem('cdr-pending-form', JSON.stringify(form));
       navigate('/admin/login', { replace: true });
       return;
     }

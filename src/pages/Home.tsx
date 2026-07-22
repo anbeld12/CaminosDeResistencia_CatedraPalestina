@@ -366,7 +366,7 @@ export function Home() {
         <div className="wrap">
           <Reveal>
             <h2 className="hr-rule mb-10">
-              <span>Cosecha {CONFIG.COSECHA} · proyectos destacados</span>
+              <span>Cosecha {CONFIG.SEMESTRE} · proyectos destacados</span>
             </h2>
           </Reveal>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

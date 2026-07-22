@@ -1,26 +1,15 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
-
-const VALID_KINDS = [
-  'ensayo', 'cartografia', 'video', 'podcast',
-  'fanzine', 'mural', 'collage', 'grabado',
-] as const;
+import { VALID_KINDS, getAuthenticatedUser, requireEnv } from '../_shared';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const supabase = createClient(
-    process.env.VITE_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!,
-  );
-
-  const authHeader = req.headers.authorization;
-  const token = authHeader?.replace('Bearer ', '');
-  const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-
-  if (authError || !user) {
+  try {
+    await getAuthenticatedUser(req);
+  } catch {
     return res.status(401).json({ error: 'No autorizado' });
   }
 
@@ -38,6 +27,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!body.n || typeof body.n !== 'string') {
     return res.status(400).json({ error: 'El número de proyecto es obligatorio' });
   }
+
+  const supabase = createClient(
+    requireEnv('VITE_SUPABASE_URL'),
+    requireEnv('SUPABASE_SERVICE_KEY'),
+  );
 
   const { data, error: insertError } = await supabase
     .from('projects')

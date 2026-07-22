@@ -6,7 +6,7 @@ import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
 import { ImageGallery } from '../components/ImageGallery';
 import { Icon } from '../lib/icons';
-import { PODCAST_SERIES } from '../data/projects-2025-1';
+import { PODCAST_SERIES } from '../data/podcast-series';
 import { useProjects } from '../lib/useProjects';
 import { OG_IMAGE, SITE_URL, SITE_NAME, SITE_LOCALE } from '../lib/seo';
 import { articleSchema, breadcrumbSchema, videoObjectSchema, podcastEpisodeSchema } from '../lib/seo-schema';

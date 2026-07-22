@@ -9,6 +9,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const THUMBS_DIR = join(ROOT, 'public', 'images', 'archive', '2025-I', 'thumbs');
 
+const UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET ?? UPLOAD_PRESET;
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -317,7 +319,7 @@ async function uploadToCloudinary(filePath, publicId) {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
       public_id: publicId,
-      upload_preset: 'catedra_palestina',
+      upload_preset: UPLOAD_PRESET,
       overwrite: true,
     });
     return result.secure_url;

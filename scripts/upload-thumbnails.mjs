@@ -14,6 +14,8 @@ const THUMBS_DIR = SEMESTER
   ? join(ROOT, 'public', 'images', 'archive', SEMESTER, 'thumbs')
   : null;
 
+const UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET ?? 'catedra_palestina';
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -44,7 +46,7 @@ function slugify(text, maxLen = 50) {
 async function uploadToCloudinary(filePath, publicId) {
   const result = await cloudinary.uploader.upload(filePath, {
     public_id: publicId,
-    upload_preset: 'catedra_palestina',
+    upload_preset: UPLOAD_PRESET,
     overwrite: true,
   });
   return result.secure_url;

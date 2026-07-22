@@ -11,13 +11,14 @@ export function AdminDashboard() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState<ProjectRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState<number | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const loadProjects = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase
       .from('projects')
       .select('*')
-      .order('year', { ascending: false })
       .order('id', { ascending: true });
     if (data) setProjects(data);
     setLoading(false);
@@ -27,15 +28,24 @@ export function AdminDashboard() {
 
   const handleDelete = async (id: number, title: string) => {
     if (!window.confirm(`¿Eliminar "${title}"?`)) return;
+    setDeleting(id);
+    setDeleteError(null);
     const { data: { session } } = await supabase.auth.getSession();
     const token = session?.access_token;
-    if (!token) { navigate('/admin/login', { replace: true }); return; }
+    if (!token) { setDeleting(null); navigate('/admin/login', { replace: true }); return; }
     const res = await fetch(`/api/admin/${id}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` },
     });
-    if (res.status === 401) { navigate('/admin/login', { replace: true }); return; }
-    loadProjects();
+    if (res.status === 401) { setDeleting(null); navigate('/admin/login', { replace: true }); return; }
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Error al eliminar' }));
+      setDeleteError(err.error ?? 'Error al eliminar');
+      setDeleting(null);
+      return;
+    }
+    await loadProjects();
+    setDeleting(null);
   };
 
   return (
@@ -60,6 +70,9 @@ export function AdminDashboard() {
         </Reveal>
 
         <Reveal delay={0.1}>
+          {deleteError && (
+            <div className="text-accent text-sm mb-4">{deleteError}</div>
+          )}
           {loading ? (
             <div className="text-center py-12 text-fg-mute font-mono text-xs tracking-[0.14em] uppercase">
               Cargando...
@@ -101,10 +114,11 @@ export function AdminDashboard() {
                             Editar
                           </button>
                           <button
-                            className="font-mono text-[11px] tracking-[0.12em] uppercase text-accent hover:text-accent/70 transition-colors"
+                            className="font-mono text-[11px] tracking-[0.12em] uppercase text-accent hover:text-accent/70 transition-colors disabled:opacity-40"
+                            disabled={deleting === p.id}
                             onClick={() => handleDelete(p.id, p.title)}
                           >
-                            Eliminar
+                            {deleting === p.id ? 'Eliminando...' : 'Eliminar'}
                           </button>
                         </div>
                       </td>

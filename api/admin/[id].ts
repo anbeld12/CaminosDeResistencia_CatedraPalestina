@@ -1,22 +1,16 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
-
-const VALID_KINDS = [
-  'ensayo', 'cartografia', 'video', 'podcast',
-  'fanzine', 'mural', 'collage', 'grabado',
-] as const;
+import { VALID_KINDS, getAuthenticatedUser, requireEnv } from '../_shared';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const supabase = createClient(
-    process.env.VITE_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!,
+    requireEnv('VITE_SUPABASE_URL'),
+    requireEnv('SUPABASE_SERVICE_KEY'),
   );
 
-  const authHeader = req.headers.authorization;
-  const token = authHeader?.replace('Bearer ', '');
-  const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-
-  if (authError || !user) {
+  try {
+    await getAuthenticatedUser(req);
+  } catch {
     return res.status(401).json({ error: 'No autorizado' });
   }
 
@@ -56,8 +50,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (body.aiThumbnail !== undefined) updates.ai_thumbnail = !!body.aiThumbnail;
     if (body.members !== undefined) updates.members = body.members;
     if (body.groupName !== undefined) updates.group_name = body.groupName?.trim() ?? null;
-
-    updates.updated_at = new Date().toISOString();
 
     const { data, error: updateError } = await supabase
       .from('projects')
