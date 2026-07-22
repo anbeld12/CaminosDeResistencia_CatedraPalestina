@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
 import { ImageBook } from '../components/ImageBook';
-import { PROJECTS_2025_1 } from '../data/projects-2025-1';
 import { FANZINE_G12 } from '../data/fanzine-g12';
+import { useProjects } from '../lib/useProjects';
 import { Icon } from '../lib/icons';
 import type { Project } from '../lib/types';
 import { OG_IMAGE } from '../lib/seo';
+import { CONFIG } from '../lib/config';
 import { articleSchema } from '../lib/seo-schema';
 
 /* ============================================================
@@ -104,6 +105,7 @@ const GENDER_DATA = {
 };
 
 function PalestinaDeTodas() {
+  const { projects } = useProjects();
   return (
     <>
       {/* ── INTRO · Sumud ─────────────────────────────────────── */}
@@ -226,7 +228,7 @@ function PalestinaDeTodas() {
                 credit={FANZINE_G12.credit}
               />
               <a
-                href={PROJECTS_2025_1.find(p => p.id === 12)?.url}
+                href={projects.find(p => p.id === 12)?.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn terra self-start"
@@ -263,6 +265,7 @@ function PalestinaDeTodas() {
    Main Genero page
    ============================================================ */
 export function Genero() {
+  const { projects } = useProjects();
   return (
     <>
       <Helmet>
@@ -332,11 +335,11 @@ export function Genero() {
         <div className="wrap">
           <Reveal>
             <h2 className="hr-rule mb-10">
-              <span>Voces desde el aula · proyectos 2025-I</span>
+              <span>Voces desde el aula · proyectos {CONFIG.SEMESTRE}</span>
             </h2>
           </Reveal>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {PROJECTS_2025_1.filter(p => [10, 5, 12].includes(p.id)).map((p, i) => (
+            {projects.filter(p => [10, 5, 12].includes(p.id)).map((p, i) => (
               <EstudianteCard key={p.id} p={p} delay={i * 0.08} />
             ))}
           </div>

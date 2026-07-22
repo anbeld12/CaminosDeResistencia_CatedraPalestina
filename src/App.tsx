@@ -10,6 +10,10 @@ import { Archive } from './pages/Archive';
 import { Voces } from './pages/Voces';
 import { Genero } from './pages/Genero';
 import { NotFound } from './pages/NotFound';
+import { AdminLogin } from './pages/admin/Login';
+import { AdminDashboard } from './pages/admin/Dashboard';
+import { AdminProjectForm } from './pages/admin/ProjectForm';
+import { AuthProvider, ProtectedRoute } from './lib/auth';
 import type { Theme } from './lib/types';
 
 function ScrollToTop() {
@@ -55,18 +59,24 @@ export function App() {
   return (
     <HelmetProvider>
       <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
-          <Route element={<AppLayout theme={theme} toggleTheme={toggleTheme} />}>
-            <Route index element={<Home />} />
-            <Route path="historia" element={<History />} />
-            <Route path="ongs" element={<ONGs />} />
-            <Route path="genero" element={<Genero />} />
-            <Route path="voces" element={<Voces />} />
-            <Route path="archivo" element={<Archive />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
+        <AuthProvider>
+          <ScrollToTop />
+          <Routes>
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route element={<AppLayout theme={theme} toggleTheme={toggleTheme} />}>
+              <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+              <Route path="/admin/projects/new" element={<ProtectedRoute><AdminProjectForm /></ProtectedRoute>} />
+              <Route path="/admin/projects/:id/edit" element={<ProtectedRoute><AdminProjectForm /></ProtectedRoute>} />
+              <Route index element={<Home />} />
+              <Route path="historia" element={<History />} />
+              <Route path="ongs" element={<ONGs />} />
+              <Route path="genero" element={<Genero />} />
+              <Route path="voces" element={<Voces />} />
+              <Route path="archivo" element={<Archive />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </HelmetProvider>
   );

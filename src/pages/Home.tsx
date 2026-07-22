@@ -6,11 +6,13 @@ import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
 import { Icon } from '../lib/icons';
+import { useLockBodyScroll } from '../lib/hooks';
 import type { Project } from '../lib/types';
-import { PROJECTS_2025_1 } from '../data/projects-2025-1';
 import { POETRY_PLAYLIST } from '../data/playlist';
+import { useProjects } from '../lib/useProjects';
 import { OG_IMAGE } from '../lib/seo';
 import { orgSchema, websiteSchema } from '../lib/seo-schema';
+import { CONFIG } from '../lib/config';
 
 /* ============ YOUTUBE IFrame API TYPES ============ */
 declare global {
@@ -56,7 +58,9 @@ interface YTPlayer {
 }
 
 export function Home() {
+  const { projects } = useProjects();
   const [openProj, setOpenProj] = useState<Project | null>(null);
+  useLockBodyScroll(!!openProj);
 
   return (
     <>
@@ -131,17 +135,15 @@ export function Home() {
           {/* ── Stats ── */}
           <Reveal className="hero-foot order-6 md:col-span-2" delay={0.3}>
             <div className="stat">
-              <span className="num">26</span>
+              <span className="num">{projects.length}</span>
               <span className="lbl">Proyectos · realizados</span>
             </div>
             <div className="stat">
-              {/* HARDCODE 2026 — actualizar anualmente */}
-              <span className="num text-accent">+78</span>
+              <span className="num text-accent">+{CONFIG.DESPOJO_ANOS}</span>
               <span className="lbl">Años · de despojo</span>
             </div>
             <div className="stat">
-              {/* HARDCODE 2026 — IV Edición completada en 2025-II. Verificar anualmente. */}
-              <span className="num">IV</span>
+              <span className="num">{CONFIG.EDICION}</span>
               <span className="lbl">Ediciones · de la cátedra</span>
             </div>
             <div className="stat">
@@ -176,8 +178,7 @@ export function Home() {
 
             <Reveal delay={0.2}>
               <div className="quote-aside">
-{/* HARDCODE 2026 — actualizar anualmente (1974 + 52 = 2026) */}
-                Cincuenta y dos años después, la rama de olivo sigue pendiente del aire. Esta cátedra
+                {`Cincuenta y ${CONFIG.DESPOJO_ANOS - 26} años después, la rama de olivo sigue pendiente del aire.`} Esta cátedra
                 recoge el gesto: <strong>nombrar lo que ocurre, sostener la memoria, sembrar futuro.</strong>
                 <br /><br />
                 Un acuerdo público entre estudiantes, docentes y comunidades —dentro y fuera de la universidad— para
@@ -363,12 +364,12 @@ export function Home() {
         <div className="wrap">
           <Reveal>
             <h2 className="hr-rule mb-10">
-              <span>Cosecha 2025-I · proyectos destacados</span>
+              <span>Cosecha {CONFIG.COSECHA} · proyectos destacados</span>
             </h2>
           </Reveal>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[3, 14, 25, 17, 23, 12].map((id, i) => {
-              const p = PROJECTS_2025_1.find(pr => pr.id === id);
+              const p = projects.find(pr => pr.id === id);
               if (!p) return null;
               return (
                 <Reveal key={p.id} as="article" delay={i * 0.06}>
@@ -435,9 +436,10 @@ export function Home() {
               transition={{ duration: 0.3, ease: 'easeOut' }}
             >
               <button className="close" onClick={() => setOpenProj(null)}><Icon.Close /></button>
-              <div className={'proj-thumb kind-' + openProj.kind} style={{ height: 220, marginBottom: 28 }}>
+              <div className={'proj-thumb' + (openProj.thumbnail ? '' : ' kind-' + openProj.kind)} style={{ height: 220, marginBottom: 28, backgroundImage: openProj.thumbnail ? 'url(' + openProj.thumbnail + ')' : undefined, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 <div className="kind-num">N° {openProj.n}</div>
-                <div className="kind-glyph">{KIND_GLYPH_LOCAL[openProj.kind] || openProj.kind.toUpperCase()}</div>
+                {!openProj.thumbnail && <div className="kind-glyph">{KIND_GLYPH_LOCAL[openProj.kind] || openProj.kind.toUpperCase()}</div>}
+                {openProj.aiThumbnail && <div className="absolute top-2 left-2 z-10 font-mono text-[9px] tracking-[0.12em] uppercase bg-black/50 backdrop-blur-sm text-white/80 px-1.5 py-0.5 rounded-sm">AI · ref.</div>}
               </div>
               <div className="kicker">{openProj.kind} · {openProj.year}</div>
               <h2 className="mt-3 text-[clamp(26px,7vw,44px)] leading-tight">{openProj.title}</h2>

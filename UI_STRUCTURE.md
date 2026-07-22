@@ -15,8 +15,11 @@ Plataforma de Memoria y Solidaridad Académica · UNAL + Embajada del Estado de 
 | Estilos | **Tailwind CSS** | Sin CSS-in-JS, Sass o CSS Modules |
 | Animación | **Framer Motion** | `<motion.*>`, `whileInView`, `AnimatePresence` |
 | Iconos | **lucide-react** + `src/lib/icons.tsx` | SVG propios en `Icon.*` |
-| Estado | `useState` + `localStorage` | Sin Redux/Zustand |
-| Routing | Estado en `App.tsx` (`PageId`) | Sin React Router |
+| DB | **Supabase PostgreSQL** | Almacenamiento de proyectos |
+| Auth | **Supabase Auth** | Admin login (email + password) |
+| Imágenes | **Cloudinary** | Hosting de thumbnails con CDN |
+| API Admin | **Vercel Functions** | CRUD de proyectos (`api/admin/`) |
+| Routing | **React Router DOM** | `<BrowserRouter>` en `App.tsx` |
 | UI libs | Ninguna | Sin MUI, Chakra, shadcn |
 
 ---
@@ -105,19 +108,14 @@ Toda combinación de utilidades que se repita → mover a `@layer components`. T
 
 ## 6. Patrones de diseño
 
-### 6.1 Navegación por estado (no URL)
-Página activa en `App.tsx`:
+### 6.1 Navegación (React Router DOM)
+Rutas definidas en `App.tsx` con `<BrowserRouter>` y `<Routes>`.
 
-```tsx
-const [page, setPage] = useState<PageId>(...);
-localStorage.setItem('cdr-page', page);
-```
+**Rutas públicas** (dentro de `AppLayout` que incluye Nav + Footer):
+`/`, `/historia`, `/ongs`, `/genero`, `/voces`, `/archivo`
 
-**Pasos para añadir página:**
-1. Añadir id a `PageId` en `types.ts`
-2. Añadir entrada a `PAGES[]`
-3. Añadir caso al objeto de render en `App.tsx`
-4. Añadir al array `valid` del inicializador
+**Rutas admin** (login sin layout, CRUD dentro de AppLayout con ProtectedRoute):
+`/admin/login`, `/admin`, `/admin/projects/new`, `/admin/projects/:id/edit`
 
 ### 6.2 Tema light/dark
 - Sincronizar `data-theme` y `class="dark"` en `<html>` desde `App.tsx`.
@@ -174,9 +172,21 @@ export function MiPagina() {
 
 ## 7. Capa de datos
 
-- Todo contenido estático vive en `src/data/*.ts`.
-- Interfaces de dominio (`Project`, `Book`, `TimelineEntry`, …) exportadas desde `src/lib/types.ts`.
-- Las páginas **importan** los datos; nunca los redefinen inline.
+### Datos dinámicos (proyectos)
+Los proyectos se almacenan en **Supabase** (tabla `projects`) y se consultan con el hook `useProjects()` desde `src/lib/useProjects.ts`. El hook cachea resultados en `localStorage` como fallback offline.
+
+### Datos estáticos (bibliografía, líneas de tiempo, ONGs)
+Archivos en `src/data/*.ts`: `BIBLIOGRAPHY`, `TIMELINE`, `GLOSSARY`, etc. Se importan directamente en los componentes que los usan.
+
+### Admin panel
+CRUD de proyectos vía Vercel Functions (`api/admin/projects.ts`, `api/admin/[id].ts`).
+Autenticación con Supabase Auth (email + password).
+Imágenes subidas a Cloudinary con firma signed vía `api/upload.ts`.
+
+### Interfaces de dominio
+`Project`, `Book`, `TimelineEntry`, … exportadas desde `src/lib/types.ts`.
+Tipos de base de datos (`ProjectRow`) en `src/types/database.ts`.
+Mapper snake_case → camelCase en `src/lib/mapper.ts`.
 
 ---
 
@@ -213,10 +223,10 @@ export function MiPagina() {
 - ❌ Instalar otra librería de animación además de Framer Motion.
 - ❌ Crear archivos CSS adicionales (todo va en `global.css` vía `@layer`).
 - ❌ Usar `default export`.
-- ❌ Usar React Router ni routing por URL.
 - ❌ Reintroducir IntersectionObserver manual.
 - ❌ Usar `@media (prefers-color-scheme: dark)` en CSS.
 - ❌ Crear archivos de documentación sin que se pidan.
 - ❌ Modificar la paleta sin mantener `primary` / `accent` como ejes visuales.
 - ❌ Eliminar el grain overlay del `body`.
 - ❌ Usar px fijos para tipografía de títulos — siempre `clamp()`.
+- ❌ Exponer `SUPABASE_SERVICE_KEY` o `CLOUDINARY_API_SECRET` en el frontend.

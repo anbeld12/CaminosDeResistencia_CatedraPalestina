@@ -7,11 +7,13 @@ import { Icon } from '../lib/icons';
 import { ImageBook } from '../components/ImageBook';
 import { TIMELINE, GLOSSARY } from '../data/history';
 import { TIMELINE_G3 } from '../data/timeline-g3';
-import { PROJECTS_2025_1 } from '../data/projects-2025-1';
 import { OG_IMAGE } from '../lib/seo';
+import { useProjects } from '../lib/useProjects';
 import { articleSchema, eventSchema } from '../lib/seo-schema';
+import { CONFIG } from '../lib/config';
 
 export function History() {
+  const { projects } = useProjects();
   const railRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [open, setOpen] = useState(-1);
@@ -137,7 +139,7 @@ export function History() {
         <div className="wrap">
           <div className="grid-2">
             <Reveal>
-              <div className="eyebrow"><span className="dot" /><span>Cartografía · Grupo 3 · 2025-I</span></div>
+              <div className="eyebrow"><span className="dot" /><span>Cartografía · Grupo 3 · {CONFIG.SEMESTRE}</span></div>
               <h2 className="mt-5 text-[clamp(28px,7vw,56px)] leading-tight">
                 La historia <em className="text-accent italic">—también—</em> se lee en páginas.
               </h2>
@@ -243,7 +245,7 @@ export function History() {
         <div className="wrap">
           <Reveal>
             <h2 className="hr-rule mb-10">
-              <span>Recursos elaborados por estudiantes 2025-I</span>
+              <span>Recursos elaborados por estudiantes {CONFIG.SEMESTRE}</span>
             </h2>
           </Reveal>
           <div className="grid md:grid-cols-3 gap-6">
@@ -267,7 +269,7 @@ export function History() {
                 group: 'Grupo 13',
               },
             ].map(({ id, title, body, group }, i) => {
-              const proj = PROJECTS_2025_1.find(p => p.id === id);
+              const proj = projects.find(p => p.id === id);
               return (
                 <Reveal key={id} as="article" delay={i * 0.08}>
                   <div className="card">

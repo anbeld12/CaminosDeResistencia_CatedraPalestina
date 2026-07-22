@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ZoomIn, ZoomOut, RotateCcw, RotateCw } from 'lucide-react';
 import { Icon } from '../lib/icons';
+import { useLockBodyScroll } from '../lib/hooks';
 
 interface ImageBookPage {
   src: string;
@@ -50,12 +51,7 @@ export function ImageBook({ src, alt, pages, label, credit, naturalWidth, natura
     }
   }, [open]);
 
-  useEffect(() => {
-    if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = prev; };
-  }, [open]);
+  useLockBodyScroll(open);
 
   useEffect(() => {
     if (!open) return;

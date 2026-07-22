@@ -5,8 +5,8 @@ import { Reveal } from '../components/Reveal';
 import { Icon } from '../lib/icons';
 import { ImageSlot } from '../components/ImageSlot';
 import { ImageGallery } from '../components/ImageGallery';
-import { PROJECTS_2025_1 } from '../data/projects-2025-1';
 import { ONG_CARDS, ONG_PARTNERS } from '../data/ongs';
+import { useProjects } from '../lib/useProjects';
 import { ExternalOrgs } from '../components/ExternalOrgs';
 import type { ImageVariant } from '../lib/types';
 import { OG_IMAGE } from '../lib/seo';
@@ -22,6 +22,7 @@ const TABS: { id: Tab; label: string }[] = [
 
 export function ONGs() {
   const [tab, setTab] = useState<Tab>('vida');
+  const { projects } = useProjects();
 
   const brigadaImages = [
     {
@@ -175,7 +176,7 @@ export function ONGs() {
             </Reveal>
             <div className="grid md:grid-cols-3 gap-6">
               {[4, 8, 20, 25].map((id, i) => {
-                const p = PROJECTS_2025_1.find(pr => pr.id === id);
+                const p = projects.find(pr => pr.id === id);
                 if (!p) return null;
                 return (
                   <Reveal key={p.id} as="article" delay={i * 0.08}>

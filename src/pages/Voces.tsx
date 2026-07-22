@@ -6,9 +6,11 @@ import { Reveal } from '../components/Reveal';
 import { ImageSlot } from '../components/ImageSlot';
 import { ImageGallery } from '../components/ImageGallery';
 import { Icon } from '../lib/icons';
-import { PODCAST_SERIES, PROJECTS_2025_1 } from '../data/projects-2025-1';
+import { PODCAST_SERIES } from '../data/projects-2025-1';
+import { useProjects } from '../lib/useProjects';
 import { OG_IMAGE } from '../lib/seo';
 import { articleSchema } from '../lib/seo-schema';
+import { CONFIG } from '../lib/config';
 
 /* ============================================================
    Darwish interactive poem card
@@ -87,6 +89,7 @@ function DarwishCard() {
    TAB 1 — Arte y Cultura
    ============================================================ */
 function ArteTab() {
+  const { projects } = useProjects();
   const muralImages = [
     {
       src: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Bethlehem-02-West_Bank_Wall.jpg',
@@ -263,7 +266,7 @@ function ArteTab() {
         </Reveal>
         <div className="grid md:grid-cols-3 gap-6">
           {[1, 4, 5, 19, 20, 24, 15, 22, 23, 17].map((id, i) => {
-            const p = PROJECTS_2025_1.find(pr => pr.id === id);
+            const p = projects.find(pr => pr.id === id);
             if (!p) return null;
             return (
               <Reveal key={p.id} as="article" delay={i * 0.08}>
@@ -302,6 +305,7 @@ function ArteTab() {
    TAB 2 — Periodismo y Narrativas
    ============================================================ */
 function PeriodismoTab() {
+  const { projects } = useProjects();
   return (
     <>
     <section className="section">
@@ -430,7 +434,7 @@ function PeriodismoTab() {
         </Reveal>
         <div className="grid md:grid-cols-3 gap-6">
           {[16].map((id, i) => {
-            const p = PROJECTS_2025_1.find(pr => pr.id === id);
+            const p = projects.find(pr => pr.id === id);
             if (!p) return null;
             return (
               <Reveal key={p.id} as="article" delay={i * 0.08}>
@@ -720,8 +724,9 @@ function getSpotifyEmbedUrl(url: string): string | null {
    TAB 5 — Video · Producción estudiantil
    ============================================================ */
 function VideoTab() {
+  const { projects } = useProjects();
   const [active, setActive] = useState(0);
-  const videos = PROJECTS_2025_1.filter(p => p.kind === 'video').sort((a, b) => a.id - b.id);
+  const videos = projects.filter(p => p.kind === 'video').sort((a, b) => a.id - b.id);
   const v = videos[active];
 
   if (!v) return null;
@@ -735,7 +740,7 @@ function VideoTab() {
           <div className="voces-open-quote">
             <h2 className="eyebrow"><span className="dot" />Video · Producción estudiantil</h2>
             <blockquote className="voces-bq">
-              &ldquo;Proyectos de video · Grupos 2025-I&rdquo;
+              &ldquo;Proyectos de video · Grupos {CONFIG.SEMESTRE}&rdquo;
             </blockquote>
             <cite className="voces-bq-attr">
               — Grupos 1, 2, 17, 21, 23
@@ -819,7 +824,8 @@ function VideoTab() {
    TAB 4 — Podcast · Producción estudiantil
    ============================================================ */
 function PodcastTab() {
-  const podcasts = PROJECTS_2025_1.filter(p => p.kind === 'podcast');
+  const { projects } = useProjects();
+  const podcasts = projects.filter(p => p.kind === 'podcast');
 
   return (
     <section className="section">
@@ -828,7 +834,7 @@ function PodcastTab() {
           <div className="voces-open-quote">
             <h2 className="eyebrow"><span className="dot" />Podcast · Producción estudiantil</h2>
             <blockquote className="voces-bq">
-              &ldquo;Proyectos de podcast · Grupos 2025-I&rdquo;
+              &ldquo;Proyectos de podcast · Grupos {CONFIG.SEMESTRE}&rdquo;
             </blockquote>
             <cite className="voces-bq-attr">
               — Grupos 7, 8, 13, 18, 25, 26

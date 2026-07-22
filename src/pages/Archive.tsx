@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Reveal } from '../components/Reveal';
 import { Icon } from '../lib/icons';
-import { BIBLIOGRAPHY, KIND_FILTERS, KIND_GLYPH, PROJECTS } from '../data/archive';
+import { useLockBodyScroll } from '../lib/hooks';
+import { BIBLIOGRAPHY, KIND_GLYPH, buildKindFilters } from '../data/archive';
+import { useProjects } from '../lib/useProjects';
 import type { Project } from '../lib/types';
 import { OG_IMAGE } from '../lib/seo';
 import { collectionPageSchema, bookSchema } from '../lib/seo-schema';
@@ -70,13 +72,22 @@ interface ProjectCardProps {
 }
 
 function ProjectCard({ p, onOpen, variant }: ProjectCardProps) {
-  const thumbBg = p.thumbnail ? { backgroundImage: `url(${p.thumbnail})`, backgroundSize: 'cover' as const, backgroundPosition: 'center' as const } : undefined;
+  const [imgError, setImgError] = useState(false);
+  useEffect(() => {
+    if (!p.thumbnail) { setImgError(false); return; }
+    const img = new Image();
+    img.onload = () => setImgError(false);
+    img.onerror = () => setImgError(true);
+    img.src = p.thumbnail;
+  }, [p.thumbnail]);
+  const hasThumb = p.thumbnail && !imgError;
+  const thumbBg = hasThumb ? { backgroundImage: `url(${p.thumbnail})`, backgroundSize: 'cover' as const, backgroundPosition: 'center' as const } : undefined;
   if (variant === 'list') {
     return (
       <Reveal as="article" className="proj-row" onClick={() => onOpen(p)}>
-        <div className={'proj-thumb' + (p.thumbnail ? '' : ' kind-' + p.kind)} style={thumbBg}>
+        <div className={'proj-thumb' + (hasThumb ? '' : ' kind-' + p.kind)} style={thumbBg}>
           <div className="kind-num">N° {p.n}</div>
-          {!p.thumbnail && <div className="kind-glyph">{KIND_GLYPH[p.kind]}</div>}
+          {!hasThumb && <div className="kind-glyph">{KIND_GLYPH[p.kind]}</div>}
           {p.aiThumbnail && <div className="absolute top-1.5 left-1.5 z-10 font-mono text-[8px] md:text-[9px] tracking-[0.12em] uppercase bg-black/50 backdrop-blur-sm text-white/80 px-1.5 py-0.5 rounded-sm">AI · ref.</div>}
         </div>
         <div className="proj-body">
@@ -90,9 +101,9 @@ function ProjectCard({ p, onOpen, variant }: ProjectCardProps) {
   }
   return (
     <Reveal as="article" className="proj" onClick={() => onOpen(p)}>
-      <div className={'proj-thumb' + (p.thumbnail ? '' : ' kind-' + p.kind)} style={thumbBg}>
+      <div className={'proj-thumb' + (hasThumb ? '' : ' kind-' + p.kind)} style={thumbBg}>
         <div className="kind-num">N° {p.n}</div>
-        {!p.thumbnail && <div className="kind-glyph">{KIND_GLYPH[p.kind]}</div>}
+        {!hasThumb && <div className="kind-glyph">{KIND_GLYPH[p.kind]}</div>}
         {p.aiThumbnail && <div className="absolute top-1.5 left-1.5 z-10 font-mono text-[8px] md:text-[9px] tracking-[0.12em] uppercase bg-black/50 backdrop-blur-sm text-white/80 px-1.5 py-0.5 rounded-sm">AI · ref.</div>}
       </div>
       <div className="meta">
@@ -116,23 +127,38 @@ export function Archive() {
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const [query, setQuery] = useState('');
   const [openProj, setOpenProj] = useState<Project | null>(null);
+  useLockBodyScroll(!!openProj);
   const [copied, setCopied] = useState(false);
   const [expandedLinks, setExpandedLinks] = useState(false);
+  const [modalImgError, setModalImgError] = useState(false);
 
-  useEffect(() => { setExpandedLinks(false); }, [openProj]);
+  const { projects, loading, error, refetch } = useProjects();
+
+  useEffect(() => {
+    setExpandedLinks(false);
+    setModalImgError(false);
+    if (openProj?.thumbnail) {
+      const img = new Image();
+      img.onload = () => setModalImgError(false);
+      img.onerror = () => setModalImgError(true);
+      img.src = openProj.thumbnail;
+    }
+  }, [openProj]);
+
+  const kindFilters = useMemo(() => buildKindFilters(projects), [projects]);
 
   const semesters = useMemo(() => {
-    const s = new Set(PROJECTS.map(p => p.year));
+    const s = new Set(projects.map(p => p.year));
     return Array.from(s).sort().reverse();
-  }, []);
+  }, [projects]);
 
   const filtered = useMemo(() => {
-    return PROJECTS.filter(p =>
+    return projects.filter(p =>
       (kind === 'all' || p.kind === kind) &&
       (semester === 'all' || p.year === semester) &&
       (!query || (p.title + ' ' + p.author + ' ' + p.tags.join(' ')).toLowerCase().includes(query.toLowerCase()))
     );
-  }, [kind, semester, query]);
+  }, [kind, semester, query, projects]);
 
   return (
     <>
@@ -189,7 +215,7 @@ export function Archive() {
           <Reveal delay={0.3}>
             <div className="subtabs">
               <button className={'subtab ' + (tab === 'projects' ? 'is-active' : '')} onClick={() => setTab('projects')}>
-                Proyectos · {PROJECTS.length}
+                Proyectos · {projects.length}
               </button>
               <button className={'subtab ' + (tab === 'biblio' ? 'is-active' : '')} onClick={() => setTab('biblio')}>
                 Bibliografía · {BIBLIOGRAPHY.length}
@@ -203,83 +229,105 @@ export function Archive() {
         <section className="section pt-0">
           <div className="wrap">
             <h2 className="sr-only">Proyectos académicos</h2>
-            <Reveal className="archive-toolbar flex-col items-stretch gap-[22px]">
-              <div className="archive-search is-prominent">
-                <Icon.Search />
-                <input
-                  placeholder="Buscar en el archivo · autora, título, etiqueta, año…"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                />
-                {query && (
-                  <button className="icon-btn w-8 h-8" onClick={() => setQuery('')}>
-                    <Icon.Close />
-                  </button>
-                )}
-              </div>
-              <div className="flex items-center gap-4 flex-wrap">
-                <div className="chips">
-                  <button
-                    className={'chip ' + (semester === 'all' ? 'is-on' : '')}
-                    onClick={() => setSemester('all')}
-                  >
-                    Todos
-                  </button>
-                  {semesters.map(s => (
-                    <button
-                      key={s}
-                      className={'chip ' + (semester === s ? 'is-on' : '')}
-                      onClick={() => setSemester(s)}
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="flex items-center gap-4 flex-wrap">
-                <div className="chips">
-                  {KIND_FILTERS.map(k => (
-                    <button
-                      key={k.id}
-                      className={'chip ' + (kind === k.id ? 'is-on' : '')}
-                      onClick={() => setKind(k.id)}
-                    >
-                      {k.label} · {k.n}
-                    </button>
-                  ))}
-                </div>
-                <div className="ml-auto flex gap-3 items-center">
-                  <span className="font-mono text-xs md:text-[11px] tracking-[0.14em] uppercase text-fg-mute">
-                    {filtered.length} de {PROJECTS.length}
-                  </span>
-                  <div className="viewtoggle">
-                    <button className={view === 'grid' ? 'is-on' : ''} onClick={() => setView('grid')}><Icon.Grid /></button>
-                    <button className={view === 'list' ? 'is-on' : ''} onClick={() => setView('list')}><Icon.Rows /></button>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
 
-            {filtered.length === 0 ? (
-              <div className="py-16 md:py-20 text-center text-fg-mute px-4">
-                <div className="font-serif text-3xl md:text-4xl">Sin coincidencias.</div>
-                <div className="mt-2.5 text-base md:text-sm">Prueba otra etiqueta o vacía la búsqueda.</div>
-              </div>
-            ) : (
-              <div className={view === 'grid' ? 'archive-grid' : ''}>
-                {filtered.map(p => (
-                  <ProjectCard key={p.id} p={p} onOpen={setOpenProj} variant={view} />
+            {loading ? (
+              <div className="archive-grid">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="proj animate-pulse">
+                    <div className="proj-thumb bg-fg-mute/10" />
+                    <div className="mt-3 h-2.5 bg-fg-mute/10 rounded w-1/4" />
+                    <div className="mt-2.5 h-4 bg-fg-mute/10 rounded w-3/4" />
+                    <div className="mt-2 h-3 bg-fg-mute/10 rounded w-1/2" />
+                  </div>
                 ))}
               </div>
-            )}
-
-            <Reveal>
-              <div className="mt-10 text-center">
-                <Link to="/genero" className="btn terra">
-                  Proyectos con enfoque de género <Icon.Arrow />
-                </Link>
+            ) : error ? (
+              <div className="py-16 md:py-20 text-center text-fg-mute px-4">
+                <div className="font-serif text-3xl md:text-4xl">Error al cargar.</div>
+                <div className="mt-2.5 text-base md:text-sm">No se pudieron obtener los proyectos. Verifica tu conexión e intenta de nuevo.</div>
+                <button className="btn terra mt-6" onClick={refetch}>Reintentar</button>
               </div>
-            </Reveal>
+            ) : (
+              <>
+                <Reveal className="archive-toolbar flex-col items-stretch gap-[22px]">
+                  <div className="archive-search is-prominent">
+                    <Icon.Search />
+                    <input
+                      placeholder="Buscar en el archivo · autora, título, etiqueta, año…"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                    />
+                    {query && (
+                      <button className="icon-btn w-8 h-8" onClick={() => setQuery('')}>
+                        <Icon.Close />
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-4 flex-wrap">
+                    <div className="chips">
+                      <button
+                        className={'chip ' + (semester === 'all' ? 'is-on' : '')}
+                        onClick={() => setSemester('all')}
+                      >
+                        Todos
+                      </button>
+                      {semesters.map(s => (
+                        <button
+                          key={s}
+                          className={'chip ' + (semester === s ? 'is-on' : '')}
+                          onClick={() => setSemester(s)}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4 flex-wrap">
+                    <div className="chips">
+                      {kindFilters.map(k => (
+                        <button
+                          key={k.id}
+                          className={'chip ' + (kind === k.id ? 'is-on' : '')}
+                          onClick={() => setKind(k.id)}
+                        >
+                          {k.label} · {k.n}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="ml-auto flex gap-3 items-center">
+                      <span className="font-mono text-xs md:text-[11px] tracking-[0.14em] uppercase text-fg-mute">
+                        {filtered.length} de {projects.length}
+                      </span>
+                      <div className="viewtoggle">
+                        <button className={view === 'grid' ? 'is-on' : ''} onClick={() => setView('grid')}><Icon.Grid /></button>
+                        <button className={view === 'list' ? 'is-on' : ''} onClick={() => setView('list')}><Icon.Rows /></button>
+                      </div>
+                    </div>
+                  </div>
+                </Reveal>
+
+                {filtered.length === 0 ? (
+                  <div className="py-16 md:py-20 text-center text-fg-mute px-4">
+                    <div className="font-serif text-3xl md:text-4xl">Sin coincidencias.</div>
+                    <div className="mt-2.5 text-base md:text-sm">Prueba otra etiqueta o vacía la búsqueda.</div>
+                  </div>
+                ) : (
+                  <div className={view === 'grid' ? 'archive-grid' : ''}>
+                    {filtered.map(p => (
+                      <ProjectCard key={p.id} p={p} onOpen={setOpenProj} variant={view} />
+                    ))}
+                  </div>
+                )}
+
+                <Reveal>
+                  <div className="mt-10 text-center">
+                    <Link to="/genero" className="btn terra">
+                      Proyectos con enfoque de género <Icon.Arrow />
+                    </Link>
+                  </div>
+                </Reveal>
+              </>
+            )}
           </div>
         </section>
       )}
@@ -340,9 +388,9 @@ export function Archive() {
               transition={{ duration: 0.3, ease: 'easeOut' }}
             >
               <button className="close" onClick={() => setOpenProj(null)}><Icon.Close /></button>
-              <div className={'proj-thumb' + (openProj.thumbnail ? '' : ' kind-' + openProj.kind)} style={{ height: 220, marginBottom: 28, backgroundImage: openProj.thumbnail ? 'url(' + openProj.thumbnail + ')' : undefined, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+              <div className={'proj-thumb' + (openProj.thumbnail && !modalImgError ? '' : ' kind-' + openProj.kind)} style={{ height: 220, marginBottom: 28, backgroundImage: openProj.thumbnail && !modalImgError ? 'url(' + openProj.thumbnail + ')' : undefined, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 <div className="kind-num">N° {openProj.n}</div>
-                {!openProj.thumbnail && <div className="kind-glyph">{KIND_GLYPH[openProj.kind] || openProj.kind.toUpperCase()}</div>}
+                {(!openProj.thumbnail || modalImgError) && <div className="kind-glyph">{KIND_GLYPH[openProj.kind] || openProj.kind.toUpperCase()}</div>}
                 {openProj.aiThumbnail && <div className="absolute top-2 left-2 z-10 font-mono text-[9px] tracking-[0.12em] uppercase bg-black/50 backdrop-blur-sm text-white/80 px-1.5 py-0.5 rounded-sm">AI · ref.</div>}
               </div>
               <div className="kicker">{openProj.kind} · {openProj.year}</div>

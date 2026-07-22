@@ -1,13 +1,8 @@
 import type { Book, KindFilter, Project } from '../lib/types';
-import { PROJECTS_2025_1, KIND_GLYPH_2025_1 } from './projects-2025-1';
 
-/* Aggregation point: import PROJECTS from future semesters here */
-/* e.g. import { PROJECTS_2025_2 } from './projects-2025-2' */
-export const PROJECTS = PROJECTS_2025_1;
+export const ALL_KINDS: Project['kind'][] = ['ensayo', 'cartografia', 'video', 'podcast', 'fanzine', 'mural', 'collage', 'grabado'];
 
-const ALL_KINDS: Project['kind'][] = ['ensayo', 'cartografia', 'video', 'podcast', 'fanzine', 'mural', 'collage', 'grabado'];
-
-const KIND_LABEL: Record<string, string> = {
+export const KIND_LABEL: Record<string, string> = {
   ensayo: 'Ensayo',
   cartografia: 'Cartografía',
   video: 'Video',
@@ -18,21 +13,26 @@ const KIND_LABEL: Record<string, string> = {
   grabado: 'Grabado',
 };
 
-export const KIND_FILTERS: KindFilter[] = [
-  { id: 'all', label: 'Todo', n: PROJECTS.length },
-  ...ALL_KINDS.map((k): KindFilter => ({
-    id: k,
-    label: KIND_LABEL[k],
-    n: PROJECTS.filter(p => p.kind === k).length,
-  })),
-];
+export function buildKindFilters(projects: Project[]): KindFilter[] {
+  return [
+    { id: 'all', label: 'Todo', n: projects.length },
+    ...ALL_KINDS.map((k): KindFilter => ({
+      id: k,
+      label: KIND_LABEL[k],
+      n: projects.filter(p => p.kind === k).length,
+    })),
+  ];
+}
 
 export const KIND_GLYPH: Record<string, string> = {
   ensayo: 'Ensayo · 06—24 pp',
   cartografia: 'Cartografía · mapa interactivo',
   video: 'Video · HD · 12—28 min',
   podcast: 'Podcast · 4 capítulos',
-  ...KIND_GLYPH_2025_1,
+  fanzine: 'Fanzine · fotografía y datos',
+  mural: 'Mural · acrílico sobre lienzo',
+  grabado: 'Grabado · linóleo',
+  collage: 'Collage · composición visual',
 };
 
 export const BIBLIOGRAPHY: Book[] = [
