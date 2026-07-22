@@ -2,17 +2,17 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 import { getAuthenticatedUser, requireEnv } from '../_shared';
 
-const supabase = createClient(
-  requireEnv('VITE_SUPABASE_URL'),
-  requireEnv('SUPABASE_SERVICE_KEY'),
-);
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     await getAuthenticatedUser(req);
   } catch {
     return res.status(401).json({ error: 'No autorizado' });
   }
+
+  const supabase = createClient(
+    requireEnv('VITE_SUPABASE_URL'),
+    requireEnv('SUPABASE_SERVICE_KEY'),
+  );
 
   if (req.method === 'GET') {
     const { data, error } = await supabase

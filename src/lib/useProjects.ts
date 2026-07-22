@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { supabase } from './supabase';
 import { toProject } from './mapper';
 import type { Project } from './types';
+
+async function getSupabase() {
+  const { supabase } = await import('./supabase');
+  return supabase;
+}
 
 const CACHE_KEY = 'cdr-projects-cache';
 const CACHE_META_KEY = 'cdr-projects-cache-meta';
@@ -68,7 +72,8 @@ export function useProjects(): UseProjectsResult {
     setLoading(true);
     setError(null);
 
-    const { data, error: err } = await supabase
+    const sb = await getSupabase();
+    const { data, error: err } = await sb
       .from('projects')
       .select('*')
       .order('id', { ascending: true });
