@@ -8,8 +8,8 @@ import { useLockBodyScroll } from '../lib/hooks';
 import { BIBLIOGRAPHY, KIND_GLYPH, buildKindFilters } from '../data/archive';
 import { useProjects } from '../lib/useProjects';
 import type { Project } from '../lib/types';
-import { OG_IMAGE } from '../lib/seo';
-import { collectionPageSchema, bookSchema } from '../lib/seo-schema';
+import { OG_IMAGE, SITE_URL, SITE_NAME, SITE_LOCALE } from '../lib/seo';
+import { collectionPageSchema, bookSchema, breadcrumbSchema } from '../lib/seo-schema';
 
 /* ============================================================
    Kind chip color map
@@ -168,14 +168,20 @@ export function Archive() {
         <meta property="og:title" content="Archivo · Cátedra Caminos de Resistencia" />
         <meta property="og:description" content="Cosecha de Saberes: bibliografía sobre Palestina, proyectos académicos Palestina y ensayos. Archivo vivo de la Cátedra Caminos de Resistencia UNAL." />
         <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:url" content={`${SITE_URL}/archivo`} />
         <meta property="og:type" content="website" />
-        <meta property="og:locale" content="es_CO" />
+        <meta property="og:locale" content={SITE_LOCALE} />
+        <meta property="og:site_name" content={SITE_NAME} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Archivo · Cátedra Caminos de Resistencia" />
         <meta name="twitter:description" content="Cosecha de Saberes: bibliografía sobre Palestina y proyectos académicos Palestina. Archivo vivo de la Cátedra Caminos de Resistencia UNAL." />
-        <link rel="canonical" href="https://caminosderesistencia.co/archivo" />
+        <link rel="canonical" href={`${SITE_URL}/archivo`} />
         <script type="application/ld+json">
           {JSON.stringify([
+            breadcrumbSchema([
+              { name: 'Inicio', url: '/' },
+              { name: 'Archivo', url: '/archivo' },
+            ]),
             collectionPageSchema('Bibliografía sobre Palestina y proyectos académicos de la Cátedra Caminos de Resistencia.'),
             ...BIBLIOGRAPHY.map(b => bookSchema(b.author, b.work, b.year)),
           ])}

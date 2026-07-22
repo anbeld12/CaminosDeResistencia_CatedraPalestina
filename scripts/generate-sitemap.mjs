@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -5,21 +6,23 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const today = new Date().toISOString().split('T')[0];
 
+const SITE_URL = process.env.VITE_SITE_URL || 'https://catedrapalestinacaminosderesistencia.com';
+
 const urls = [
-  { loc: '/', priority: 1.0 },
-  { loc: '/historia', priority: 0.8 },
-  { loc: '/ongs', priority: 0.8 },
-  { loc: '/genero', priority: 0.8 },
-  { loc: '/voces', priority: 0.8 },
-  { loc: '/archivo', priority: 0.8 },
+  { loc: '/', priority: 1.0, changefreq: 'weekly' },
+  { loc: '/historia', priority: 0.8, changefreq: 'monthly' },
+  { loc: '/ongs', priority: 0.8, changefreq: 'monthly' },
+  { loc: '/genero', priority: 0.8, changefreq: 'monthly' },
+  { loc: '/voces', priority: 0.8, changefreq: 'monthly' },
+  { loc: '/archivo', priority: 0.9, changefreq: 'weekly' },
 ];
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url>
-    <loc>https://caminosderesistencia.co${u.loc}</loc>
+    <loc>${SITE_URL}${u.loc}</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
   </url>`).join('\n')}
 </urlset>

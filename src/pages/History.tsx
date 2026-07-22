@@ -6,10 +6,11 @@ import { MythCards } from '../components/MythCards';
 import { Icon } from '../lib/icons';
 import { ImageBook } from '../components/ImageBook';
 import { TIMELINE, GLOSSARY } from '../data/history';
+import { MYTHS_DATA } from '../data/myths';
 import { TIMELINE_G3 } from '../data/timeline-g3';
-import { OG_IMAGE } from '../lib/seo';
+import { OG_IMAGE, SITE_URL, SITE_NAME, SITE_LOCALE } from '../lib/seo';
 import { useProjects } from '../lib/useProjects';
-import { articleSchema, eventSchema } from '../lib/seo-schema';
+import { articleSchema, eventSchema, breadcrumbSchema, faqSchema } from '../lib/seo-schema';
 import { CONFIG } from '../lib/config';
 
 export function History() {
@@ -52,14 +53,24 @@ export function History() {
         <meta property="og:title" content="Historia · Cátedra Caminos de Resistencia" />
         <meta property="og:description" content="Línea histórica de Palestina desde 1917: Nakba 1948, Declaración Balfour, mitos del conflicto palestino-israelí. Raíces milenarias que sostienen la memoria. Cátedra Caminos de Resistencia." />
         <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:url" content={`${SITE_URL}/historia`} />
         <meta property="og:type" content="article" />
-        <meta property="og:locale" content="es_CO" />
+        <meta property="og:locale" content={SITE_LOCALE} />
+        <meta property="og:site_name" content={SITE_NAME} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Historia · Cátedra Caminos de Resistencia" />
         <meta name="twitter:description" content="Línea histórica de Palestina: Nakba 1948, Declaración Balfour, mitos del conflicto palestino-israelí. Cronología y cartografía crítica." />
-        <link rel="canonical" href="https://caminosderesistencia.co/historia" />
+        <link rel="canonical" href={`${SITE_URL}/historia`} />
         <script type="application/ld+json">
           {JSON.stringify([
+            breadcrumbSchema([
+              { name: 'Inicio', url: '/' },
+              { name: 'Historia', url: '/historia' },
+            ]),
+            faqSchema(MYTHS_DATA.map(m => ({
+              question: m.myth,
+              answer: m.reality,
+            }))),
             articleSchema(
               'Raíces milenarias · Historia de Palestina',
               'Línea histórica de Palestina desde 1917: Nakba 1948, Declaración Balfour y mitos del conflicto palestino-israelí.',

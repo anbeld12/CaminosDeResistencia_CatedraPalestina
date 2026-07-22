@@ -28,6 +28,9 @@ export function Footer() {
               <li>Apoyo: Facultad De Ciencias Políticas Anfitriona</li>
               <li>Acompañamiento Cultural: Delegaciones Internacionales Aliadas</li>
             </ul>
+            <div className="font-mono text-[11px] tracking-[0.05em] mt-3" style={{ color: 'var(--on-dark-legal)' }}>
+              Contacto: ctpalestina_bog@unal.edu.co
+            </div>
           </div>
         </div>
 

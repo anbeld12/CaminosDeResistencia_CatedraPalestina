@@ -1,15 +1,38 @@
-import { SITE_URL } from './seo';
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from './seo';
 
 export function orgSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Cátedra Caminos de Resistencia',
+    name: SITE_NAME,
     url: SITE_URL,
     logo: `${SITE_URL}/og-image.png`,
-    description: 'Plataforma de memoria y solidaridad académica · UNAL · Facultad de Derecho y Ciencias Políticas',
+    description: SITE_DESCRIPTION,
     knowsLanguage: 'es-CO',
     areaServed: 'CO',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Facultad de Derecho y Ciencias Políticas, Universidad Nacional de Colombia',
+      addressLocality: 'Bogotá',
+      addressRegion: 'Bogotá D.C.',
+      addressCountry: 'CO',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 4.6383,
+      longitude: -74.0836,
+    },
+    parentOrganization: {
+      '@type': 'CollegeOrUniversity',
+      name: 'Universidad Nacional de Colombia',
+      url: 'https://unal.edu.co',
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: 'ctpalestina_bog@unal.edu.co',
+      contactType: 'academic',
+      availableLanguage: ['Spanish', 'English'],
+    },
   };
 }
 
@@ -17,10 +40,18 @@ export function websiteSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'Cátedra Caminos de Resistencia',
+    name: SITE_NAME,
     url: SITE_URL,
     description: 'Espacio sentipensante de educación pública sobre Palestina desde Colombia. Repositorio de la Facultad de Derecho y Ciencias Políticas.',
     inLanguage: 'es-CO',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${SITE_URL}/archivo?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
   };
 }
 
@@ -87,5 +118,67 @@ export function breadcrumbSchema(items: { name: string; url: string }[]) {
       name: item.name,
       item: `${SITE_URL}${item.url}`,
     })),
+  };
+}
+
+export function faqSchema(questions: { question: string; answer: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: questions.map(q => ({
+      '@type': 'Question',
+      name: q.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: q.answer,
+      },
+    })),
+  };
+}
+
+export function courseSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name: 'Cátedra Caminos de Resistencia',
+    description: 'Espacio sentipensante de educación pública sobre Palestina desde Colombia. Repositorio de la Facultad de Derecho y Ciencias Políticas.',
+    provider: {
+      '@type': 'CollegeOrUniversity',
+      name: 'Universidad Nacional de Colombia',
+      url: 'https://unal.edu.co',
+    },
+    educationalLevel: 'University',
+    inLanguage: 'es-CO',
+    url: SITE_URL,
+  };
+}
+
+export function videoObjectSchema(name: string, description: string, thumbnailUrl: string, embedUrl: string, uploadDate: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name,
+    description,
+    thumbnailUrl,
+    embedUrl,
+    uploadDate,
+    inLanguage: 'es',
+    contentUrl: embedUrl,
+  };
+}
+
+export function podcastEpisodeSchema(name: string, description: string, url: string, episodeNumber: number) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'PodcastEpisode',
+    name,
+    description,
+    url,
+    episodeNumber,
+    inLanguage: 'es',
+    partOfSeries: {
+      '@type': 'PodcastSeries',
+      name: 'Cátedra Caminos de Resistencia · Podcast',
+    },
   };
 }

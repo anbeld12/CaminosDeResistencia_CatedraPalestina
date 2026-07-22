@@ -9,8 +9,8 @@ import { ONG_CARDS, ONG_PARTNERS } from '../data/ongs';
 import { useProjects } from '../lib/useProjects';
 import { ExternalOrgs } from '../components/ExternalOrgs';
 import type { ImageVariant } from '../lib/types';
-import { OG_IMAGE } from '../lib/seo';
-import { websiteSchema } from '../lib/seo-schema';
+import { OG_IMAGE, SITE_URL, SITE_NAME, SITE_LOCALE } from '../lib/seo';
+import { websiteSchema, breadcrumbSchema } from '../lib/seo-schema';
 
 type Tab = 'vida' | 'partners' | 'field';
 
@@ -83,14 +83,22 @@ export function ONGs() {
         <meta property="og:title" content="ONGs · Cátedra Caminos de Resistencia" />
         <meta property="og:description" content="Savia y Sumud: ONG Palestina, ayuda humanitaria Gaza y organizaciones de derechos humanos. Logística humanitaria, aliadas y brigadas de trabajo en Palestina." />
         <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:url" content={`${SITE_URL}/ongs`} />
         <meta property="og:type" content="website" />
-        <meta property="og:locale" content="es_CO" />
+        <meta property="og:locale" content={SITE_LOCALE} />
+        <meta property="og:site_name" content={SITE_NAME} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="ONGs · Cátedra Caminos de Resistencia" />
         <meta name="twitter:description" content="Savia y Sumud: ONG Palestina, ayuda humanitaria Gaza y organizaciones de derechos humanos. MAP, Al-Haq, PCRF, MSF." />
-        <link rel="canonical" href="https://caminosderesistencia.co/ongs" />
+        <link rel="canonical" href={`${SITE_URL}/ongs`} />
         <script type="application/ld+json">
-          {JSON.stringify(websiteSchema())}
+          {JSON.stringify([
+            breadcrumbSchema([
+              { name: 'Inicio', url: '/' },
+              { name: 'ONGs', url: '/ongs' },
+            ]),
+            websiteSchema(),
+          ])}
         </script>
       </Helmet>
       <header className="page-head">

@@ -8,8 +8,8 @@ import { ImageGallery } from '../components/ImageGallery';
 import { Icon } from '../lib/icons';
 import { PODCAST_SERIES } from '../data/projects-2025-1';
 import { useProjects } from '../lib/useProjects';
-import { OG_IMAGE } from '../lib/seo';
-import { articleSchema } from '../lib/seo-schema';
+import { OG_IMAGE, SITE_URL, SITE_NAME, SITE_LOCALE } from '../lib/seo';
+import { articleSchema, breadcrumbSchema, videoObjectSchema, podcastEpisodeSchema } from '../lib/seo-schema';
 import { CONFIG } from '../lib/config';
 
 /* ============================================================
@@ -631,6 +631,10 @@ function SolidaridadTab() {
    ============================================================ */
 export function Voces() {
   const [tab, setTab] = useState<'arte' | 'periodismo' | 'solidaridad' | 'podcast' | 'videos'>('arte');
+  const { projects } = useProjects();
+
+  const videos = projects.filter(p => p.kind === 'video');
+  const podcasts = projects.filter(p => p.kind === 'podcast');
 
   const tabs: { id: 'arte' | 'periodismo' | 'solidaridad' | 'podcast' | 'videos'; label: string }[] = [
     { id: 'arte',        label: 'Arte y Cultura' },
@@ -648,17 +652,42 @@ export function Voces() {
         <meta property="og:title" content="Voces · Cátedra Caminos de Resistencia" />
         <meta property="og:description" content="Voces de la Resistencia: Mahmoud Darwish poemas, arte mural con Handala Naji al-Ali, muro de Belén grafiti, periodismo en Gaza y fallo CIJ Palestina 2024." />
         <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:url" content={`${SITE_URL}/voces`} />
         <meta property="og:type" content="article" />
-        <meta property="og:locale" content="es_CO" />
+        <meta property="og:locale" content={SITE_LOCALE} />
+        <meta property="og:site_name" content={SITE_NAME} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Voces · Cátedra Caminos de Resistencia" />
         <meta name="twitter:description" content="Voces de la Resistencia: Mahmoud Darwish poemas, arte mural palestino, Handala Naji al-Ali y muro de Belén grafiti." />
-        <link rel="canonical" href="https://caminosderesistencia.co/voces" />
+        <link rel="canonical" href={`${SITE_URL}/voces`} />
         <script type="application/ld+json">
-          {JSON.stringify(articleSchema(
-            'Voces de la Resistencia · Cultura, periodismo y solidaridad',
-            'Mahmoud Darwish poemas, arte mural palestino, Handala, periodismo en Gaza y fallo CIJ Palestina 2024.'
-          ))}
+          {JSON.stringify([
+            breadcrumbSchema([
+              { name: 'Inicio', url: '/' },
+              { name: 'Voces', url: '/voces' },
+            ]),
+            articleSchema(
+              'Voces de la Resistencia · Cultura, periodismo y solidaridad',
+              'Mahmoud Darwish poemas, arte mural palestino, Handala, periodismo en Gaza y fallo CIJ Palestina 2024.'
+            ),
+            ...(tab === 'videos' ? videos.map(v =>
+              videoObjectSchema(
+                v.title,
+                v.description || '',
+                v.thumbnail || OG_IMAGE,
+                v.url || '',
+                v.year,
+              )
+            ) : []),
+            ...(tab === 'podcast' ? podcasts.map((p, i) =>
+              podcastEpisodeSchema(
+                p.title,
+                p.description || '',
+                p.url || '',
+                i + 1,
+              )
+            ) : []),
+          ])}
         </script>
       </Helmet>
       <header className="page-head">

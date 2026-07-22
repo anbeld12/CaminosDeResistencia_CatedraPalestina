@@ -2,7 +2,7 @@
 
 > Plataforma de Memoria y Solidaridad Académica · UNAL + Embajada del Estado de Palestina
 >
-> **Sitio web:** https://caminosderesistencia.co
+> **Sitio web:** https://catedrapalestinacaminosderesistencia.com
 >
 > **Licencia:** CC-BY-NC-4.0
 
@@ -140,7 +140,7 @@ CREATE POLICY "Eliminación solo autenticados"
 ### Crear usuario admin
 
 1. Ir a Supabase Dashboard → **Authentication** → **Users** → **Add User**
-2. Email: `admin@caminosderesistencia.co` (o el que prefieras)
+2. Email: `ctpalestina_bog@unal.edu.co` (institucional verificable)
 3. Password: elegir una segura
 
 ### Desarrollo local
@@ -476,7 +476,11 @@ Busca archivos en `public/images/archive/{semestre}/thumbs/`, los sube a Cloudin
 - **Prerender**: `scripts/prerender.mjs` genera HTML estático de las 6 rutas principales con Puppeteer
 - **Sitemap**: `scripts/generate-sitemap.mjs` genera `public/sitemap.xml` (6 URLs, changefreq monthly)
 - **JSON-LD**: `src/lib/seo-schema.ts` genera schema.org estructurado (Organization, Website, Article, CollectionPage, Event, Book, BreadcrumbList)
-- **Canonical URL**: `https://caminosderesistencia.co` configurado en cada página
+- **Canonical URL**: `https://catedrapalestinacaminosderesistencia.com` configurado dinámicamente desde `VITE_SITE_URL`
+- **BreadcrumbList**: JSON-LD estructurado en páginas secundarias (History, ONGs, Genero, Voces, Archive)
+- **FAQPage schema**: en sección "Mitos vs Realidad" de History
+- **Course schema**: en Home describiendo la cátedra como curso académico
+- **VideoObject/PodcastEpisode schema**: exportados para uso en Voces
 - **PWA**: manifest.json en la raíz con theme_color `#2E4731`
 
 ---

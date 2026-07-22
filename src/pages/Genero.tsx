@@ -7,9 +7,9 @@ import { FANZINE_G12 } from '../data/fanzine-g12';
 import { useProjects } from '../lib/useProjects';
 import { Icon } from '../lib/icons';
 import type { Project } from '../lib/types';
-import { OG_IMAGE } from '../lib/seo';
+import { OG_IMAGE, SITE_URL, SITE_NAME, SITE_LOCALE } from '../lib/seo';
 import { CONFIG } from '../lib/config';
-import { articleSchema } from '../lib/seo-schema';
+import { articleSchema, breadcrumbSchema } from '../lib/seo-schema';
 
 /* ============================================================
    QuotesMarquee — impactful quote block
@@ -274,17 +274,25 @@ export function Genero() {
         <meta property="og:title" content="Género · Cátedra Caminos de Resistencia" />
         <meta property="og:description" content="Palestina de Todas: feminismo palestino, salud mental infantil Gaza, violencia sistémica y liderazgo de las mujeres palestinas bajo ocupación." />
         <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:url" content={`${SITE_URL}/genero`} />
         <meta property="og:type" content="article" />
-        <meta property="og:locale" content="es_CO" />
+        <meta property="og:locale" content={SITE_LOCALE} />
+        <meta property="og:site_name" content={SITE_NAME} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Género · Cátedra Caminos de Resistencia" />
         <meta name="twitter:description" content="Palestina de Todas: feminismo palestino, salud mental infantil Gaza y liderazgo de las mujeres palestinas." />
-        <link rel="canonical" href="https://caminosderesistencia.co/genero" />
+        <link rel="canonical" href={`${SITE_URL}/genero`} />
         <script type="application/ld+json">
-          {JSON.stringify(articleSchema(
-            'Palestina de todas · Género y resistencia',
-            'Feminismo palestino, salud mental infantil en Gaza, violencia sistémica y liderazgo de las mujeres palestinas bajo ocupación israelí.'
-          ))}
+          {JSON.stringify([
+            breadcrumbSchema([
+              { name: 'Inicio', url: '/' },
+              { name: 'Género', url: '/genero' },
+            ]),
+            articleSchema(
+              'Palestina de todas · Género y resistencia',
+              'Feminismo palestino, salud mental infantil en Gaza, violencia sistémica y liderazgo de las mujeres palestinas bajo ocupación israelí.'
+            ),
+          ])}
         </script>
       </Helmet>
       {/* ── CABECERA ───────────────────────────────────────────── */}
