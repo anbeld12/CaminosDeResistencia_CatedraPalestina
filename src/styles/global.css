@@ -1919,7 +1919,7 @@
   .icon-btn { width: 44px; height: 44px; }
   .nav-meta { flex-shrink: 0; margin-left: auto; gap: 6px; position: relative; z-index: 5; }
   .nav-cta { display: none !important; }
-  .nav-burger { z-index: 2; background: var(--bg-warm); border-color: var(--terracotta); }
+  .nav-burger { z-index: 2; border-color: var(--terracotta); }
 
   /* Mobile menu — overflow-safe text */
   .mobile-sheet { padding: 88px 20px 24px; }

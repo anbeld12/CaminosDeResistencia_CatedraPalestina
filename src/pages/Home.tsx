@@ -413,8 +413,8 @@ export function Home() {
                       </h3>
                     </div>
                     <div className="mt-4">
-                      <Link to="/archivo" className="btn terra">
-                        Ver en Archivo <Icon.Arrow />
+                      <Link to="/archivo" className="btn terra w-full justify-center">
+                        Ver en Archivo
                       </Link>
                     </div>
                   </div>
