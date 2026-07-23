@@ -1817,8 +1817,7 @@
 #main-content:focus { outline: none; }
 
   @media (max-width: 1100px) {
-    .nav-cta .cta-text { display: none; }
-    .nav-cta { padding: 9px 12px; }
+    .nav-cta { display: none; }
   }
 
   /* ============================================================
@@ -1925,6 +1924,22 @@
   /* Mobile menu — overflow-safe text */
   .mobile-sheet { padding: 88px 20px 24px; }
   .mobile-sheet a { font-size: 28px; padding: 12px 0; }
+  .mobile-sheet a.is-active {
+    color: var(--terracotta);
+    position: relative;
+    padding-left: 28px;
+  }
+  .mobile-sheet a.is-active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    bottom: 6px;
+    width: 3px;
+    border-radius: 2px;
+    background: var(--terracotta);
+  }
+  .mobile-sheet a.is-active small { color: var(--terracotta); }
   .mobile-sheet a small { font-size: 10px; }
 
   /* HERO — stack meta vertically, scale stats down */
