@@ -59,19 +59,24 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               <Icon.Close />
             </button>
 
-            <div
-              className={'proj-thumb h-[180px] md:h-[220px] mb-5 md:mb-6 ' + (project.thumbnail ? '' : ' kind-' + project.kind)}
-              style={project.thumbnail ? { backgroundImage: `url(${project.thumbnail})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
-              role="img"
-              aria-label={`Miniatura de ${project.title}`}
-            >
-              <div className="kind-num">N° {project.n}</div>
-              {!project.thumbnail && (
-                <div className="kind-glyph">{KIND_GLYPH[project.kind] || project.kind.toUpperCase()}</div>
+            <div className="relative mb-5 md:mb-6 rounded-xl overflow-hidden h-[200px] md:h-[260px] bg-[var(--olive)]">
+              {project.thumbnail ? (
+                <img src={project.thumbnail} alt={`Miniatura de ${project.title}`} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="font-serif text-[clamp(60px,10vw,100px)] opacity-15 select-none text-white">
+                    {KIND_GLYPH[project.kind] || project.kind.toUpperCase()}
+                  </span>
+                </div>
               )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              <div className="absolute bottom-3 left-4 font-mono text-[12px] tracking-[0.15em] uppercase text-white/90">
+                {project.kind} · {project.year}
+              </div>
+              <div className="absolute top-3 right-4 font-mono text-[11px] tracking-[0.12em] uppercase text-white/80 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                N° {project.n}
+              </div>
             </div>
-
-            <div className="kicker">{project.kind} · {project.year}</div>
             <h2 id="pm-title" className="mt-3 text-[clamp(22px,6vw,36px)] leading-tight">{project.title}</h2>
             <div className="text-fg-mute mt-2 text-base md:text-sm">{project.author}</div>
 
